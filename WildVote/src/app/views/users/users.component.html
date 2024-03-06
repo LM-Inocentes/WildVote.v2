@@ -1,0 +1,81 @@
+<c-row class="justify-content-center">
+    <c-col xs="12">
+      <c-col class="mb-4" xs="12">
+        <div class="row">
+          <div class="col-lg-6 mx-auto">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search for..." aria-label="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="button">Go!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </c-col>
+    </c-col>
+</c-row>
+
+
+<c-row>
+    <c-col xs>
+      <c-card class="mb-4">
+        <c-card-header>Users</c-card-header>
+        <c-card-body>
+          <table
+            [hover]="true"
+            [responsive]="true"
+            [striped]="true"
+            align="middle"
+            cTable
+            class="mb-0 border"
+          >
+            <thead cTableColor="light">
+              <tr>
+                <th class="text-center">
+                  ID
+                </th>
+                <th>Name</th>
+                <th class="text-center">Department</th>
+                <th>Year</th>
+                <th>Status</th>
+                <th>Admin</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users; index as i">
+                <td class="text-center">
+                  <!-- <c-avatar
+                    size="md"
+                    src="{{ user.avatar }}"
+                    status="{{ user.status }}"
+                  ></c-avatar> -->
+                  {{ user.id }}
+                </td>
+                <td>
+                  <div>{{ user.Fullname }}</div>
+                  <div class="small text-medium-emphasis text-nowrap">
+                    <span>
+                      {{ user.Department }} | {{ user.Year }} 
+                    </span>
+                  </div>
+                </td>
+                <td class="text-center">
+                    {{ user.Department }} 
+                </td>
+                <td>
+                    {{ user.Year }} 
+                </td>
+                <td>
+                  {{ user.Voted }}
+                </td>
+                <td>
+                  {{ user.isAdmin }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </c-card-body>
+      </c-card>
+    </c-col>
+  </c-row>
+  

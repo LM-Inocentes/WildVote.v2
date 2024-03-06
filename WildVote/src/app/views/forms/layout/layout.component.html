@@ -1,0 +1,97 @@
+<c-row>
+  <c-col xs="12">
+    <c-card class="mb-4 bg-dark text-white">
+      <c-card-header ngPreserveWhitespaces class="bg-warning">
+        <strong>Add Candidate</strong> <small></small>
+      </c-card-header>
+      <c-card-body>
+     
+          <form cForm class="row g-3">
+            <c-col md="5">
+              <label cLabel for="id">ID Number</label>
+              <input cFormControl id="id" type="email" placeholder="Input ID and click Autofill button to Fill-up the form"/>
+            </c-col>
+            <c-col xs="12">
+              <button cButton type="submit" color="secondary">Autofill</button>
+            </c-col>
+            <c-col md="5">
+              <label cLabel for="Name">Name</label>
+              <input cFormControl id="Name" placeholder="" value=""/>
+            </c-col>
+            <c-col md="3">
+              <label cLabel for="Department" >Department</label>
+              <select cSelect id="Department" [value]="autofillValue">
+                <option>...</option>
+                <option>ARCH</option>
+                <option>CHE</option>
+                <option>CE</option>
+                <option>CPE</option>
+                <option>EE</option>
+                <option>ECE</option>
+                <option>IE</option>
+                <option>ME</option>
+                <option>EM</option>
+                <option>CS</option>
+                <option>IT</option>
+                <option>CNAHS</option>
+                <option>CMBA</option>
+                <option>CASE</option>
+                <option>CCJ</option>
+              </select>
+            </c-col>
+            <c-col md="2">
+              <label cLabel for="Year">Year</label>
+              <select cSelect id="Year">
+                <option>...</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+            </c-col>
+            <c-col md="5">
+              <label cLabel for="Position">Position</label>
+              <select cSelect id="Position">
+                <option>...</option>
+                <option>PRESIDENT</option>
+                <option>VICE-PRESIDENT</option>
+                <option>SECRETARY</option>
+                <option>TREASURER</option>
+                <option>AUDITOR</option>
+                <option>ARCH REPRESENTATIVE</option>
+                <option>CHE REPRESENTATIVE</option>
+                <option>CE REPRESENTATIVE</option>
+                <option>CPE REPRESENTATIVE</option>
+                <option>EE REPRESENTATIVE</option>
+                <option>ECE REPRESENTATIVE</option>
+                <option>IE REPRESENTATIVE</option>
+                <option>ME REPRESENTATIVE</option>
+                <option>EM REPRESENTATIVE</option>
+                <option>CS REPRESENTATIVE</option>
+                <option>IT REPRESENTATIVE</option>
+                <option>CNAHS REPRESENTATIVE</option>
+                <option>CMBA REPRESENTATIVE</option>
+                <option>CASE REPRESENTATIVE</option>
+                <option>CCJ REPRESENTATIVE</option>
+              </select>
+            </c-col>
+            <c-col md="3">
+              <label cLabel for="PartyList">Party List</label>
+              <input cFormControl id="PartyList" />
+            </c-col>
+            <c-col md="6">
+              <label cLabel for="Profile">
+                Upload Profile
+              </label>
+              <input cFormControl id="Profile" type="file" />
+            </c-col>
+            <c-col xs="12">
+              <button cButton type="submit" color="danger">Add Candidate</button>
+            </c-col>
+          </form>
+      
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
