@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AddCandidateComponent } from './add-candidate/add-candidate.component'
 import { ManageCandidateComponent } from './manage-candidate/manage-candidate.component'
+import { EditCandidateComponent } from './edit-candidate/edit-candidate.component';
 
 const routes: Routes = [
   {
@@ -12,9 +13,11 @@ const routes: Routes = [
     },
     children: [
       {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'list-candidates'
+        path: 'manage-candidates/:id',
+        component: EditCandidateComponent,
+        data: {
+          title: 'Manage Candidate'
+        }
       },
       {
         path: 'add-candidate',

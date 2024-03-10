@@ -51,7 +51,7 @@
                 </td>
                 <td>
                   <ng-container *ngTemplateOutlet="Remove"></ng-container>
-                      <button  style="margin-left: 5px;" cButton color="info" >Edit</button> 
+                      <button  style="margin-left: 5px;" cButton color="info" routerLink="/manage-candidates/{{candidate.id}}">Edit</button> 
                       <ng-template #Remove>
                         <button cButton color="danger" (click)="toggleLiveDemo()" cButton>Remove</button>
                         <c-modal id="liveDemoModal" [visible]="liveDemoVisible" (visibleChange)="handleLiveDemoChange($event)">

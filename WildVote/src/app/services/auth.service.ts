@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../shared/models/User';
-import { DELETE_USER_BY_ID, GET_USERS_URL, GET_USER_BY_ID_URL, LOGIN_URL, REGISTER_URL, SEARCH_USER_BY_ID_URL } from '../shared/apiURLs/URLs';
+import { DELETE_USER_BY_ID, EDIT_USER_BY_ID_URL, GET_USERS_URL, GET_USER_BY_ID_URL, LOGIN_URL, REGISTER_URL, SEARCH_USER_BY_ID_URL } from '../shared/apiURLs/URLs';
 
 const USER_KEY = 'User';
 
@@ -68,6 +68,22 @@ export class AuthService {
         next: (user) => {
           this.toastrService.success(
             `User Deleted`,
+            'Success'
+          )
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Error');
+        }
+      })
+    );
+  }
+
+  editUser(user: User): Observable<User>{
+    return this.http.patch<User>(EDIT_USER_BY_ID_URL, user).pipe(
+      tap({
+        next: (user) => {
+          this.toastrService.success(
+            `User ${user.id} Updated`,
             'Success'
           )
         },

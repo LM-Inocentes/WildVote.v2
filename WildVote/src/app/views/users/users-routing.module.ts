@@ -20,7 +20,7 @@ const routes: Routes = [
         }
       },
       {
-        path: ':userID',
+        path: 'edit/:userID',
         component: EditComponent,
         data: { title: 'Users'}
       },

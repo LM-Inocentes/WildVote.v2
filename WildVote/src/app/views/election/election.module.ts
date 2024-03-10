@@ -24,10 +24,11 @@ import { ElectionRoutingModule } from './election-routing.module';
 
 import { AddCandidateComponent } from './add-candidate/add-candidate.component'
 import { ManageCandidateComponent } from './manage-candidate/manage-candidate.component';
+import { EditCandidateComponent } from './edit-candidate/edit-candidate.component';
 
 @NgModule({
   declarations: [
-    AddCandidateComponent, ManageCandidateComponent
+    AddCandidateComponent, ManageCandidateComponent, EditCandidateComponent
   ],
   imports: [
     CommonModule,

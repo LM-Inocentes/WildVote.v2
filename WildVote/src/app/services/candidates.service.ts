@@ -53,8 +53,40 @@ export class CandidatesService {
     );
   }
 
+  editCandidate(user: Candidate): Observable<Candidate>{
+    return this.http.patch<Candidate>('EDIT_USER_BY_ID_URL', user).pipe(
+      tap({
+        next: (user) => {
+          this.toastrService.success(
+            `User ${user.id} Updated`,
+            'Success'
+          )
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Error');
+        }
+      })
+    );
+  }
+
   getCandidates(): Observable<Candidate[]>{
     return this.http.get<Candidate[]>(GET_CANDIDATES_URL);
+  }
+
+  getCandidateByID( id :string ): Observable<Candidate>{
+    return this.http.get<Candidate>('GET_USER_BY_ID_URL'+id).pipe(
+      tap({
+        next: (user) => {
+          this.toastrService.success(
+            `Match Found`,
+            'Success'
+          )
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Failed');
+        }
+      })
+    );
   }
 
 

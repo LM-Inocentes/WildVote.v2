@@ -6,7 +6,7 @@
             <strong>Edit User ({{user.id}})</strong> <small></small>
         </c-card-header>
           <c-card-body class="p-4">
-            <form cForm [formGroup]="registerForm" (ngSubmit)="addUser()">
+            <form cForm [formGroup]="registerForm" (ngSubmit)="editUser()">
               <!-- ID Number and Fullname on the same line -->
               <c-row class="mb-3">
                 <c-col sm="6">
@@ -14,7 +14,7 @@
                     <span cInputGroupText>
                       <svg cIcon name="cilAddressBook"></svg>
                     </span>
-                    <input formControlName="id" cFormControl placeholder="ID Number" />
+                    <input formControlName="id" placeholder="ID Number" />
                   </c-input-group>
                 </c-col>
                 <c-col sm="6">

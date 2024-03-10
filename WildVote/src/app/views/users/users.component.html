@@ -78,7 +78,7 @@
                   {{ user.isAdmin }}
                 </td>
                 <td>
-                  <button  style="margin-right: 5px;" cButton color="info" routerLink="/users/{{user.id}}">Edit</button> 
+                  <button  style="margin-right: 5px;" cButton color="info" routerLink="/users/edit/{{user.id}}">Edit</button> 
                   <ng-container *ngTemplateOutlet="Remove"></ng-container>
                       <ng-template #Remove>
                         <button cButton color="danger" (click)="toggleLiveDemo()" cButton>Delete</button>

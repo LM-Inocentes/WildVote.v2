@@ -14,7 +14,7 @@ export class EditComponent {
   user = {} as User;
 
   registerForm = new FormGroup({
-    id: new FormControl('', [
+    id: new FormControl({ value: '', disabled: true }, [
       Validators.required,
       Validators.minLength(9),
     ]),
@@ -50,19 +50,19 @@ export class EditComponent {
     });
   }
 
-  addUser() {
+  editUser() {
     if (this.registerForm.invalid) {
       this.toastr.error('Please check your form fields.', 'Invalid Input');
       return;
     }
-    const user:User = {
-      id: this.registerForm.value.id!,
+    this.authService.editUser({
+      id: this.user.id!,
       Fullname: this.registerForm.value.fullname!,
       Department: this.registerForm.value.department!,
       Year: this.registerForm.value.year!,
       password: this.registerForm.value.password!,
-    }
-
-    this.authService.register(user).subscribe();
+    }).subscribe(_ => {
+      this.ngOnInit();
+    });
   }
 }

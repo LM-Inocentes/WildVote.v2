@@ -59,6 +59,25 @@ router.get("/get/:id", asyncHandler(
   }
 ))
 
+router.patch("/edit", asyncHandler(
+  async (req, res) => {
+    const { id, Fullname, Department, Year, password } = req.body;
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { id: id }, // Find user by id
+      {
+        $set: {
+          "Fullname": Fullname,
+          "Department": Department,
+          "Year": Year,
+          "password": password
+        }
+      },
+      { new: true } // Return the updated document
+    );
+    res.send(updatedUser);
+  }
+))
+
 router.delete("/delete/:id", asyncHandler(
   async (req, res) => {
     const candidate = await UserModel.findOne({ id: req.params.id });
