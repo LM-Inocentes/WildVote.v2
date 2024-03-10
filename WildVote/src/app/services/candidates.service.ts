@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, tap } from 'rxjs';
 import { Candidate } from '../shared/models/Candidate';
-import { ADD_CANDIDATE_URL } from '../shared/apiURLs/URLs';
+import { ADD_CANDIDATE_URL, GET_CANDIDATES_URL, REMOVE_CANDIDATE_URL } from '../shared/apiURLs/URLs';
 
 @Injectable({
   providedIn: 'root'
@@ -36,4 +36,26 @@ export class CandidatesService {
       })
     );
   }
+  
+  deleteCandidateByID(id: string) {
+    return this.http.delete(REMOVE_CANDIDATE_URL + id).pipe(
+      tap({
+        next: (user) => {
+          this.toastrService.success(
+            `Candidate Deleted`,
+            'Success'
+          )
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Error');
+        }
+      })
+    );
+  }
+
+  getCandidates(): Observable<Candidate[]>{
+    return this.http.get<Candidate[]>(GET_CANDIDATES_URL);
+  }
+
+
 }

@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "WildVote": {
+    "wildvote": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -39,9 +39,7 @@
             "styles": [
               "src/scss/styles.scss"
             ],
-            "scripts": [
-            
-            ],
+            "scripts": [],
             "allowedCommonJsDependencies": [
               "chart.js"
             ]
@@ -77,10 +75,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "WildVote:build:production"
+              "buildTarget": "wildvote:build:production"
             },
             "development": {
-              "buildTarget": "WildVote:build:development"
+              "buildTarget": "wildvote:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -88,7 +86,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "WildVote:build"
+            "buildTarget": "wildvote:build"
           }
         },
         "test": {
@@ -110,6 +108,23 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "version": 2
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "wildvote:build:production",
+              "serveTarget": "wildvote:serve:production"
+            },
+            "development": {
+              "buildTarget": "wildvote:build:development",
+              "serveTarget": "wildvote:serve:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

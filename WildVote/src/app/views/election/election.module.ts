@@ -3,16 +3,31 @@ import { CommonModule } from '@angular/common';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { ButtonModule, CardModule, FormModule, GridModule } from '@coreui/angular';
+import {
+  AvatarModule,
+  ButtonGroupModule,
+  ButtonModule,
+  CardModule,
+  FormModule,
+  GridModule,
+  NavModule,
+  ProgressModule,
+  TableModule,
+  TabsModule,
+  ModalModule,
+  WidgetModule,
+} from '@coreui/angular';
+
 import { IconModule, IconSetService } from '@coreui/icons-angular';
 
 import { ElectionRoutingModule } from './election-routing.module';
 
 import { AddCandidateComponent } from './add-candidate/add-candidate.component'
+import { ManageCandidateComponent } from './manage-candidate/manage-candidate.component';
 
 @NgModule({
   declarations: [
-    AddCandidateComponent
+    AddCandidateComponent, ManageCandidateComponent
   ],
   imports: [
     CommonModule,
@@ -20,9 +35,17 @@ import { AddCandidateComponent } from './add-candidate/add-candidate.component'
     CardModule,
     ButtonModule,
     GridModule,
+    ModalModule,
     IconModule,
     FormModule,
     ReactiveFormsModule,
+    AvatarModule,
+    ButtonGroupModule,
+    NavModule,
+    ProgressModule,
+    TableModule,
+    TabsModule,
+    WidgetModule
   ],
   providers:[
     IconSetService

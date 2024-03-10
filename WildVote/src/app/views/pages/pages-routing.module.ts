@@ -27,13 +27,6 @@ const routes: Routes = [
       title: 'Login Page'
     }
   },
-  {
-    path: 'register',
-    component: RegisterComponent,
-    data: {
-      title: 'Register Page'
-    }
-  }
 ];
 
 @NgModule({

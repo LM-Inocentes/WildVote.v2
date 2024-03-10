@@ -1,5 +1,5 @@
 {
-  "name": "WildVote",
+  "name": "wildvote",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -15,6 +15,7 @@
     "@angular/common": "^17.1.2",
     "@angular/compiler": "^17.1.2",
     "@angular/core": "^17.1.2",
+    "@angular/fire": "^17.0.1",
     "@angular/forms": "^17.1.2",
     "@angular/language-service": "^17.1.2",
     "@angular/platform-browser": "^17.1.2",

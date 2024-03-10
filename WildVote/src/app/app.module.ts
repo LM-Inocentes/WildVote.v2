@@ -40,6 +40,11 @@ import {
 } from '@coreui/angular';
 
 import { IconModule, IconSetService } from '@coreui/icons-angular';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getDatabase, provideDatabase } from '@angular/fire/database';
+import { getStorage, provideStorage } from '@angular/fire/storage';
+import { firebaseConfig } from '../environments/environment';
 
 const APP_CONTAINERS = [
   DefaultFooterComponent,
@@ -83,6 +88,7 @@ const APP_CONTAINERS = [
       positionClass: 'toast-top-center',
       preventDuplicates: true,
     }),
+    provideFirebaseApp(() => initializeApp({"projectId":"wildvote-cit","appId":"1:244968865834:web:119db168ede6b0eb358353","databaseURL":"https://wildvote-cit-default-rtdb.asia-southeast1.firebasedatabase.app","storageBucket":"wildvote-cit.appspot.com","apiKey":"AIzaSyAwS8v3YMrRgs1xruC0hD5FL1kRQeIaw0s","authDomain":"wildvote-cit.firebaseapp.com","messagingSenderId":"244968865834"})),
   ],
   providers: [
     {

@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "wildvote-cit"
+  },
+  "use": "wildvote-cit",
+  "targets": {
+    "wildvote-cit": {
+      "hosting": {
+        "wildvote": [
+          "wildvote-cit"
+        ]
+      }
+    }
+  }
+}

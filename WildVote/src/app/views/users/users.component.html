@@ -4,7 +4,7 @@
         <div class="row">
           <div class="col-lg-6 mx-auto">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search for..." aria-label="Search for...">
+              <input type="text" class="form-control" placeholder="Search for ID Number..." aria-label="Search for...">
               <span class="input-group-btn">
                 <button class="btn btn-secondary" type="button">Go!</button>
               </span>
@@ -19,7 +19,12 @@
 <c-row>
     <c-col xs>
       <c-card class="mb-4">
-        <c-card-header>Users</c-card-header>
+        <c-card-header class="bg-dark text-white">Users</c-card-header>
+        <c-card-header class="bg-dark text-white">
+          <button cButton color="light" routerLink="/users/register">
+            <svg cIcon name="cilUserPlus"></svg>
+          </button>
+        </c-card-header>
         <c-card-body>
           <table
             [hover]="true"
@@ -29,7 +34,7 @@
             cTable
             class="mb-0 border"
           >
-            <thead cTableColor="light">
+            <thead cTableColor="dark">
               <tr>
                 <th class="text-center">
                   ID
@@ -37,8 +42,9 @@
                 <th>Name</th>
                 <th class="text-center">Department</th>
                 <th>Year</th>
-                <th>Status</th>
+                <th>Voted</th>
                 <th>Admin</th>
+                <th>Manage</th>
               </tr>
             </thead>
             <tbody>
@@ -70,6 +76,23 @@
                 </td>
                 <td>
                   {{ user.isAdmin }}
+                </td>
+                <td>
+                  <button  style="margin-right: 5px;" cButton color="info" routerLink="/users/{{user.id}}">Edit</button> 
+                  <ng-container *ngTemplateOutlet="Remove"></ng-container>
+                      <ng-template #Remove>
+                        <button cButton color="danger" (click)="toggleLiveDemo()" cButton>Delete</button>
+                        <c-modal id="liveDemoModal" [visible]="liveDemoVisible" (visibleChange)="handleLiveDemoChange($event)">
+                          <c-modal-header>
+                            <h5 cModalTitle>Confirm</h5>
+                            <button (click)="toggleLiveDemo()" cButtonClose></button>
+                          </c-modal-header>
+                          <c-modal-body>Do You Really Want to Delete This User?</c-modal-body>
+                          <c-modal-footer>
+                            <button cButton color="primary" (click)="deleteUser(user.id)">Yes</button>
+                          </c-modal-footer>
+                        </c-modal>
+                      </ng-template>
                 </td>
               </tr>
             </tbody>

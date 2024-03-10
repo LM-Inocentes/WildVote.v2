@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../shared/models/User';
-import { GET_USERS_URL, GET_USER_BY_ID_URL, LOGIN_URL, REGISTER_URL } from '../shared/apiURLs/URLs';
+import { DELETE_USER_BY_ID, GET_USERS_URL, GET_USER_BY_ID_URL, LOGIN_URL, REGISTER_URL, SEARCH_USER_BY_ID_URL } from '../shared/apiURLs/URLs';
 
 const USER_KEY = 'User';
 
@@ -58,6 +58,27 @@ export class AuthService {
     return this.http.get<User[]>(GET_USERS_URL);
   }
 
+  searchUsersByID(searchTerm: string) {
+    return this.http.get<User[]>(SEARCH_USER_BY_ID_URL + searchTerm);
+  }
+
+  deleteUserByID(id: string) {
+    return this.http.delete(DELETE_USER_BY_ID + id).pipe(
+      tap({
+        next: (user) => {
+          this.toastrService.success(
+            `User Deleted`,
+            'Success'
+          )
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Error');
+        }
+      })
+    );
+  }
+
+
   getUserById( id :string ): Observable<User>{
     return this.http.get<User>(GET_USER_BY_ID_URL+id).pipe(
       tap({
@@ -72,6 +93,10 @@ export class AuthService {
         }
       })
     );
+  }
+
+  editUserById( id :string ): Observable<User>{
+    return this.http.get<User>(GET_USER_BY_ID_URL+id);
   }
 
 

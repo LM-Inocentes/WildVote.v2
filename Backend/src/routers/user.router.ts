@@ -59,6 +59,14 @@ router.get("/get/:id", asyncHandler(
   }
 ))
 
+router.delete("/delete/:id", asyncHandler(
+  async (req, res) => {
+    const candidate = await UserModel.findOne({ id: req.params.id });
+    await candidate!.deleteOne();
+    res.send();
+  }
+))
+
 router.post("/register", upload.single('image'), asyncHandler(
   async (req, res) => {
     const { id, Fullname, Department, Year, password} = req.body;

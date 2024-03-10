@@ -13,13 +13,15 @@ import {
   NavModule,
   ProgressModule,
   TableModule,
-  TabsModule
+  TabsModule,
+  ModalModule,
 } from '@coreui/angular';
 
 import { IconModule } from '@coreui/icons-angular';
 import { UsersRoutingModule } from './users-routing.module';
 import { UsersComponent } from './users.component';
-
+import { RegisterComponent } from './register/register.component';
+import { EditComponent } from './edit/edit.component'
 
 @NgModule({
   imports: [
@@ -37,7 +39,8 @@ import { UsersComponent } from './users.component';
     ButtonGroupModule,
     AvatarModule,
     TableModule,
+    ModalModule,
   ],
-  declarations: [UsersComponent]
+  declarations: [UsersComponent, RegisterComponent, EditComponent]
 })
 export class UsersModule { }

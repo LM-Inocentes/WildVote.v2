@@ -8,6 +8,7 @@ export interface ICandidate{
     PartyList: string;
     Position: string;
     Profile: string;
+    ProfileID: string;
     Votes: number;
    // ReferenceFingerPrint: string;  
 }
@@ -17,9 +18,11 @@ export const CandidateSchema = new Schema<ICandidate>(
         id: { type: String, required:true },
         Fullname: { type: String, required:true },
         Department: { type: String, required:true },
+        Year: { type: String, required:true },
         PartyList: { type: String, required:true },
         Position: { type: String, required:true },
         Profile: { type: String, required:true },
+        ProfileID: { type: String, required:true },
         Votes: { type: Number, required:true },
     },{
         toJSON:{

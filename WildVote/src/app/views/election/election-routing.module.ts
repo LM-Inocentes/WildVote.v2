@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AddCandidateComponent } from './add-candidate/add-candidate.component'
+import { ManageCandidateComponent } from './manage-candidate/manage-candidate.component'
 
 const routes: Routes = [
   {
@@ -20,6 +21,13 @@ const routes: Routes = [
         component: AddCandidateComponent,
         data: {
           title: 'Add Candidate'
+        }
+      },
+      {
+        path: 'manage-candidates',
+        component: ManageCandidateComponent,
+        data: {
+          title: 'Manage Candidate'
         }
       },
     ]

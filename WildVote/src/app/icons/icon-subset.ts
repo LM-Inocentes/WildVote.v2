@@ -1,4 +1,6 @@
 import {
+  cilAddressBook,
+  cilInstitution,
   cibCcAmex,
   cibCcApplePay,
   cibCcMastercard,
@@ -59,6 +61,7 @@ import {
   cilLockLocked,
   cilContact,
   cilUserX,
+  cilUserPlus,
   cilInput,
   cilMagnifyingGlass,
   cilMap,
@@ -97,8 +100,11 @@ import {
 } from '@coreui/icons';
 
 export const iconSubset = {
+  cilInstitution,
+  cilAddressBook,
   cilInput,
   cilUserX,
+  cilUserPlus,
   cilFlagAlt,
   cilContact,
   cilPowerStandby,
@@ -195,6 +201,9 @@ export const iconSubset = {
 };
 
 export enum IconSubset {
+  cilInstitution = 'cilInstitution',
+  cilAddressBook = 'cilAddressBook',
+  cilUserPlus = 'cilUserPlus',
   cilFlagAlt = 'cilFlagAlt',
   cilContact = 'cilContact',
   cilUserX = 'cilUserX',

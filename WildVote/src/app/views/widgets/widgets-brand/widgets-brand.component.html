@@ -1,22 +1,13 @@
-<c-row>
-  <c-col *ngFor="let widget of brandData; index as i" sm="6" xl="3">
+<c-row class="justify-content-center text-center">
+  <c-col *ngFor="let widget of brandData; index as i" sm="4" xl="4">
     <c-widget-stat-d
       [color]="widget.color ?? ''"
       [style]="widget.capBg ?? null"
       [values]="widget.values"
       class="mb-4"
     >
-      <svg [name]="widget.icon" cIcon class="my-4 text-white" height="52"></svg>
-      <ng-container *ngIf="withCharts">
-        <c-chart
-          #chart="cChart"
-          [data]="widget.data"
-          [options]="chartOptions"
-          class="position-absolute w-100 h-100"
-          type="line"
-        >{{ chart.id }}</c-chart
-        >
-      </ng-container>
+      <img [src]="widget.imageUrl" alt="Brand Image" height="150" class="my-4 text-white">
     </c-widget-stat-d>
+    <button cButton color="info">Vote</button>
   </c-col>
 </c-row>

@@ -30,5 +30,6 @@ export class ButtonGroupsComponent {
 
   setRadioValue(value: string): void {
     this.formRadio1.setValue({ radio1: value });
+    console.log(this.formRadio1.value);
   }
 }
