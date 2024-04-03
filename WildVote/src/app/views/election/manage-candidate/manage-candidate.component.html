@@ -50,8 +50,8 @@
                   </div>
                 </td>
                 <td>
+                  <button  style="margin-right: 5px;" cButton color="info" [routerLink]="['edit/', candidate.id]">Edit</button> 
                   <ng-container *ngTemplateOutlet="Remove"></ng-container>
-                      <button  style="margin-left: 5px;" cButton color="info" routerLink="/manage-candidates/{{candidate.id}}">Edit</button> 
                       <ng-template #Remove>
                         <button cButton color="danger" (click)="toggleLiveDemo()" cButton>Remove</button>
                         <c-modal id="liveDemoModal" [visible]="liveDemoVisible" (visibleChange)="handleLiveDemoChange($event)">
@@ -75,8 +75,8 @@
 </c-row>
 
 
-
-<!-- <c-row>
+<!-- 
+<c-row>
   <c-col xs>
     <c-card class="mb-4">
       <c-card-header class="bg-dark text-white">Election Candidates</c-card-header>
@@ -96,6 +96,6 @@
           </c-col>
         </c-row>
       </c-card-body>
-      </c-card>
-      </c-col>
+    </c-card>
+  </c-col>
 </c-row> -->

@@ -41,6 +41,56 @@ router.post("/add", upload.single('profile'), asyncHandler(
   }
 ))
 
+router.patch("/edit", upload.single('profile'), asyncHandler(
+  async (req, res) => {
+    const { Position, PartyList, id, Fullname, Department, Year } = req.body;
+    console.log(req.body);
+    if (!req.file) {
+      const updatedCandidate = await CandidateModel.findOneAndUpdate(
+        { id: id }, // Find user by id
+        {
+          $set: {
+            "Position": Position,
+            "PartyList": PartyList,
+            "Fullname": Fullname,
+            "Department": Department,
+            "Year": Year,
+          }
+        },
+        { new: true } 
+      );
+      res.send(updatedCandidate);
+      return;
+    }
+    //if new profile is uploaded
+
+    const candidate = await CandidateModel.findOne({ id: id });
+    await cloudinary.uploader.destroy(candidate?.ProfileID);
+
+    const result = await cloudinary.uploader.upload(req.file?.path, {
+      public_id: id,
+      folder: `Candidates/${Position}`
+    });
+
+    const updatedCandidate = await CandidateModel.findOneAndUpdate(
+      { id: id }, 
+      {
+        $set: {
+          "Position": Position,
+          "PartyList": PartyList,
+          "Fullname": Fullname,
+          "Department": Department,
+          "Year": Year,
+          "Profile": result.secure_url,
+          "ProfileID": result.public_id,
+        }
+      },
+      { new: true } 
+    );
+    res.send(updatedCandidate);
+  }
+))
+
 router.delete("/remove/:id", asyncHandler(
   async (req, res) => {
     const candidate = await CandidateModel.findOne({ id: req.params.id });
@@ -82,6 +132,17 @@ router.get("/get/", asyncHandler(
     res.send(candidates);             
   }
 ));
+
+router.get("/get/:id", asyncHandler(
+  async (req, res) =>{
+      const user = await CandidateModel.findOne({id: req.params.id});
+      if(!user){
+        res.status(400).send("Match Not Found");
+        return;
+      }
+      res.send(user);                     
+  }
+))
 
 router.get("/get/president", asyncHandler(
   async (req, res) => {

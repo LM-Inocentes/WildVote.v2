@@ -11,6 +11,8 @@ export const DELETE_USER_BY_ID = BASE_URL + '/api/users/delete/';
 
 export const ADD_CANDIDATE_URL = BASE_URL + '/api/candidates/add';
 export const GET_CANDIDATES_URL = BASE_URL + '/api/candidates/get';
+export const EDIT_CANDIDATE_URL = BASE_URL + '/api/candidates/edit';
+export const GET_CANDIDATES_BY_ID_URL = BASE_URL + '/api/candidates/get/';
 export const PRESIDENT_CANDIDATES_URL = BASE_URL + '/api/candidates/get/president';
 export const VICE_PRESIDENT_CANDIDATES_URL = BASE_URL + '/api/candidates/get/vice-president';
 export const SECRETARY_CANDIDATES_URL = BASE_URL + '/api/candidates/get/secretary';

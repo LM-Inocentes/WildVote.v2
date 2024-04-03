@@ -14,7 +14,7 @@ export class ManageCandidateComponent implements OnInit{
 
   brandData = [
     {
-      imageUrl: 'https://res.cloudinary.com/de4dinse3/image/upload/v1710065500/Candidates/AUDITOR/22-2222-222.png',
+      imageUrl: 'https://res.cloudinary.com/de4dinse3/image/upload/v1712139652/Candidates/SECRETARY/20-3065-505.png',
       icon: '',
       values: [{ title: 'EZ Partylist ', value: 'LM Inocentes' }],
       capBg: { '--cui-card-cap-bg': '#3b5998' },
@@ -25,6 +25,12 @@ export class ManageCandidateComponent implements OnInit{
       icon: 'cib-linkedin',
       values: [{ title: 'contacts', value: '500' }, { title: 'feeds', value: '1.292' }],
       capBg: { '--cui-card-cap-bg': '#4875b4' },
+
+    },
+    {
+      icon: 'cilCalendar',
+      values: [{ title: 'events', value: '12+' }, { title: 'meetings', value: '4' }],
+      color: 'warning',
 
     },
     {

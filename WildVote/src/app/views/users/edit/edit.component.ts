@@ -15,8 +15,6 @@ export class EditComponent {
 
   registerForm = new FormGroup({
     id: new FormControl({ value: '', disabled: true }, [
-      Validators.required,
-      Validators.minLength(9),
     ]),
     fullname: new FormControl('', [
       Validators.required,
@@ -55,6 +53,7 @@ export class EditComponent {
       this.toastr.error('Please check your form fields.', 'Invalid Input');
       return;
     }
+    
     this.authService.editUser({
       id: this.user.id!,
       Fullname: this.registerForm.value.fullname!,

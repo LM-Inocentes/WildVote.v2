@@ -18,28 +18,24 @@ export class EditCandidateComponent {
   candidate = {} as Candidate;
 
   editCandidateForm = new FormGroup({
-    id: new FormControl("", [
-      Validators.required,
-      Validators.minLength(9)
+    id: new FormControl({ value: '', disabled: true }, [
     ]),
-    fullname: new FormControl("", [
+    fullname: new FormControl('', [
       Validators.required,
     ]),
-    position: new FormControl("", [
+    department: new FormControl('', [
       Validators.required,
     ]),
-    partylist: new FormControl("", [
+    year: new FormControl('', [
       Validators.required,
     ]),
-    department: new FormControl("", [
+    position: new FormControl('', [
       Validators.required,
     ]),
-    year: new FormControl("", [
+    partylist: new FormControl('', [
       Validators.required,
     ]),
-    profile: new FormControl(File, [
-      Validators.required,
-    ]),
+    profile: new FormControl(File, []),
   })
 
   constructor(public iconSet: IconSetService, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private candidateService:CandidatesService ) { 
@@ -48,14 +44,16 @@ export class EditCandidateComponent {
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
-      this.candidateService.getCandidateByID(params['id']).subscribe(Candidate => {
+      this.candidateService.getCandidateByID(params['candidateID']).subscribe(Candidate => {
         this.candidate = Candidate;
+        
         this.editCandidateForm.patchValue({
           id: this.candidate.id,
           fullname: this.candidate.Fullname,
           department: this.candidate.Department,
           position: this.candidate.Position,
           partylist: this.candidate.PartyList,
+          year: this.candidate.Year,
         });
       });
     });
@@ -70,23 +68,18 @@ export class EditCandidateComponent {
       this.toastr.error('Please check your form fields.', 'Invalid Input');
       return;
     }
-    const candidate: Candidate = {
-      id: this.editCandidateForm.value.id!,
-      Fullname: this.editCandidateForm.value.fullname!,
-      Department: this.editCandidateForm.value.department!,
-      Year: this.editCandidateForm.value.year!,
-      Position: this.editCandidateForm.value.position!,
-      PartyList: this.editCandidateForm.value.partylist!,
-    }
-    this.candidateService.addCandidate(
-      this.editCandidateForm.value.id!, 
-      this.editCandidateForm.value.fullname!,
-      this.editCandidateForm.value.department!,
+    
+    this.candidateService.editCandidate(
+      this.candidate.id, 
       this.editCandidateForm.value.partylist!,
       this.editCandidateForm.value.position!,
-      this.editCandidateForm.value.year!,
-      this.Profile
-      ).subscribe();
+      this.Profile,
+      this.editCandidateForm.value.fullname!, 
+      this.editCandidateForm.value.department!, 
+      this.editCandidateForm.value.year! 
+      ).subscribe(_ => {
+        this.ngOnInit();
+      });
   }
 
 }

@@ -13,13 +13,6 @@ const routes: Routes = [
     },
     children: [
       {
-        path: 'manage-candidates/:id',
-        component: EditCandidateComponent,
-        data: {
-          title: 'Manage Candidate'
-        }
-      },
-      {
         path: 'add-candidate',
         component: AddCandidateComponent,
         data: {
@@ -31,6 +24,13 @@ const routes: Routes = [
         component: ManageCandidateComponent,
         data: {
           title: 'Manage Candidate'
+        }
+      },
+      {
+        path: 'manage-candidates/edit/:candidateID',
+        component: EditCandidateComponent,
+        data: {
+          title: 'Edit Candidate'
         }
       },
     ]

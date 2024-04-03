@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, tap } from 'rxjs';
 import { Candidate } from '../shared/models/Candidate';
-import { ADD_CANDIDATE_URL, GET_CANDIDATES_URL, REMOVE_CANDIDATE_URL } from '../shared/apiURLs/URLs';
+import { ADD_CANDIDATE_URL, EDIT_CANDIDATE_URL, GET_CANDIDATES_BY_ID_URL, GET_CANDIDATES_URL, REMOVE_CANDIDATE_URL } from '../shared/apiURLs/URLs';
 
 @Injectable({
   providedIn: 'root'
@@ -53,12 +53,23 @@ export class CandidatesService {
     );
   }
 
-  editCandidate(user: Candidate): Observable<Candidate>{
-    return this.http.patch<Candidate>('EDIT_USER_BY_ID_URL', user).pipe(
+  editCandidate(id:string, PartyList:string, Position:string, image: File, Fullname: string, Department: string, Year: string): Observable<Candidate>{
+    const candidateData: FormData = new FormData();
+    candidateData.append('id', id);
+    candidateData.append('PartyList', PartyList);
+    candidateData.append('Position', Position);
+    candidateData.append('Fullname', Fullname);
+    candidateData.append('Department', Department);
+    candidateData.append('Year', Year);
+    if(image){
+      candidateData.append('profile', image);
+      console.log("profile uploaded");
+    }
+    return this.http.patch<Candidate>(EDIT_CANDIDATE_URL, candidateData).pipe(
       tap({
-        next: (user) => {
+        next: (updatedCandidate) => {
           this.toastrService.success(
-            `User ${user.id} Updated`,
+            `Candidate ${updatedCandidate.id} Updated`,
             'Success'
           )
         },
@@ -74,19 +85,7 @@ export class CandidatesService {
   }
 
   getCandidateByID( id :string ): Observable<Candidate>{
-    return this.http.get<Candidate>('GET_USER_BY_ID_URL'+id).pipe(
-      tap({
-        next: (user) => {
-          this.toastrService.success(
-            `Match Found`,
-            'Success'
-          )
-        },
-        error: (errorResponse) => {
-          this.toastrService.error(errorResponse.error, 'Failed');
-        }
-      })
-    );
+    return this.http.get<Candidate>(GET_CANDIDATES_BY_ID_URL+id);
   }
 
 
