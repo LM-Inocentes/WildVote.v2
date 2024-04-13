@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CandidatesService } from 'src/app/services/candidates.service';
-import { VoteService } from 'src/app/services/vote.service';
 import { Candidate } from 'src/app/shared/models/Candidate';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { VoteService } from 'src/app/services/vote.service';
 
 @Component({
-  selector: 'app-manage-candidate',
-  templateUrl: './manage-candidate.component.html',
-  styleUrl: './manage-candidate.component.scss'
+  selector: 'app-voting-system',
+  templateUrl: './voting-system.component.html',
+  styleUrl: './voting-system.component.scss'
 })
-export class ManageCandidateComponent implements OnInit{
+export class VotingSystemComponent {
   candidates!: Candidate[];
   public liveDemoVisible = false;
   candidateElectionPresident: any;
@@ -29,16 +29,6 @@ export class ManageCandidateComponent implements OnInit{
       CPERepresentative: '',
     };
     
-
-  brandData = [
-    {
-      imageUrl: 'https://res.cloudinary.com/de4dinse3/image/upload/v1712139652/Candidates/SECRETARY/20-3065-505.png',
-      icon: '',
-      values: [{ title: 'EZ Partylist ', value: 'LM Inocentes' }],
-      capBg: { '--cui-card-cap-bg': '#3b5998' },
-      color: 'warning',
-    }
-  ];
 
   PresidentVote = new UntypedFormGroup({
     PresidentVoteID: new UntypedFormControl('President')
@@ -94,14 +84,21 @@ export class ManageCandidateComponent implements OnInit{
     this.voteResult.CPERepresentative = this.CPERepresentativeVote.value.CPERepresentativeVoteID;
   }
 
-  startElection(): void{
-    this.voteService.uploadCandidates(this.candidates).subscribe();
+  submitVoteResult(): void{
+    console.log(this.voteResult);
+    Object.values(this.voteResult).forEach(position => {
+      if(position===''){
+        return;
+      }
+      this.voteService.updateVoteCounts(position).subscribe();  // Perform operations on each position's value here
+    });
   }
 
-  constructor(private candidateService: CandidatesService, private formBuilder: UntypedFormBuilder, private voteService: VoteService) { }
+ 
+
+  constructor(private candidateService: CandidatesService, private voteService: VoteService) { }
 
   ngOnInit(): void {
-
     this.candidateService.getCandidates().subscribe((candidates) => {
       this.candidates = candidates;
       this.sortCandidatesByPosition();
@@ -235,14 +232,12 @@ export class ManageCandidateComponent implements OnInit{
     });
   }
 
-  toggleLiveDemo(candidateId?: string) {
+  toggleLiveDemo() {
     this.liveDemoVisible = !this.liveDemoVisible;
-    console.log(candidateId);
   }
 
   handleLiveDemoChange(event: boolean) {
     this.liveDemoVisible = event;
   }
-
 
 }

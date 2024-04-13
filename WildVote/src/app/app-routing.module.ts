@@ -6,6 +6,7 @@ import { Page404Component } from './views/pages/page404/page404.component';
 import { Page500Component } from './views/pages/page500/page500.component';
 import { LoginComponent } from './views/pages/login/login.component';
 import { RegisterComponent } from './views/pages/register/register.component';
+import { VotingSystemComponent } from './views/voting-system/voting-system.component';
 
 const routes: Routes = [
   {
@@ -26,12 +27,15 @@ const routes: Routes = [
           import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule)
       },
       {
+        path: 'vote',
+        loadChildren: () =>
+          import('./views/voting-system/voting-system.module').then((m) => m.VotingSystemModule)
+      },
+      {
         path: 'users',
         loadChildren: () =>
           import('./views/users/users.module').then((m) => m.UsersModule)
       },
-      
-      
       {
         path: 'theme',
         loadChildren: () =>

@@ -7,4 +7,5 @@ export class Candidate{
     Position!: string;
     Profile?: string;
     Votes?: number;
+    color?: string;
 }

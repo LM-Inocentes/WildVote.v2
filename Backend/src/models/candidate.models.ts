@@ -10,6 +10,7 @@ export interface ICandidate{
     Profile: string;
     ProfileID: string;
     Votes: number;
+    color: string;
    // ReferenceFingerPrint: string;  
 }
 
@@ -24,6 +25,7 @@ export const CandidateSchema = new Schema<ICandidate>(
         Profile: { type: String, required:true },
         ProfileID: { type: String, required:true },
         Votes: { type: Number, required:true },
+        color: { type: String, required:true },
     },{
         toJSON:{
             virtuals:true

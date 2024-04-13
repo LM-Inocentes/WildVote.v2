@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { cilAddressBook, cilInstitution, cilListNumbered, cilLockLocked, cilUser, cilFlagAlt, cilContact } from '@coreui/icons';
+import { cilAddressBook, cilInstitution, cilListNumbered, cilLockLocked, cilUser, cilFlagAlt, cilContact, cilContrast } from '@coreui/icons';
 import { IconSetService } from '@coreui/icons-angular';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
@@ -35,18 +35,20 @@ export class EditCandidateComponent {
     partylist: new FormControl('', [
       Validators.required,
     ]),
+    color: new FormControl('', [
+      Validators.required,
+    ]),
     profile: new FormControl(File, []),
   })
 
   constructor(public iconSet: IconSetService, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private candidateService:CandidatesService ) { 
-    iconSet.icons = {cilAddressBook, cilUser, cilLockLocked, cilInstitution, cilListNumbered, cilFlagAlt, cilContact};
+    iconSet.icons = {cilAddressBook, cilUser, cilLockLocked, cilInstitution, cilListNumbered, cilFlagAlt, cilContact, cilContrast};
   }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
       this.candidateService.getCandidateByID(params['candidateID']).subscribe(Candidate => {
         this.candidate = Candidate;
-        
         this.editCandidateForm.patchValue({
           id: this.candidate.id,
           fullname: this.candidate.Fullname,
@@ -54,6 +56,7 @@ export class EditCandidateComponent {
           position: this.candidate.Position,
           partylist: this.candidate.PartyList,
           year: this.candidate.Year,
+          color: this.candidate.color
         });
       });
     });
@@ -76,7 +79,8 @@ export class EditCandidateComponent {
       this.Profile,
       this.editCandidateForm.value.fullname!, 
       this.editCandidateForm.value.department!, 
-      this.editCandidateForm.value.year! 
+      this.editCandidateForm.value.year!,
+      this.editCandidateForm.value.color!
       ).subscribe(_ => {
         this.ngOnInit();
       });

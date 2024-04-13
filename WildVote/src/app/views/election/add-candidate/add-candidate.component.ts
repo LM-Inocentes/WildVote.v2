@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { cilAddressBook, cilInstitution, cilListNumbered, cilLockLocked, cilUser, cilFlagAlt, cilContact } from '@coreui/icons';
+import { cilAddressBook, cilInstitution, cilListNumbered, cilLockLocked, cilUser, cilFlagAlt, cilContact, cilContrast } from '@coreui/icons';
 import { IconSetService } from '@coreui/icons-angular';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
@@ -35,13 +35,16 @@ export class AddCandidateComponent {
     year: new FormControl("", [
       Validators.required,
     ]),
+    color: new FormControl("", [
+      Validators.required,
+    ]),
     profile: new FormControl(File, [
       Validators.required,
     ]),
   })
 
   constructor(public iconSet: IconSetService, private toastr: ToastrService, private authService: AuthService, private candidateService:CandidatesService ) { 
-    iconSet.icons = {cilAddressBook, cilUser, cilLockLocked, cilInstitution, cilListNumbered, cilFlagAlt, cilContact};
+    iconSet.icons = {cilAddressBook, cilUser, cilLockLocked, cilInstitution, cilListNumbered, cilFlagAlt, cilContact, cilContrast};
   }
 
   onFileChange(event: any): void {
@@ -67,14 +70,6 @@ export class AddCandidateComponent {
       this.toastr.error('Please check your form fields.', 'Invalid Input');
       return;
     }
-    const candidate: Candidate = {
-      id: this.addCandidateForm.value.id!,
-      Fullname: this.addCandidateForm.value.fullname!,
-      Department: this.addCandidateForm.value.department!,
-      Year: this.addCandidateForm.value.year!,
-      Position: this.addCandidateForm.value.position!,
-      PartyList: this.addCandidateForm.value.partylist!,
-    }
     this.candidateService.addCandidate(
       this.addCandidateForm.value.id!, 
       this.addCandidateForm.value.fullname!,
@@ -82,7 +77,7 @@ export class AddCandidateComponent {
       this.addCandidateForm.value.partylist!,
       this.addCandidateForm.value.position!,
       this.addCandidateForm.value.year!,
-      this.Profile
+      this.Profile, this.addCandidateForm.value.color!
       ).subscribe();
   }
 }

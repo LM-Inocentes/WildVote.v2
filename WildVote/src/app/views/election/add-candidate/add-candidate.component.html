@@ -109,15 +109,35 @@
                     </select>
                   </c-input-group>
                 </c-col>
-                <c-col sm="4">
+                <c-col sm="3">
+                  <c-input-group>
+                    <span cInputGroupText>
+                      <svg cIcon name="cilContrast"></svg>
+                    </span>
+                    <select formControlName="color" cFormControl>
+                      <option value="" disabled selected>Color</option>
+                      <!-- Add additional options as needed -->
+                      <option>Light</option>
+                      <option>Dark</option>
+                      <option value="success">Green</option>
+                      <option value="danger">Red</option>
+                      <option value="warning">Yellow</option>
+                      <option value="primary">Blue</option>
+                      <option>Violet</option>
+                      <!-- ... -->
+                    </select>
+                  </c-input-group>
+                </c-col>
+                <c-col sm="3">
                     <c-input-group>
                       <span cInputGroupText>
                         <svg cIcon name="cilFlagAlt"></svg>
                       </span>
                       <input formControlName="partylist" cFormControl placeholder="PartyList"/>
                     </c-input-group>
-                  </c-col>
+                </c-col>
               </c-row>
+              
               <c-row class="mb-3">
                 <c-col sm="4">
                     <label cLabel for="Profile">

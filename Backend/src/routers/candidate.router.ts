@@ -8,7 +8,7 @@ const router = Router();
 
 router.post("/add", upload.single('profile'), asyncHandler(
   async (req, res) => {
-    const { id, Fullname, Department, PartyList, Position, Year } = req.body;
+    const { id, Fullname, Department, PartyList, Position, Year, color } = req.body;
     const user = await CandidateModel.findOne({ id });
     if (user) {
       res.status(400)
@@ -34,7 +34,8 @@ router.post("/add", upload.single('profile'), asyncHandler(
       Position,
       Profile: result.secure_url,
       ProfileID: result.public_id,
-      Votes: 0
+      Votes: 0,
+      color,
     }
     const dbCandidate = await CandidateModel.create(newCandidate);
     res.send(dbCandidate);
@@ -43,8 +44,7 @@ router.post("/add", upload.single('profile'), asyncHandler(
 
 router.patch("/edit", upload.single('profile'), asyncHandler(
   async (req, res) => {
-    const { Position, PartyList, id, Fullname, Department, Year } = req.body;
-    console.log(req.body);
+    const { Position, PartyList, id, Fullname, Department, Year, color } = req.body;
     if (!req.file) {
       const updatedCandidate = await CandidateModel.findOneAndUpdate(
         { id: id }, // Find user by id
@@ -55,6 +55,7 @@ router.patch("/edit", upload.single('profile'), asyncHandler(
             "Fullname": Fullname,
             "Department": Department,
             "Year": Year,
+            "color": color,
           }
         },
         { new: true } 

@@ -13,7 +13,7 @@ export class CandidatesService {
 
   constructor(private http:HttpClient, private toastrService: ToastrService, private router: Router) { }
 
-  addCandidate( id:string, Fullname:string, Department:string, PartyList:string, Position:string, Year:string, image: File ): Observable<Candidate>{
+  addCandidate( id:string, Fullname:string, Department:string, PartyList:string, Position:string, Year:string, image: File, color: string ): Observable<Candidate>{
     const formData: FormData = new FormData();
     formData.append('profile', image);
     formData.append('id', id);
@@ -22,6 +22,7 @@ export class CandidatesService {
     formData.append('Year', Year);
     formData.append('PartyList', PartyList);
     formData.append('Position', Position);
+    formData.append('color', color);
     return this.http.post<Candidate>(ADD_CANDIDATE_URL, formData).pipe(
       tap({
         next: (candidate) => {
@@ -53,7 +54,7 @@ export class CandidatesService {
     );
   }
 
-  editCandidate(id:string, PartyList:string, Position:string, image: File, Fullname: string, Department: string, Year: string): Observable<Candidate>{
+  editCandidate(id:string, PartyList:string, Position:string, image: File, Fullname: string, Department: string, Year: string, color: string): Observable<Candidate>{
     const candidateData: FormData = new FormData();
     candidateData.append('id', id);
     candidateData.append('PartyList', PartyList);
@@ -61,9 +62,9 @@ export class CandidatesService {
     candidateData.append('Fullname', Fullname);
     candidateData.append('Department', Department);
     candidateData.append('Year', Year);
+    candidateData.append('color', color);
     if(image){
       candidateData.append('profile', image);
-      console.log("profile uploaded");
     }
     return this.http.patch<Candidate>(EDIT_CANDIDATE_URL, candidateData).pipe(
       tap({

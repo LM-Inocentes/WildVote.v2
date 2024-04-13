@@ -1,69 +1,9 @@
-<c-row>
-    <c-col xs>
-      <c-card class="mb-4">
-        <c-card-header class="bg-dark text-white">Election Candidates</c-card-header>
-        <c-card-body>
-          <table
-            [hover]="true"
-            [responsive]="true"
-            [striped]="true"
-            align="middle"
-            cTable
-            class="mb-0 border"
-          >
-            <thead cTableColor="dark">
-              <tr>
-                <th class="text-center">
-                  Profile
-                </th>
-                <th>Student</th>
-                <th>Position</th>
-                <th>PartyList</th>
-                <th>Manage</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let candidate of candidates; index as i">
-                <td class="text-center">
-                  <c-avatar
-                    size="md"
-                    src="{{ candidate.Profile }}"
-                    status= "success"
-                  ></c-avatar>
-                </td>
-                <td>
-                  <div>{{ candidate.Fullname }}</div>
-                  <div class="small text-medium-emphasis text-nowrap">
-                    <span>
-                      {{ candidate.Department }} - {{ candidate.Year }}
-                    </span>
-                  </div>
-                </td>
-                <td>
-                    {{ candidate.Position }}
-                </td>
-                <td>
-                  <div class="d-flex justify-content-between">
-                    <div class="float-start">
-                      <strong>{{ candidate.PartyList }}</strong>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <button  style="margin-right: 5px;" cButton color="info" [routerLink]="['edit/', candidate.id]">Edit</button> 
-                  <button cButton color="danger" (click)="removeCandidate(candidate.id)" cButton>Remove</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </c-card-body>
-      </c-card>
-    </c-col>
-</c-row>
+<figure class="text-center">
+    <blockquote class="blockquote">
+      <p>2024 SSG Elections</p>
+    </blockquote>
+</figure>
 
-<div class="d-grid gap-2 col-6 mx-auto p-3">
-  <button cButton color="primary" (click)="startElection()" variant="outline" >Start Election</button>
-</div>
 
 
 <c-row>
@@ -300,3 +240,6 @@
   </c-col>
 </c-row>
 
+<div class="d-grid gap-2 col-6 mx-auto p-3">
+  <button cButton color="primary" (click)="submitVoteResult()" variant="outline" >Submit Vote</button>
+</div>
