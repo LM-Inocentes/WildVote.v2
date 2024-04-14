@@ -27,6 +27,71 @@ export class VoteService {
     return from(Promise.all(pushObservables));
   }
 
+  setElectionStatus(cmd: boolean): Observable<void> {
+    // Get a reference to the 'election' node in your Firebase database
+    const electionRef = this.db.object('election');
+
+    // Set the isElectionStart value to true
+    return from(electionRef.update({ isElectionStart: cmd }));
+  }
+
+  getElectionStatus(): Observable<boolean> {
+    // Get a reference to the 'election' node in your Firebase database
+    const electionRef = this.db.object('election/isElectionStart');
+
+    // Return an observable with type assertion using pipe and map operator
+    return electionRef.valueChanges().pipe(
+      map(value => !!value) // Map the value to boolean explicitly
+    );
+  }
+
+  getHighestVoteCounts(): Observable<any[]> {
+    return this.db.object('/candidates').valueChanges().pipe(
+      map((candidates: any) => {
+
+        const highestVoteCounts: { [key: string]: { Department: string, Votes: number; Fullname: string, 
+          PartyList: string, Position: string, Profile: string, ProfileID: string, Year: string } } = {};
+
+        // Iterate through each candidate
+        for (const candidateId in candidates) {
+          if (candidates.hasOwnProperty(candidateId)) {
+            const candidate = candidates[candidateId];
+            const position = candidate.Position;
+
+            // Check if position exists in highestVoteCounts object
+            if (!highestVoteCounts[position]) {
+              highestVoteCounts[position] = { Votes: 0, Fullname: '', Department: '', PartyList: '', Position: '', Profile: '', ProfileID: '', Year: ''};
+            }
+
+            // Update highest vote count for the position
+            if (candidate.Votes > highestVoteCounts[position].Votes) {
+              highestVoteCounts[position] = {
+                Votes: candidate.Votes,
+                Fullname: candidate.Fullname,
+                Department: candidate.Department, 
+                PartyList: candidate.PartyList, 
+                Position: candidate.Position, 
+                Profile: candidate.Profile, 
+                ProfileID: candidate.ProfileID, 
+                Year: candidate.Year
+              };
+            }
+          }
+        }
+
+        // Convert highestVoteCounts object to array for easier iteration in template
+        const result = [];
+        for (const position in highestVoteCounts) {
+          if (highestVoteCounts.hasOwnProperty(position)) {
+            result.push({ position, ...highestVoteCounts[position] });
+          }
+        }
+
+        return result;
+      })
+    );
+  }
+
   updateVoteCounts(candidateID: string): Observable<void> {
     return from(this.db.object(`candidates/${candidateID}`).update({ Votes: firebase.database.ServerValue.increment(1) }));
   }

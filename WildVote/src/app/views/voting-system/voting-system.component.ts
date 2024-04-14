@@ -3,6 +3,7 @@ import { CandidatesService } from 'src/app/services/candidates.service';
 import { Candidate } from 'src/app/shared/models/Candidate';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { VoteService } from 'src/app/services/vote.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-voting-system',
@@ -12,6 +13,7 @@ import { VoteService } from 'src/app/services/vote.service';
 export class VotingSystemComponent {
   candidates!: Candidate[];
   public liveDemoVisible = false;
+  isElectionStart$!: Observable<boolean>;
   candidateElectionPresident: any;
   candidateElectionVicePresident: any;
   candidateElectionSecretary: any;
@@ -99,6 +101,7 @@ export class VotingSystemComponent {
   constructor(private candidateService: CandidatesService, private voteService: VoteService) { }
 
   ngOnInit(): void {
+    this.isElectionStart$ = this.voteService.getElectionStatus();
     this.candidateService.getCandidates().subscribe((candidates) => {
       this.candidates = candidates;
       this.sortCandidatesByPosition();

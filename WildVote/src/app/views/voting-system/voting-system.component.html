@@ -1,11 +1,21 @@
 <figure class="text-center">
     <blockquote class="blockquote">
-      <p>2024 SSG Elections</p>
+      <strong>
+        <p style="font-size: 24px; color: rgb(117, 25, 5)">2024 SSG Elections</p>
+      </strong>
     </blockquote>
 </figure>
 
+<div *ngIf="(isElectionStart$ | async) === false" class="text-center"> 
+  <blockquote class="blockquote">
+    <strong>
+      <p style="font-size: 24px; color: rgb(162, 37, 9)" class="p-310">No Ongoing Election</p>
+    </strong>
+  </blockquote>
+</div>
 
 
+<div *ngIf="(isElectionStart$ | async) === true">
 <c-row>
   <c-col xs>
     <c-card class="mb-4">
@@ -242,4 +252,6 @@
 
 <div class="d-grid gap-2 col-6 mx-auto p-3">
   <button cButton color="primary" (click)="submitVoteResult()" variant="outline" >Submit Vote</button>
+</div>
+
 </div>

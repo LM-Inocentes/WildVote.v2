@@ -3,6 +3,7 @@ import { CandidatesService } from 'src/app/services/candidates.service';
 import { VoteService } from 'src/app/services/vote.service';
 import { Candidate } from 'src/app/shared/models/Candidate';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-manage-candidate',
@@ -12,12 +13,14 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angul
 export class ManageCandidateComponent implements OnInit{
   candidates!: Candidate[];
   public liveDemoVisible = false;
+  isElectionStart$!: Observable<boolean>;
   candidateElectionPresident: any;
   candidateElectionVicePresident: any;
   candidateElectionSecretary: any;
   candidateElectionTreasurer: any;
   candidateElectionAuditor: any;
   candidateElectionCPERepresentative: any;
+  highestVoteCounts$!: Observable<any[]>;
   
   voteResult = 
     {
@@ -95,12 +98,22 @@ export class ManageCandidateComponent implements OnInit{
   }
 
   startElection(): void{
-    this.voteService.uploadCandidates(this.candidates).subscribe();
+    //this.voteService.uploadCandidates(this.candidates).subscribe();
+    this.voteService.setElectionStatus(true).subscribe();
+    console.log(this.voteService.getElectionStatus().subscribe());
+  }
+
+  endElection(): void{
+    this.voteService.setElectionStatus(false).subscribe();
+
   }
 
   constructor(private candidateService: CandidatesService, private formBuilder: UntypedFormBuilder, private voteService: VoteService) { }
 
   ngOnInit(): void {
+    this.isElectionStart$ = this.voteService.getElectionStatus();
+    this.highestVoteCounts$ = this.voteService.getHighestVoteCounts();
+
 
     this.candidateService.getCandidates().subscribe((candidates) => {
       this.candidates = candidates;

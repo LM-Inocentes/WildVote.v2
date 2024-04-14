@@ -50,8 +50,8 @@
                   </div>
                 </td>
                 <td>
-                  <button  style="margin-right: 5px;" cButton color="info" [routerLink]="['edit/', candidate.id]">Edit</button> 
-                  <button cButton color="danger" (click)="removeCandidate(candidate.id)" cButton>Remove</button>
+                  <button  style="margin-right: 5px;" cButton color="info" [disabled]="(isElectionStart$ | async)" [routerLink]="['edit/', candidate.id]">Edit</button> 
+                  <button cButton color="danger" (click)="removeCandidate(candidate.id)" [disabled]="(isElectionStart$ | async)" cButton>Remove</button>
                 </td>
               </tr>
             </tbody>
@@ -61,8 +61,21 @@
     </c-col>
 </c-row>
 
-<div class="d-grid gap-2 col-6 mx-auto p-3">
-  <button cButton color="primary" (click)="startElection()" variant="outline" >Start Election</button>
+<div class="d-grid gap-1 col-3 mx-auto p-3" *ngIf="(isElectionStart$ | async) === false">
+  <button cButton color="primary" (click)="startElection()" variant="outline">Start Election</button>
+</div>
+
+<div class="d-grid gap-1 col-3 mx-auto p-3" *ngIf="(isElectionStart$ | async) === true">
+  <button cButton color="danger" (click)="endElection()" variant="outline">End Election</button>
+</div>
+
+<div *ngIf="(highestVoteCounts$ | async) as highestVoteCounts">
+  <h2>Highest Vote Counts for Each Position</h2>
+  <ul>
+    <li *ngFor="let item of highestVoteCounts">
+      Position: {{ item.position }} - Highest Vote Count: {{ item.Votes }} (Candidate: {{ item.Fullname }})
+    </li>
+  </ul>
 </div>
 
 
