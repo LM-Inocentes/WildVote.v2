@@ -1,13 +1,37 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/compat/database';
 import { Candidate } from '../shared/models/Candidate';
-import { Observable, catchError, forkJoin, from, map, switchMap} from 'rxjs';
+import { Observable, catchError, forkJoin, from, map, mergeMap, of, switchMap, throwError, toArray} from 'rxjs';
 import firebase from 'firebase/compat/app';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VoteService {
+
+  customOrder = [
+    "PRESIDENT",
+    "VICE-PRESIDENT",
+    "SECRETARY",
+    "TREASURER",
+    "AUDITOR",
+    "ARCH REPRESENTATIVE",
+    "CHE REPRESENTATIVE",
+    "CE REPRESENTATIVE",
+    "CPE REPRESENTATIVE",
+    "EE REPRESENTATIVE",
+    "ECE REPRESENTATIVE",
+    "IE REPRESENTATIVE",
+    "ME REPRESENTATIVE",
+    "EM REPRESENTATIVE",
+    "CS REPRESENTATIVE",
+    "IT REPRESENTATIVE",
+    "CNAHS REPRESENTATIVE",
+    "CMBA REPRESENTATIVE",
+    "CASE REPRESENTATIVE",
+    "CCJ REPRESENTATIVE",
+  ];
+
 
   constructor(private db: AngularFireDatabase) { }
 
@@ -48,9 +72,7 @@ export class VoteService {
   getHighestVoteCounts(): Observable<any[]> {
     return this.db.object('/candidates').valueChanges().pipe(
       map((candidates: any) => {
-
-        const highestVoteCounts: { [key: string]: { Department: string, Votes: number; Fullname: string, 
-          PartyList: string, Position: string, Profile: string, ProfileID: string, Year: string } } = {};
+        const highestVoteCounts: { [key: string]: any } = {};
 
         // Iterate through each candidate
         for (const candidateId in candidates) {
@@ -58,38 +80,41 @@ export class VoteService {
             const candidate = candidates[candidateId];
             const position = candidate.Position;
 
-            // Check if position exists in highestVoteCounts object
-            if (!highestVoteCounts[position]) {
-              highestVoteCounts[position] = { Votes: 0, Fullname: '', Department: '', PartyList: '', Position: '', Profile: '', ProfileID: '', Year: ''};
-            }
-
             // Update highest vote count for the position
-            if (candidate.Votes > highestVoteCounts[position].Votes) {
-              highestVoteCounts[position] = {
-                Votes: candidate.Votes,
-                Fullname: candidate.Fullname,
-                Department: candidate.Department, 
-                PartyList: candidate.PartyList, 
-                Position: candidate.Position, 
-                Profile: candidate.Profile, 
-                ProfileID: candidate.ProfileID, 
-                Year: candidate.Year
-              };
+            if (!highestVoteCounts[position] || candidate.Votes > highestVoteCounts[position].Votes) {
+              highestVoteCounts[position] = candidate;
             }
           }
         }
 
-        // Convert highestVoteCounts object to array for easier iteration in template
-        const result = [];
-        for (const position in highestVoteCounts) {
-          if (highestVoteCounts.hasOwnProperty(position)) {
-            result.push({ position, ...highestVoteCounts[position] });
-          }
-        }
+        // Convert highestVoteCounts object to array and sort by custom order
+        const result = Object.keys(highestVoteCounts)
+          .map(position => ({ position, ...highestVoteCounts[position] }))
+          .sort((a, b) => {
+            const indexA = this.customOrder.indexOf(a.position);
+            const indexB = this.customOrder.indexOf(b.position);
+            return indexA - indexB;
+          });
 
         return result;
       })
     );
+  }
+
+  deleteAllCandidates(candidates: Candidate[]): Observable<any[]> {
+    const candidateRefs: AngularFireList<any> = this.db.list('candidates');
+    const pushObservables: Observable<any>[] = [];
+
+    // Iterate over each candidate
+    candidates.forEach(candidate => {
+      const candidateId = candidate.id; // Get the desired ID from candidate.id
+
+      // Push the candidate object with the specified ID to Firebase
+      pushObservables.push(from(candidateRefs.set(candidateId, null)));
+    });
+
+    // Return an observable that resolves when all candidates are uploaded
+    return from(Promise.all(pushObservables));
   }
 
   updateVoteCounts(candidateID: string): Observable<void> {

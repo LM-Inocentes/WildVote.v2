@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-
 import { navItems } from './_nav';
+import { navItemsUser } from './_nav_user'
+import { navItemsGeneral } from './_nav_general'
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/shared/models/User';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,6 +13,14 @@ import { navItems } from './_nav';
 export class DefaultLayoutComponent {
 
   public navItems = navItems;
-
-  constructor() {}
+  public navItemsUser = navItemsUser;
+  public navItemsGeneral = navItemsGeneral;
+  user!: User;
+  
+  constructor(private authService: AuthService) {
+    this.authService.userObservable.subscribe((newUser) => {
+      this.user = newUser;
+      console.log(this.user.isAdmin == undefined);
+    });
+  }
 }

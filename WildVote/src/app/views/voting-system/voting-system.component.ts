@@ -4,6 +4,7 @@ import { Candidate } from 'src/app/shared/models/Candidate';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { VoteService } from 'src/app/services/vote.service';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-voting-system',
@@ -98,7 +99,9 @@ export class VotingSystemComponent {
 
  
 
-  constructor(private candidateService: CandidatesService, private voteService: VoteService) { }
+  constructor(private candidateService: CandidatesService, private voteService: VoteService, private router: Router) {
+
+   }
 
   ngOnInit(): void {
     this.isElectionStart$ = this.voteService.getElectionStatus();

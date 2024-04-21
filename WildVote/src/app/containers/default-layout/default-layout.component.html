@@ -32,10 +32,20 @@
   /> -->
 
   <ng-scrollbar pointerEventsMethod="scrollbar">
-    <c-sidebar-nav
-      [navItems]="navItems"
-      dropdownMode="close"
-    />
+    <ng-container *ngIf="user.isAdmin == undefined; else userLoggedIn">
+      <!-- Render this sidebar nav if user is an admin -->
+      <c-sidebar-nav [navItems]="navItemsGeneral" dropdownMode="close"></c-sidebar-nav>
+    </ng-container>
+    <ng-template #userLoggedIn>
+      <ng-container *ngIf="!user.isAdmin">
+        <!-- Render this sidebar nav if user is not an admin -->
+        <c-sidebar-nav [navItems]="navItemsUser" dropdownMode="close"></c-sidebar-nav>
+      </ng-container>
+      <ng-container *ngIf="user.isAdmin">
+        <!-- Render this sidebar nav if user is not an admin -->
+        <c-sidebar-nav [navItems]="navItems" dropdownMode="close"></c-sidebar-nav>
+      </ng-container>
+    </ng-template>
   </ng-scrollbar>
   <c-sidebar-toggler
     *ngIf="!sidebar.narrow"

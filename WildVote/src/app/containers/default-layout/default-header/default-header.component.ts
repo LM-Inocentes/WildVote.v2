@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, Input } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 
-import { ClassToggleService, HeaderComponent } from '@coreui/angular';
+import { HeaderComponent } from '@coreui/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/shared/models/User';
 
@@ -18,7 +17,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
   public newNotifications = new Array(5)
   user!: User;
 
-  constructor(private classToggler: ClassToggleService, private authService: AuthService, private cdr: ChangeDetectorRef ) {
+  constructor(private authService: AuthService, private cdr: ChangeDetectorRef ) {
     super();
     
   }

@@ -1,7 +1,7 @@
 import { INavData } from '@coreui/angular';
 
 
-export const navItems: INavData[] = [
+export const navItemsUser: INavData[] = [
   {
     name: 'General',
     title: true,
@@ -13,7 +13,7 @@ export const navItems: INavData[] = [
 
   },
   {
-    name: 'Election',
+    name: 'Vote',
     title: true,
   },
   {
@@ -21,6 +21,15 @@ export const navItems: INavData[] = [
     url: '/vote',
     iconComponent: { name: 'cil-check' },
 
+  },
+  {
+    name: 'Account',
+    title: true,
+  },
+  {
+    name: 'Logout',
+    url: '/login',
+    iconComponent: { name: 'cil-account-logout' },
   },
   // {
   //   title: true,
@@ -37,31 +46,34 @@ export const navItems: INavData[] = [
   //   linkProps: { fragment: 'someAnchor' },
   //   iconComponent: { name: 'cil-pencil' }
   // },
-  {
-    name: 'Manage',
-    title: true,
-  },
-  {
-    name: 'Users',
-    url: '/users',
-    iconComponent: { name: 'cil-user' },
-
-  },
-  {
-    name: 'Election',
-    url: '/election',
-    iconComponent: { name: 'cil-notes' },
-    children: [
-      {
-        name: 'Manage Candidates',
-        url: '/election/manage-candidates'
-      },
-      {
-        name: 'Add Candidate',
-        url: '/election/add-candidate'
-      },
-    ]
-  },
+  // {
+  //   name: 'Admin',
+  //   title: true,
+  // },
+  // {
+  //   name: 'Users',
+  //   url: '/users',
+  //   iconComponent: { name: 'cil-user' },
+  //   badge: {
+  //     color: 'info',
+  //     text: 'NEW'
+  //   },
+  // },
+  // {
+  //   name: 'Election',
+  //   url: '/election',
+  //   iconComponent: { name: 'cil-notes' },
+  //   children: [
+  //     {
+  //       name: 'Manage Candidates',
+  //       url: '/election/manage-candidates'
+  //     },
+  //     {
+  //       name: 'Add Candidate',
+  //       url: '/election/add-candidate'
+  //     },
+  //   ]
+  // },
 
 
   

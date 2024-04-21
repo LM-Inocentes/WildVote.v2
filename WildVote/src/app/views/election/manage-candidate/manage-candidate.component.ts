@@ -3,7 +3,8 @@ import { CandidatesService } from 'src/app/services/candidates.service';
 import { VoteService } from 'src/app/services/vote.service';
 import { Candidate } from 'src/app/shared/models/Candidate';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, concatMap } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-manage-candidate',
@@ -97,27 +98,33 @@ export class ManageCandidateComponent implements OnInit{
     this.voteResult.CPERepresentative = this.CPERepresentativeVote.value.CPERepresentativeVoteID;
   }
 
-  startElection(): void{
-    //this.voteService.uploadCandidates(this.candidates).subscribe();
-    this.voteService.setElectionStatus(true).subscribe();
-    console.log(this.voteService.getElectionStatus().subscribe());
+  startElection(): void {
+    this.voteService.setElectionStatus(true).pipe(
+      concatMap(() => this.voteService.uploadCandidates(this.candidates))
+    ).subscribe({
+      error: (e) => this.toastr.error('Error', e),
+      complete: () => this.toastr.success('Election Officially Started', 'Success')
+  })
   }
-
   endElection(): void{
     this.voteService.setElectionStatus(false).subscribe();
-
+    this.voteService.deleteAllCandidates(this.candidates).subscribe();
   }
 
-  constructor(private candidateService: CandidatesService, private formBuilder: UntypedFormBuilder, private voteService: VoteService) { }
+  constructor(private candidateService: CandidatesService, private formBuilder: UntypedFormBuilder, private voteService: VoteService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.isElectionStart$ = this.voteService.getElectionStatus();
     this.highestVoteCounts$ = this.voteService.getHighestVoteCounts();
-
+    this.highestVoteCounts$.subscribe({
+      next: (candidate) => this.sortCandidatesByPosition(candidate),
+      error: (e) => this.toastr.error('Error', e),
+      complete: () => this.sortCandidatesByPosition(this.candidates)
+    });
 
     this.candidateService.getCandidates().subscribe((candidates) => {
       this.candidates = candidates;
-      this.sortCandidatesByPosition();
+      this.sortCandidatesByPosition(this.candidates);
      
       this.candidateElectionPresident = this.candidates
       .filter((candidate: Candidate) => candidate.Position === 'PRESIDENT') // Filter by position
@@ -211,7 +218,7 @@ export class ManageCandidateComponent implements OnInit{
       });
   }
 
-  sortCandidatesByPosition(): void {
+  sortCandidatesByPosition(candidates: Candidate[]): void {
     const customOrder = [
       "PRESIDENT",
       "VICE-PRESIDENT",
@@ -235,7 +242,7 @@ export class ManageCandidateComponent implements OnInit{
       "CCJ REPRESENTATIVE",
     ];
 
-    this.candidates.sort((a, b) => {
+    candidates.sort((a, b) => {
       const indexA = customOrder.indexOf(a.Position);
       const indexB = customOrder.indexOf(b.Position);
       return indexA - indexB;
