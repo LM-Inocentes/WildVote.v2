@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { cilAddressBook, cilInstitution, cilListNumbered, cilLockLocked, cilUser, cilFlagAlt, cilContact, cilContrast } from '@coreui/icons';
 import { IconSetService } from '@coreui/icons-angular';
 import { ToastrService } from 'ngx-toastr';
@@ -41,11 +41,17 @@ export class EditCandidateComponent {
     profile: new FormControl(File, []),
   })
 
-  constructor(public iconSet: IconSetService, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private candidateService:CandidatesService ) { 
+  constructor(public iconSet: IconSetService, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private candidateService:CandidatesService, private authService: AuthService, private router: Router ) { 
     iconSet.icons = {cilAddressBook, cilUser, cilLockLocked, cilInstitution, cilListNumbered, cilFlagAlt, cilContact, cilContrast};
   }
 
   ngOnInit(): void {
+    this.authService.userObservable.subscribe((currentUser) => {
+      if(!currentUser.isAdmin){
+        this.router.navigate(['dashboard']);
+        return;
+      }
+    });
     this.activatedRoute.params.subscribe((params) => {
       this.candidateService.getCandidateByID(params['candidateID']).subscribe(Candidate => {
         this.candidate = Candidate;

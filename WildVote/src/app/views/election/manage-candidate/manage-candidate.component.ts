@@ -5,6 +5,8 @@ import { Candidate } from 'src/app/shared/models/Candidate';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable, concatMap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-candidate',
@@ -111,9 +113,17 @@ export class ManageCandidateComponent implements OnInit{
     this.voteService.deleteAllCandidates(this.candidates).subscribe();
   }
 
-  constructor(private candidateService: CandidatesService, private formBuilder: UntypedFormBuilder, private voteService: VoteService, private toastr: ToastrService) { }
+  constructor(private candidateService: CandidatesService, private authService: AuthService, private router: Router,
+    private voteService: VoteService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
+    this.authService.userObservable.subscribe((currentUser) => {
+      if(!currentUser.isAdmin){
+        this.router.navigate(['dashboard']);
+        return;
+      }
+    });
+
     this.isElectionStart$ = this.voteService.getElectionStatus();
     this.highestVoteCounts$ = this.voteService.getHighestVoteCounts();
     this.highestVoteCounts$.subscribe({

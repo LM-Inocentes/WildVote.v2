@@ -40,10 +40,12 @@
       <ng-container *ngIf="!user.isAdmin">
         <!-- Render this sidebar nav if user is not an admin -->
         <c-sidebar-nav [navItems]="navItemsUser" dropdownMode="close"></c-sidebar-nav>
+        <c-sidebar-nav [navItems]="logoutnav" (click)="logout()" dropdownMode="close" ></c-sidebar-nav>
       </ng-container>
       <ng-container *ngIf="user.isAdmin">
         <!-- Render this sidebar nav if user is not an admin -->
         <c-sidebar-nav [navItems]="navItems" dropdownMode="close"></c-sidebar-nav>
+        <c-sidebar-nav [navItems]="logoutnav" (click)="logout()" dropdownMode="close"></c-sidebar-nav>
       </ng-container>
     </ng-template>
   </ng-scrollbar>

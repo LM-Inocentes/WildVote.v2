@@ -22,6 +22,7 @@ export const navItems: INavData[] = [
     iconComponent: { name: 'cil-check' },
 
   },
+
   // {
   //   title: true,
   //   name: 'Settings'
@@ -62,7 +63,10 @@ export const navItems: INavData[] = [
       },
     ]
   },
-
+  {
+    name: 'Account',
+    title: true,
+  },
 
   
   // {

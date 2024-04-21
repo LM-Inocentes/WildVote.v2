@@ -26,11 +26,6 @@ export const navItemsUser: INavData[] = [
     name: 'Account',
     title: true,
   },
-  {
-    name: 'Logout',
-    url: '/login',
-    iconComponent: { name: 'cil-account-logout' },
-  },
   // {
   //   title: true,
   //   name: 'Settings'

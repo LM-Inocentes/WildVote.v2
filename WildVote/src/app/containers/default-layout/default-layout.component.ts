@@ -4,6 +4,7 @@ import { navItemsUser } from './_nav_user'
 import { navItemsGeneral } from './_nav_general'
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/shared/models/User';
+import { INavData } from '@coreui/angular';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,16 +12,27 @@ import { User } from 'src/app/shared/models/User';
   styleUrls: ['./default-layout.component.scss'],
 })
 export class DefaultLayoutComponent {
-
+  user!: User;
   public navItems = navItems;
   public navItemsUser = navItemsUser;
   public navItemsGeneral = navItemsGeneral;
-  user!: User;
+  public logoutnav: INavData[] = [
+    {
+      name: 'Logout',
+      url: '/logout',
+      iconComponent: { name: 'cil-power-standby' },
+    },
+  ];
+  
   
   constructor(private authService: AuthService) {
     this.authService.userObservable.subscribe((newUser) => {
       this.user = newUser;
-      console.log(this.user.isAdmin == undefined);
     });
+  }
+
+  logout() {
+    this.authService.Logout();
+    window.location.reload();
   }
 }

@@ -7,6 +7,7 @@ import { Page500Component } from './views/pages/page500/page500.component';
 import { LoginComponent } from './views/pages/login/login.component';
 import { RegisterComponent } from './views/pages/register/register.component';
 import { VotingSystemComponent } from './views/voting-system/voting-system.component';
+import { authGuard } from 'src/app/services/guard.guard'
 
 const routes: Routes = [
   {
@@ -28,11 +29,15 @@ const routes: Routes = [
       },
       {
         path: 'vote',
+        canActivate: [authGuard],
+        canActivateChild: [authGuard],
         loadChildren: () =>
-          import('./views/voting-system/voting-system.module').then((m) => m.VotingSystemModule)
+          import('./views/voting-system/voting-system.module').then((m) => m.VotingSystemModule),
       },
       {
         path: 'users',
+        canActivate: [authGuard],     
+        canActivateChild: [authGuard],
         loadChildren: () =>
           import('./views/users/users.module').then((m) => m.UsersModule)
       },
@@ -85,7 +90,9 @@ const routes: Routes = [
       {
         path: 'election',
         loadChildren: () =>
-          import('./views/election/election.module').then((m) => m.ElectionModule)
+          import('./views/election/election.module').then((m) => m.ElectionModule),
+        canActivate: [authGuard],     
+        canActivateChild: [authGuard],
       },
 
     ]

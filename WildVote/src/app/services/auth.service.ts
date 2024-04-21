@@ -19,6 +19,15 @@ export class AuthService {
     this.userObservable = this.userSubject.asObservable();
   }
 
+  isUserLoggedIn(){
+    const isLoggedIn = this.getUserFromLocalStorage();
+    console.log((isLoggedIn));
+    if(isLoggedIn){
+      return true;
+    }
+    return false;
+  }
+
   login(user: User): Observable<User> {
     return this.http.post<User>(LOGIN_URL, user).pipe(
       tap({

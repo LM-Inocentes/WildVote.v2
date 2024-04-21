@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { cilAddressBook, cilInstitution, cilListNumbered, cilLockLocked, cilUser, cilFlagAlt, cilContact, cilContrast } from '@coreui/icons';
 import { IconSetService } from '@coreui/icons-angular';
 import { ToastrService } from 'ngx-toastr';
@@ -43,8 +44,14 @@ export class AddCandidateComponent {
     ]),
   })
 
-  constructor(public iconSet: IconSetService, private toastr: ToastrService, private authService: AuthService, private candidateService:CandidatesService ) { 
+  constructor(public iconSet: IconSetService, private toastr: ToastrService, private authService: AuthService, private candidateService:CandidatesService, private router: Router ) { 
     iconSet.icons = {cilAddressBook, cilUser, cilLockLocked, cilInstitution, cilListNumbered, cilFlagAlt, cilContact, cilContrast};
+    this.authService.userObservable.subscribe((currentUser) => {
+      if(!currentUser.isAdmin){
+        this.router.navigate(['dashboard']);
+        return;
+      }
+    });
   }
 
   onFileChange(event: any): void {
