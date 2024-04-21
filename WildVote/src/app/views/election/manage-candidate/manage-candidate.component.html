@@ -75,7 +75,18 @@
     <h2>Highest Vote Counts for Each Position</h2>
     <ul>
       <li *ngFor="let item of highestVoteCounts">
-        Position: {{ item.position }} - Highest Vote Count: {{ item.Votes }} (Candidate: {{ item.Fullname }})
+        Position: {{ item.Position }} - Highest Vote Count: {{ item.Votes }} (Candidate: {{ item.Fullname }}) (id: {{ item.id }})
+      </li>
+    </ul>
+  </ng-container>
+</div>
+
+<div *ngIf="(getAllCandidates$ | async) as getAllCandidatesSortedByPosition">
+  <ng-container *ngIf="getAllCandidatesSortedByPosition.length > 0">
+    <h2>Election Real-Time Result</h2>
+    <ul>
+      <li *ngFor="let item of getAllCandidatesSortedByPosition">
+       : {{ item.Position }}  Vote Count: {{ item.Votes }} (Candidate: {{ item.Fullname }}) (id: {{ item.id }}) (year: {{ item.Year }})
       </li>
     </ul>
   </ng-container>
@@ -301,7 +312,7 @@
               </c-widget-stat-d>
               <input
                 class="btn-check"
-                formControlName="CPERepresentative"
+                formControlName="CPERepresentativeVoteID"
                 type="radio"
                 [value]="widget.id"
               />

@@ -32,7 +32,6 @@ export class VoteService {
     "CCJ REPRESENTATIVE",
   ];
 
-
   constructor(private db: AngularFireDatabase) { }
 
   uploadCandidates(candidates: Candidate[]): Observable<any[]> {
@@ -57,6 +56,26 @@ export class VoteService {
 
     // Set the isElectionStart value to true
     return from(electionRef.update({ isElectionStart: cmd }));
+  }
+
+  getAllCandidates(): Observable<any[]> {
+    return this.db.list<any>('candidates').valueChanges().pipe(
+      map(candidates => {
+        // Filter candidates to ensure each has a valid position field
+        candidates = candidates.filter(candidate => {
+          return this.customOrder.includes(candidate.position);
+        });
+
+        // Sort candidates based on the custom order
+        candidates.sort((a, b) => {
+          const indexA = this.customOrder.indexOf(a.position);
+          const indexB = this.customOrder.indexOf(b.position);
+          return indexA - indexB;
+        });
+
+        return candidates;
+      })
+    );
   }
 
   getElectionStatus(): Observable<boolean> {
@@ -95,7 +114,6 @@ export class VoteService {
             const indexB = this.customOrder.indexOf(b.position);
             return indexA - indexB;
           });
-
         return result;
       })
     );

@@ -24,6 +24,7 @@ export class ManageCandidateComponent implements OnInit{
   candidateElectionAuditor: any;
   candidateElectionCPERepresentative: any;
   highestVoteCounts$!: Observable<any[]>;
+  getAllCandidates$!: Observable<any[]>;
   
   voteResult = 
     {
@@ -127,9 +128,10 @@ export class ManageCandidateComponent implements OnInit{
     this.isElectionStart$ = this.voteService.getElectionStatus();
     this.highestVoteCounts$ = this.voteService.getHighestVoteCounts();
     this.highestVoteCounts$.subscribe({
-      next: (candidate) => this.sortCandidatesByPosition(candidate),
-      error: (e) => this.toastr.error('Error', e),
-      complete: () => this.sortCandidatesByPosition(this.candidates)
+    });
+    
+    this.getAllCandidates$ = this.voteService.getAllCandidates();
+    this.getAllCandidates$.subscribe({
     });
 
     this.candidateService.getCandidates().subscribe((candidates) => {
