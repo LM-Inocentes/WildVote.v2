@@ -5,6 +5,8 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angul
 import { VoteService } from 'src/app/services/vote.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/shared/models/User';
 
 @Component({
   selector: 'app-voting-system',
@@ -12,6 +14,7 @@ import { Router } from '@angular/router';
   styleUrl: './voting-system.component.scss'
 })
 export class VotingSystemComponent {
+  user!: User;
   candidates!: Candidate[];
   public liveDemoVisible = false;
   isElectionStart$!: Observable<boolean>;
@@ -99,11 +102,13 @@ export class VotingSystemComponent {
 
  
 
-  constructor(private candidateService: CandidatesService, private voteService: VoteService, private router: Router) {
-
-   }
+  constructor(private candidateService: CandidatesService, private voteService: VoteService, private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.authService.userObservable.subscribe((loggedInUser) => {
+      this.user = loggedInUser;
+    });
+
     this.isElectionStart$ = this.voteService.getElectionStatus();
     this.candidateService.getCandidates().subscribe((candidates) => {
       this.candidates = candidates;

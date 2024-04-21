@@ -1,4 +1,10 @@
- <c-container>
+<figure class="text-center" *ngIf="(isElectionStart$ | async)">
+  <blockquote class="blockquote">
+    <p>Unable to Add Candidates while Election is Ongoing</p>
+  </blockquote>
+</figure>
+ 
+ <c-container *ngIf="!(isElectionStart$ | async)">
     <c-row class="justify-content-center">
       <c-col xs="12">
         <c-card class="mx-4 bg-dark text-white">
@@ -157,3 +163,4 @@
       </c-col>
     </c-row>
   </c-container>
+

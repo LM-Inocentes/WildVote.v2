@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 import { cilAddressBook, cilInstitution, cilListNumbered, cilLockLocked, cilUser, cilFlagAlt, cilContact, cilContrast } from '@coreui/icons';
 import { IconSetService } from '@coreui/icons-angular';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { CandidatesService } from 'src/app/services/candidates.service';
+import { VoteService } from 'src/app/services/vote.service';
 import { Candidate } from 'src/app/shared/models/Candidate';
 
 @Component({
@@ -15,6 +17,7 @@ import { Candidate } from 'src/app/shared/models/Candidate';
 })
 export class AddCandidateComponent {
   Profile!: File;
+  isElectionStart$!: Observable<boolean>;
 
   addCandidateForm = new FormGroup({
     id: new FormControl("", [
@@ -44,7 +47,7 @@ export class AddCandidateComponent {
     ]),
   })
 
-  constructor(public iconSet: IconSetService, private toastr: ToastrService, private authService: AuthService, private candidateService:CandidatesService, private router: Router ) { 
+  constructor(public iconSet: IconSetService, private toastr: ToastrService,private voteService: VoteService, private authService: AuthService, private candidateService:CandidatesService, private router: Router ) { 
     iconSet.icons = {cilAddressBook, cilUser, cilLockLocked, cilInstitution, cilListNumbered, cilFlagAlt, cilContact, cilContrast};
     this.authService.userObservable.subscribe((currentUser) => {
       if(!currentUser.isAdmin){
@@ -52,6 +55,11 @@ export class AddCandidateComponent {
         return;
       }
     });
+    this.isElectionStart$ = this.voteService.getElectionStatus();
+  }
+
+  ngOnInit(): void {
+    
   }
 
   onFileChange(event: any): void {
@@ -85,6 +93,8 @@ export class AddCandidateComponent {
       this.addCandidateForm.value.position!,
       this.addCandidateForm.value.year!,
       this.Profile, this.addCandidateForm.value.color!
-      ).subscribe();
+      ).subscribe(_ => {
+        this.ngOnInit();
+      });
   }
 }
