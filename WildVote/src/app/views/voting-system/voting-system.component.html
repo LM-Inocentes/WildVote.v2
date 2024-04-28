@@ -6,7 +6,7 @@
     </blockquote>
 </figure>
 
-<div *ngIf="(isElectionStart$ | async) === false" class="text-center"> 
+<div *ngIf="(status?.isElectionStart) === false" class="text-center"> 
   <blockquote class="blockquote">
     <strong>
       <p style="font-size: 24px; color: rgb(162, 37, 9)" class="p-310">No Ongoing Election</p>
@@ -14,8 +14,46 @@
   </blockquote>
 </div>
 
+<div *ngIf="user?.Voted" class="text-center"> 
+  <blockquote class="blockquote">
+    <strong>
+      <p style="font-size: 24px; color: rgb(162, 37, 9)" class="p-310">You Already Voted</p>
+    </strong>
+  </blockquote>
+</div>
 
-<div *ngIf="(isElectionStart$ | async) === true">
+<div *ngIf="user?.Voted" class="text-center"> 
+  <c-row>
+    <c-col xs>
+      <c-card class="mb-4">
+        <c-card-header class="bg-dark text-white">Your Vote Submitted</c-card-header>
+        <c-card-body>
+    
+            <c-row class="justify-content-center text-center">
+              <c-col *ngFor="let vote of positionsArray; let i = index" sm="4" xl="4">
+                <c-widget-stat-d
+                  color= {{vote.data.color}}
+                  [style]="{ '--cui-card-cap-bg': '#3b5998' }"
+                  [values]="[{ title: vote.data.PartyList, value: vote.data.Fullname }]"
+                  class="mb-4"
+                >
+                  <img [src]=vote.data.Profile alt="Brand Image" height="150" class="my-4 text-white">
+                </c-widget-stat-d>
+                <blockquote class="blockquote">
+                  <strong>
+                    <p style="font-size: 18px; color: rgb(162, 37, 9)" class="p-310">{{vote.position}}</p>
+                  </strong>
+                </blockquote>
+              </c-col>
+            </c-row>
+        </c-card-body>
+      </c-card>
+    </c-col>
+  </c-row>
+</div>
+
+
+<div *ngIf="((status?.isElectionStart)  === true) && !user?.Voted">
 <c-row>
   <c-col xs>
     <c-card class="mb-4">
@@ -40,7 +78,7 @@
                 [value]="widget.id"
               />
               <label
-                (click)="setPresidentVoteValue(widget.id)"
+                (click)="setPresidentVoteValue(widget.id, widget.Fullname, widget.PartyList, widget.color, widget.imageUrl)"
                 cButton
                 cFormCheckLabel
                 variant="outline"
@@ -79,7 +117,7 @@
                 [value]="widget.id"
               />
               <label
-                (click)="setVicePresidentVoteValue(widget.id)"
+                (click)="setVicePresidentVoteValue(widget.id, widget.Fullname, widget.PartyList, widget.color, widget.imageUrl)"
                 cButton
                 cFormCheckLabel
                 variant="outline"
@@ -118,7 +156,7 @@
                 [value]="widget.id"
               />
               <label
-                (click)="setSecretaryVoteValue(widget.id)"
+                (click)="setSecretaryVoteValue(widget.id, widget.Fullname, widget.PartyList, widget.color, widget.imageUrl)"
                 cButton
                 cFormCheckLabel
                 variant="outline"
@@ -157,7 +195,7 @@
                 [value]="widget.id"
               />
               <label
-                (click)="setTreasurerVoteValue(widget.id)"
+                (click)="setTreasurerVoteValue(widget.id, widget.Fullname, widget.PartyList, widget.color, widget.imageUrl)"
                 cButton
                 cFormCheckLabel
                 variant="outline"
@@ -196,7 +234,7 @@
                 [value]="widget.id"
               />
               <label
-                (click)="setAuditorVoteValue(widget.id)"
+                (click)="setAuditorVoteValue(widget.id, widget.Fullname, widget.PartyList, widget.color, widget.imageUrl)"
                 cButton
                 cFormCheckLabel
                 variant="outline"
@@ -235,7 +273,7 @@
                 [value]="widget.id"
               />
               <label
-                (click)="setCPERepresentativeVoteValue(widget.id)"
+                (click)="setCPERepresentativeVoteValue(widget.id, widget.Fullname, widget.PartyList, widget.color, widget.imageUrl)"
                 cButton
                 cFormCheckLabel
                 variant="outline"

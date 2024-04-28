@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/shared/models/User';
+import { UserVoteResult } from 'src/app/shared/models/UserVoteResult';
+import { Election } from 'src/app/shared/models/Election';
 
 @Component({
   selector: 'app-voting-system',
@@ -15,15 +17,58 @@ import { User } from 'src/app/shared/models/User';
 })
 export class VotingSystemComponent {
   user!: User;
+  logggedUser!: User;
   candidates!: Candidate[];
   public liveDemoVisible = false;
-  isElectionStart$!: Observable<boolean>;
+  status?: Election;
   candidateElectionPresident: any;
   candidateElectionVicePresident: any;
   candidateElectionSecretary: any;
   candidateElectionTreasurer: any;
   candidateElectionAuditor: any;
   candidateElectionCPERepresentative: any;
+  getUserVoteResult!: UserVoteResult;
+  positionsArray: any;
+
+  userVoteResult: UserVoteResult = {
+      President: {
+        id: '',
+        Fullname: '',
+        PartyList: '',
+        color: ''
+      },
+      VicePresident: {
+        id: '',
+        Fullname: '',
+        PartyList: '',
+        color: ''
+      },
+      Secretary: {
+        id: '',
+        Fullname: '',
+        PartyList: '',
+        color: ''
+      },
+      Treasurer: {
+        id: '',
+        Fullname: '',
+        PartyList: '',
+        color: ''
+      },
+      Auditor: {
+        id: '',
+        Fullname: '',
+        PartyList: '',
+        color: ''
+      },
+      CPERepresentative: {
+        id: '',
+        Fullname: '',
+        PartyList: '',
+        color: ''
+      },
+      id: ''
+  }
   
   voteResult = 
     {
@@ -40,63 +85,122 @@ export class VotingSystemComponent {
     PresidentVoteID: new UntypedFormControl('President')
   });
 
-  setPresidentVoteValue(id: string): void {
-    this.PresidentVote.setValue({ PresidentVoteID: id });
-    this.voteResult.President = this.PresidentVote.value.PresidentVoteID;
+  setPresidentVoteValue(id: string, Fullname: string, PartyList: string, color: string, Profile: string): void {
+    this.PresidentVote.setValue({
+      PresidentVoteID: 
+        id,
+      });
+    this.userVoteResult.President = {
+      id,
+      Fullname,
+      PartyList,
+      color,
+      Profile
+    };
   }
 
   VicePresidentVote = new UntypedFormGroup({
     VicePresidentVoteID: new UntypedFormControl('VicePresident')
   });
 
-  setVicePresidentVoteValue(id: string): void {
-    this.VicePresidentVote.setValue({ VicePresidentVoteID: id });
-    this.voteResult.VicePresident = this.VicePresidentVote.value.VicePresidentVoteID;
+  setVicePresidentVoteValue(id: string, Fullname: string, PartyList: string, color: string, Profile: string): void {
+    this.VicePresidentVote.setValue({ 
+      VicePresidentVoteID: 
+      id,
+    });
+    this.userVoteResult.VicePresident = {
+      id,
+      Fullname,
+      PartyList,
+      color,
+      Profile
+    };
   }
 
   SecretaryVote = new UntypedFormGroup({
     SecretaryVoteID: new UntypedFormControl('Secretary')
   });
 
-  setSecretaryVoteValue(id: string): void {
-    this.SecretaryVote.setValue({ SecretaryVoteID: id });
-    this.voteResult.Secretary = this.SecretaryVote.value.SecretarytVoteID;
+  setSecretaryVoteValue(id: string, Fullname: string, PartyList: string, color: string, Profile: string): void {
+    this.SecretaryVote.setValue({ 
+      SecretaryVoteID: 
+      id,
+    });
+    this.userVoteResult.Secretary = {
+      id,
+      Fullname,
+      PartyList,
+      color,
+      Profile
+    };
   }
+
 
   TreasurerVote = new UntypedFormGroup({
     TreasurerVoteID: new UntypedFormControl('Treasurer')
   });
 
-  setTreasurerVoteValue(id: string): void {
-    this.TreasurerVote.setValue({ TreasurerVoteID: id });
-    this.voteResult.Treasurer = this.TreasurerVote.value.TreasurerVoteID;
+  setTreasurerVoteValue(id: string, Fullname: string, PartyList: string, color: string, Profile: string): void {
+    this.TreasurerVote.setValue({ 
+      TreasurerVoteID: 
+      id,
+    });
+    this.userVoteResult.Treasurer = {
+      id,
+      Fullname,
+      PartyList,
+      color,
+      Profile
+    };
   }
 
   AuditorVote = new UntypedFormGroup({
     AuditorVoteID: new UntypedFormControl('Auditor')
   });
 
-  setAuditorVoteValue(id: string): void {
-    this.AuditorVote.setValue({ AuditorVoteID: id });
-    this.voteResult.Auditor = this.AuditorVote.value.AuditorVoteID;
+  setAuditorVoteValue(id: string, Fullname: string, PartyList: string, color: string, Profile: string): void {
+    this.AuditorVote.setValue({ 
+      AuditorVoteID: 
+      id,
+    });
+    this.userVoteResult.Auditor = {
+      id,
+      Fullname,
+      PartyList,
+      color,
+      Profile
+    };
   }
 
   CPERepresentativeVote = new UntypedFormGroup({
     CPERepresentativeVoteID: new UntypedFormControl('CPERepresentative')
   });
 
-  setCPERepresentativeVoteValue(id: string): void {
-    this.CPERepresentativeVote.setValue({ CPERepresentativeVoteID: id });
-    this.voteResult.CPERepresentative = this.CPERepresentativeVote.value.CPERepresentativeVoteID;
+  setCPERepresentativeVoteValue(id: string, Fullname: string, PartyList: string, color: string, Profile: string): void {
+    this.CPERepresentativeVote.setValue({ 
+      CPERepresentativeVoteID: 
+      id,
+    });
+    this.userVoteResult.CPERepresentative = {
+      id,
+      Fullname,
+      PartyList,
+      color,
+      Profile
+    };
   }
 
   submitVoteResult(): void{
-    console.log(this.voteResult);
-    Object.values(this.voteResult).forEach(position => {
-      if(position===''){
+    this.userVoteResult.id = this.user.id;
+    Object.values(this.userVoteResult).forEach(position => {
+      if(position===''||position.id===undefined){
         return;
       }
-      this.voteService.updateVoteCounts(position).subscribe();  // Perform operations on each position's value here
+      this.voteService.updateVoteCounts(position.id).subscribe();  // Perform operations on each position's value here
+    });
+    this.voteService.submitUserVote(this.userVoteResult).subscribe();
+    this.authService.votedUser(this.user).subscribe(_ => {
+      this.ngOnInit();
     });
   }
 
@@ -106,10 +210,32 @@ export class VotingSystemComponent {
 
   ngOnInit(): void {
     this.authService.userObservable.subscribe((loggedInUser) => {
-      this.user = loggedInUser;
+      this.logggedUser = loggedInUser;
+    });
+    this.authService.getUserByIdNoToast(this.logggedUser.id).subscribe((getUser) => {
+      this.user = getUser;
+      if(this.user.Voted){
+      this.voteService.getUserVote(this.user.id).subscribe((uservote) => {
+        this.getUserVoteResult = uservote;
+
+        this.positionsArray = Object.entries(this.getUserVoteResult)
+        .filter(([key, value]) => typeof value === 'object' && value !== null && !Array.isArray(value))
+        .map(([key, value]) => ({
+          position: key,
+          data: value as Candidate // Cast the value to PositionData interface
+        }));
+
+        console.log(this.positionsArray[0].data.Fullname);
+      });
+      return;
+    }
+    });
+    this.voteService.getElectionStatus().subscribe((STATUS) => {
+      this.status = STATUS;
     });
 
-    this.isElectionStart$ = this.voteService.getElectionStatus();
+    
+
     this.candidateService.getCandidates().subscribe((candidates) => {
       this.candidates = candidates;
       this.sortCandidatesByPosition();

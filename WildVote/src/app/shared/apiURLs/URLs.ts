@@ -6,6 +6,13 @@ export const REGISTER_URL = BASE_URL + '/api/users/register';
 export const GET_USERS_URL = BASE_URL + '/api/users/get';
 export const GET_USER_BY_ID_URL = BASE_URL + '/api/users/get/';
 export const EDIT_USER_BY_ID_URL = BASE_URL + '/api/users/edit/';
+export const VOTED_USER_URL = BASE_URL + '/api/users/edit/voted';
+export const USER_VOTE_RESULT_URL = BASE_URL + '/api/users/vote';
+export const GET_USER_VOTE_RESULT_URL = BASE_URL + '/api/users/vote/';
+export const USER_VOTE_RESET_RESULT_URL = BASE_URL + '/api/users/vote/reset';
+export const RESET_VOTED_USER_URL = BASE_URL + '/api/users/reset/voted';
+export const ADMIN_USER_URL = BASE_URL + '/api/users/edit/isAdmin';
+export const ISNOTADMIN_USER_URL = BASE_URL + '/api/users/edit/isnotAdmin';
 export const SEARCH_USER_BY_ID_URL = BASE_URL + '/api/users/';
 export const DELETE_USER_BY_ID = BASE_URL + '/api/users/delete/';
 
@@ -35,3 +42,6 @@ export const CASE_CANDIDATES_URL = BASE_URL + '/api/candidates/get/case-represen
 export const CCJ_CANDIDATES_URL = BASE_URL + '/api/candidates/get/ccj-representative';
 
 export const REMOVE_CANDIDATE_URL = BASE_URL + '/api/candidates/remove/';
+
+export const SET_ELECTION_URL = BASE_URL + '/api/misc/set-election';
+export const GET_ELECTION_STATUS_URL = BASE_URL + '/api/misc/get-election-status';

@@ -1,30 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CandidatesService } from 'src/app/services/candidates.service';
 import { VoteService } from 'src/app/services/vote.service';
 import { Candidate } from 'src/app/shared/models/Candidate';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { Observable, concatMap } from 'rxjs';
+import { Observable, Subscription, concatMap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { Election } from 'src/app/shared/models/Election';
 
 @Component({
   selector: 'app-manage-candidate',
   templateUrl: './manage-candidate.component.html',
   styleUrl: './manage-candidate.component.scss'
 })
-export class ManageCandidateComponent implements OnInit{
+export class ManageCandidateComponent implements OnInit, OnDestroy{
   candidates!: Candidate[];
   public liveDemoVisible = false;
-  isElectionStart$!: Observable<boolean>;
   candidateElectionPresident: any;
   candidateElectionVicePresident: any;
   candidateElectionSecretary: any;
   candidateElectionTreasurer: any;
   candidateElectionAuditor: any;
   candidateElectionCPERepresentative: any;
+
+  isElectionStart?: Election;
   highestVoteCounts$!: Observable<any[]>;
   getAllCandidates$!: Observable<any[]>;
+  private highestVoteCountsSubscription!: Subscription;
+  private getAllCandidatesSubscription!: Subscription;
   
   voteResult = 
     {
@@ -104,14 +108,21 @@ export class ManageCandidateComponent implements OnInit{
   startElection(): void {
     this.voteService.setElectionStatus(true).pipe(
       concatMap(() => this.voteService.uploadCandidates(this.candidates))
-    ).subscribe({
-      error: (e) => this.toastr.error('Error', e),
-      complete: () => this.toastr.success('Election Officially Started', 'Success')
-  })
+    ).subscribe(_ => {
+      this.toastr.info('Election Started');
+      this.ngOnInit();
+    });
   }
+
   endElection(): void{
     this.voteService.setElectionStatus(false).subscribe();
-    this.voteService.deleteAllCandidates(this.candidates).subscribe();
+    this.authService.resetUsersVotes().subscribe();
+    this.authService.resetUsersVotesResults().subscribe();
+    this.voteService.deleteAllCandidates(this.candidates).subscribe(_ => {
+      this.toastr.info('Election Ended');
+      this.ngOnInit();
+    });
+
   }
 
   constructor(private candidateService: CandidatesService, private authService: AuthService, private router: Router,
@@ -125,14 +136,18 @@ export class ManageCandidateComponent implements OnInit{
       }
     });
 
-    this.isElectionStart$ = this.voteService.getElectionStatus();
-    this.highestVoteCounts$ = this.voteService.getHighestVoteCounts();
-    this.highestVoteCounts$.subscribe({
+
+    this.voteService.getElectionStatus().subscribe((status) => {
+      this.isElectionStart = status;
     });
     
+    this.highestVoteCounts$ = this.voteService.getHighestVoteCounts();
     this.getAllCandidates$ = this.voteService.getAllCandidates();
-    this.getAllCandidates$.subscribe({
-    });
+
+    // Subscribe to observables and handle data
+    this.highestVoteCountsSubscription = this.highestVoteCounts$.subscribe();
+    this.getAllCandidatesSubscription = this.getAllCandidates$.subscribe();
+
 
     this.candidateService.getCandidates().subscribe((candidates) => {
       this.candidates = candidates;
@@ -228,6 +243,12 @@ export class ManageCandidateComponent implements OnInit{
         Votes: candidate.Votes,
       }));
       });
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions to prevent memory leaks
+    this.highestVoteCountsSubscription.unsubscribe();
+    this.getAllCandidatesSubscription.unsubscribe();
   }
 
   sortCandidatesByPosition(candidates: Candidate[]): void {

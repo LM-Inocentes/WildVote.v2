@@ -50,8 +50,8 @@
                   </div>
                 </td>
                 <td>
-                  <button  style="margin-right: 5px;" cButton color="info" [disabled]="(isElectionStart$ | async)" [routerLink]="['edit/', candidate.id]">Edit</button> 
-                  <button cButton color="danger" (click)="removeCandidate(candidate.id)" [disabled]="(isElectionStart$ | async)" cButton>Remove</button>
+                  <button  style="margin-right: 5px;" cButton color="info" [disabled]="(isElectionStart?.isElectionStart && isElectionStart !== undefined)" [routerLink]="['edit/', candidate.id]">Edit</button> 
+                  <button cButton color="danger" (click)="removeCandidate(candidate.id)" [disabled]="(isElectionStart?.isElectionStart && isElectionStart !== undefined)" cButton>Remove</button>
                 </td>
               </tr>
             </tbody>
@@ -61,11 +61,11 @@
     </c-col>
 </c-row>
 
-<div class="d-grid gap-1 col-3 mx-auto p-3" *ngIf="(isElectionStart$ | async) === false">
+<div class="d-grid gap-1 col-3 mx-auto p-3" *ngIf="(!isElectionStart?.isElectionStart && isElectionStart !== undefined)">
   <button cButton color="primary" (click)="startElection()" variant="outline">Start Election</button>
 </div>
 
-<div class="d-grid gap-1 col-3 mx-auto p-3" *ngIf="(isElectionStart$ | async) === true">
+<div class="d-grid gap-1 col-3 mx-auto p-3" *ngIf="(isElectionStart?.isElectionStart && isElectionStart !== undefined)">
   <button cButton color="danger" (click)="endElection()" variant="outline">End Election</button>
 </div>
 

@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/compat/database';
 import { Candidate } from '../shared/models/Candidate';
-import { Observable, catchError, forkJoin, from, map, mergeMap, of, switchMap, throwError, toArray} from 'rxjs';
+import { Observable, catchError, forkJoin, from, map, mergeMap, of, switchMap, tap, throwError, toArray} from 'rxjs';
 import firebase from 'firebase/compat/app';
+import { HttpClient } from '@angular/common/http';
+import { GET_ELECTION_STATUS_URL, GET_USER_VOTE_RESULT_URL, SET_ELECTION_URL, USER_VOTE_RESULT_URL } from '../shared/apiURLs/URLs';
+import { ToastrService } from 'ngx-toastr';
+import { Election } from '../shared/models/Election';
+import { UserVoteResult } from '../shared/models/UserVoteResult';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +38,7 @@ export class VoteService {
   ];
 
 
-  constructor(private db: AngularFireDatabase) { }
+  constructor(private db: AngularFireDatabase, private http:HttpClient,  private toastrService: ToastrService) { }
 
   uploadCandidates(candidates: Candidate[]): Observable<any[]> {
     const candidateRefs: AngularFireList<Candidate> = this.db.list('candidates');
@@ -50,27 +55,37 @@ export class VoteService {
     // Return an observable that resolves when all candidates are uploaded
     return from(Promise.all(pushObservables));
   }
-
-  setElectionStatus(cmd: boolean): Observable<void> {
-    // Get a reference to the 'election' node in your Firebase database
-    const electionRef = this.db.object('election');
-
-    // Set the isElectionStart value to true
-    return from(electionRef.update({ isElectionStart: cmd }));
+  
+  submitUserVote( userVote :UserVoteResult ): Observable<UserVoteResult>{
+    return this.http.post<UserVoteResult>(USER_VOTE_RESULT_URL, userVote).pipe(
+      tap({
+        next: (user) => {
+          this.toastrService.success(
+            `Vote Submitted`,
+            'Success'
+          )
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Failed');
+        }
+      })
+    );
   }
 
-  getAllCandidates(): Observable<any[]> {
+  getUserVote(id: string): Observable<UserVoteResult>{
+    return this.http.get<UserVoteResult>(GET_USER_VOTE_RESULT_URL+id);
+  }
+
+  setElectionStatus(isElectionStart: boolean): Observable<void>{
+    return this.http.post<void>(SET_ELECTION_URL, {isElectionStart});
+  }
+
+  getAllCandidates(): Observable<any> {
     return this.db.list<any>('candidates').valueChanges();
   }
 
-  getElectionStatus(): Observable<boolean> {
-    // Get a reference to the 'election' node in your Firebase database
-    const electionRef = this.db.object('election/isElectionStart');
-
-    // Return an observable with type assertion using pipe and map operator
-    return electionRef.valueChanges().pipe(
-      map(value => !!value) // Map the value to boolean explicitly
-    );
+  getElectionStatus(): Observable<Election> {
+    return this.http.get<Election>(GET_ELECTION_STATUS_URL);
   }
 
   getHighestVoteCounts(): Observable<any[]> {

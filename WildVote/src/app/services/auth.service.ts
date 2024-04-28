@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../shared/models/User';
-import { DELETE_USER_BY_ID, EDIT_USER_BY_ID_URL, GET_USERS_URL, GET_USER_BY_ID_URL, LOGIN_URL, REGISTER_URL, SEARCH_USER_BY_ID_URL } from '../shared/apiURLs/URLs';
+import { ADMIN_USER_URL, DELETE_USER_BY_ID, EDIT_USER_BY_ID_URL, GET_USERS_URL, GET_USER_BY_ID_URL, ISNOTADMIN_USER_URL, LOGIN_URL, REGISTER_URL, RESET_VOTED_USER_URL, SEARCH_USER_BY_ID_URL, USER_VOTE_RESET_RESULT_URL, VOTED_USER_URL } from '../shared/apiURLs/URLs';
 
 const USER_KEY = 'User';
 
@@ -103,6 +103,61 @@ export class AuthService {
     );
   }
 
+  votedUser(user: User): Observable<User>{
+    return this.http.patch<User>(VOTED_USER_URL, user).pipe(
+      tap({
+        next: (user) => {
+          this.toastrService.success(
+            `Vote Submitted`,
+            'Success'
+          )
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Error');
+        }
+      })
+    );
+  }
+
+  resetUsersVotes(): Observable<void>{
+    return this.http.patch<void>(RESET_VOTED_USER_URL, {});
+  }
+
+  resetUsersVotesResults(): Observable<void>{
+    return this.http.delete<void>(USER_VOTE_RESET_RESULT_URL);
+  }
+
+  setUserAdmin(user: User): Observable<User>{
+    return this.http.patch<User>(ADMIN_USER_URL, user).pipe(
+      tap({
+        next: (user) => {
+          this.toastrService.success(
+            `User ${user.id} Set as Admin`,
+            'Success'
+          )
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Error');
+        }
+      })
+    );
+  }
+
+  unsetUserAdmin(user: User): Observable<User>{
+    return this.http.patch<User>(ISNOTADMIN_USER_URL, user).pipe(
+      tap({
+        next: (user) => {
+          this.toastrService.success(
+            `User ${user.id} Revoked Admin Access`,
+            'Success'
+          )
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Error');
+        }
+      })
+    );
+  }
 
   getUserById( id :string ): Observable<User>{
     return this.http.get<User>(GET_USER_BY_ID_URL+id).pipe(
@@ -118,6 +173,10 @@ export class AuthService {
         }
       })
     );
+  }
+
+  getUserByIdNoToast( id :string ): Observable<User>{
+    return this.http.get<User>(GET_USER_BY_ID_URL+id);
   }
 
   editUserById( id :string ): Observable<User>{

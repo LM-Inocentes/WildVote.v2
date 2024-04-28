@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CandidatesService } from 'src/app/services/candidates.service';
 import { VoteService } from 'src/app/services/vote.service';
 import { Candidate } from 'src/app/shared/models/Candidate';
+import { Election } from 'src/app/shared/models/Election';
 
 @Component({
   selector: 'app-add-candidate',
@@ -17,8 +18,7 @@ import { Candidate } from 'src/app/shared/models/Candidate';
 })
 export class AddCandidateComponent {
   Profile!: File;
-  isElectionStart$!: Observable<boolean>;
-
+  isElectionStart?: Election;
   addCandidateForm = new FormGroup({
     id: new FormControl("", [
       Validators.required,
@@ -55,7 +55,10 @@ export class AddCandidateComponent {
         return;
       }
     });
-    this.isElectionStart$ = this.voteService.getElectionStatus();
+    this.voteService.getElectionStatus().subscribe((status) => {
+      this.isElectionStart = status;
+    });
+    
   }
 
   ngOnInit(): void {
