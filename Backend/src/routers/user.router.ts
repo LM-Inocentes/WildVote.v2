@@ -86,6 +86,26 @@ router.get("/get/", asyncHandler(
   }
 ))
 
+router.get('/user-count', asyncHandler(async (req, res) => {
+  try {
+    const userCount = await UserModel.countDocuments();
+    res.status(200).json({ userCount });
+  } catch (error) {
+    console.error('Error fetching user count:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}));
+
+router.get('/user-count/voted', asyncHandler(async (req, res) => {
+  try {
+    const votedUserCount = await UserModel.countDocuments({ Voted: true });
+    res.status(200).json({ votedUserCount });
+  } catch (error) {
+    console.error('Error fetching voted user count:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}));
+
 router.get("/get/:id", asyncHandler(
   async (req, res) =>{
       const user = await UserModel.findOne({id: req.params.id});

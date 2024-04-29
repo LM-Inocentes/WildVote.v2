@@ -4,7 +4,7 @@ import { Candidate } from '../shared/models/Candidate';
 import { Observable, catchError, forkJoin, from, map, mergeMap, of, switchMap, tap, throwError, toArray} from 'rxjs';
 import firebase from 'firebase/compat/app';
 import { HttpClient } from '@angular/common/http';
-import { GET_ELECTION_STATUS_URL, GET_USER_VOTE_RESULT_URL, SET_ELECTION_URL, USER_VOTE_RESULT_URL } from '../shared/apiURLs/URLs';
+import { GET_ELECTION_STATUS_URL, GET_USER_VOTE_RESULT_URL, SET_ELECTION_URL, USER_COUNT_URL, USER_COUNT_VOTED_URL, USER_VOTE_RESULT_URL } from '../shared/apiURLs/URLs';
 import { ToastrService } from 'ngx-toastr';
 import { Election } from '../shared/models/Election';
 import { UserVoteResult } from '../shared/models/UserVoteResult';
@@ -72,8 +72,37 @@ export class VoteService {
     );
   }
 
+  getUsersCount(): Observable<any>{
+    return this.http.get<any>( USER_COUNT_URL );
+  }
+
+  setUsersCount(cmd: number): Observable<void> {
+    return from(this.db.object(`users/all`).set(cmd));
+  }
+
+  getUsersWhoVoted(): Observable<any>{
+    return this.http.get<any>(USER_COUNT_VOTED_URL);
+  }
+
+  setUsersWhoVoted(cmd: number): Observable<void> {
+    return from(this.db.object(`users/voted`).set(cmd));
+  }
+
+  listenUsersCount(): Observable<any> {
+    return this.db.list<any>('users/all').valueChanges();
+  }
+
+  listenUsersWhoVotedCount(): Observable<any> {
+    return this.db.list<any>('users/voted').valueChanges();
+  }
+
+
   getUserVote(id: string): Observable<UserVoteResult>{
     return this.http.get<UserVoteResult>(GET_USER_VOTE_RESULT_URL+id);
+  }
+
+  setUserVote(cmd: number): Observable<void> {
+    return from(this.db.object(`users/voted`).set(cmd));
   }
 
   setElectionStatus(isElectionStart: boolean): Observable<void>{
