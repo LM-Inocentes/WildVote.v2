@@ -40,6 +40,18 @@ export class UsersComponent {
     });
   }
 
+  demoteUser(user: User){
+    this.authService.unsetUserAdmin(user).subscribe(_ => {
+      this.ngOnInit();
+    });
+  }
+
+  setUserAdmin(user: User){
+    this.authService.setUserAdmin(user).subscribe(_ => {
+      this.ngOnInit();
+    });
+  }
+
   toggleLiveDemo() {
     this.liveDemoVisible = !this.liveDemoVisible;
   }

@@ -136,7 +136,6 @@ export class ManageCandidateComponent implements OnInit, OnDestroy{
       }
     });
 
-
     this.voteService.getElectionStatus().subscribe((status) => {
       this.isElectionStart = status;
     });

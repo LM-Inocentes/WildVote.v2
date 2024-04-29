@@ -84,6 +84,64 @@ export class VoteService {
     return this.db.list<any>('candidates').valueChanges();
   }
 
+  getAllPresidentCandidates(): Observable<any[]> {
+    return this.db.list<any>('candidates').valueChanges().pipe(
+      map(candidates => {
+        const filteredCandidates = candidates.filter(candidate => candidate.Position === 'PRESIDENT');
+        filteredCandidates.sort((a, b) => b.Votes - a.Votes);
+        return filteredCandidates;
+      })
+    );
+  }
+  getAllVicePresidentCandidates(): Observable<any[]> {
+    return this.db.list<any>('candidates').valueChanges().pipe(
+      map(candidates => {
+        const filteredCandidates = candidates.filter(candidate => candidate.Position === 'VICE-PRESIDENT');
+        filteredCandidates.sort((a, b) => b.Votes - a.Votes);
+        return filteredCandidates;
+      })
+    );
+  }
+
+  getAllSecretaryCandidates(): Observable<any[]> {
+    return this.db.list<any>('candidates').valueChanges().pipe(
+      map(candidates => {
+        const filteredCandidates = candidates.filter(candidate => candidate.Position === 'SECRETARY');
+        filteredCandidates.sort((a, b) => b.Votes - a.Votes);
+        return filteredCandidates;
+      })
+    );
+  }
+
+  getAllTreasurerCandidates(): Observable<any[]> {
+    return this.db.list<any>('candidates').valueChanges().pipe(
+      map(candidates => {
+        const filteredCandidates = candidates.filter(candidate => candidate.Position === 'TREASURER');
+        filteredCandidates.sort((a, b) => b.Votes - a.Votes);
+        return filteredCandidates;
+      })
+    );
+  }
+  getAllAuditorCandidates(): Observable<any[]> {
+    return this.db.list<any>('candidates').valueChanges().pipe(
+      map(candidates => {
+        const filteredCandidates = candidates.filter(candidate => candidate.Position === 'AUDITOR');
+        filteredCandidates.sort((a, b) => b.Votes - a.Votes);
+        return filteredCandidates;
+      })
+    );
+  }
+
+  getAllCpeRepresentativeCandidates(): Observable<any[]> {
+    return this.db.list<any>('candidates').valueChanges().pipe(
+      map(candidates => {
+        const filteredCandidates = candidates.filter(candidate => candidate.Position === 'CPE REPRESENTATIVE');
+        filteredCandidates.sort((a, b) => b.Votes - a.Votes);
+        return filteredCandidates;
+      })
+    );
+  }
+
   getElectionStatus(): Observable<Election> {
     return this.http.get<Election>(GET_ELECTION_STATUS_URL);
   }

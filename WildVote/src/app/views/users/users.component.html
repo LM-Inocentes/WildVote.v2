@@ -45,6 +45,7 @@
                 <th>Voted</th>
                 <th>Admin</th>
                 <th>Manage</th>
+                <th>Privilege</th>
               </tr>
             </thead>
             <tbody>
@@ -79,20 +80,11 @@
                 </td>
                 <td>
                   <button  style="margin-right: 5px;" cButton color="info" routerLink="/users/edit/{{user.id}}">Edit</button> 
-                  <ng-container *ngTemplateOutlet="Remove"></ng-container>
-                      <ng-template #Remove>
-                        <button cButton color="danger" (click)="toggleLiveDemo()" cButton>Delete</button>
-                        <c-modal id="liveDemoModal" [visible]="liveDemoVisible" (visibleChange)="handleLiveDemoChange($event)">
-                          <c-modal-header>
-                            <h5 cModalTitle>Confirm</h5>
-                            <button (click)="toggleLiveDemo()" cButtonClose></button>
-                          </c-modal-header>
-                          <c-modal-body>Do You Really Want to Delete This User?</c-modal-body>
-                          <c-modal-footer>
-                            <button cButton color="primary" (click)="deleteUser(user.id)">Yes</button>
-                          </c-modal-footer>
-                        </c-modal>
-                      </ng-template>
+                  <button cButton color="danger" (click)="deleteUser(user.id)">Delete</button>
+                </td>
+                <td>
+                  <button *ngIf="!user.isAdmin"  style="margin-right: 5px;" cButton color="info" (click)="setUserAdmin(user)">Set Admin</button> 
+                  <button *ngIf="user.isAdmin"  cButton color="danger" (click)="demoteUser(user)">Demote User</button>
                 </td>
               </tr>
             </tbody>
