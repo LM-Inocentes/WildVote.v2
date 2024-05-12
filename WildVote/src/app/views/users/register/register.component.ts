@@ -3,6 +3,7 @@ import { User } from 'src/app/shared/models/User';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service'
+import { VoteService } from 'src/app/services/vote.service';
 
 @Component({
   selector: 'app-register',
@@ -29,8 +30,8 @@ export class RegisterComponent {
     ]),
   })
 
-  constructor(private toastr: ToastrService, private authService: AuthService,) { 
-
+  constructor(private toastr: ToastrService, private authService: AuthService, private voteService: VoteService) { 
+   
   }
 
   addUser() {
@@ -46,7 +47,11 @@ export class RegisterComponent {
       password: this.registerForm.value.password!,
     }
 
-    this.authService.register(user).subscribe();
+    this.authService.register(user).subscribe(_ => {
+      this.voteService.getUsersCount().subscribe((userCount) => {
+        this.voteService.setUsersCount(userCount.userCount);
+      });
+    });
   }
 
 

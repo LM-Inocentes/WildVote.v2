@@ -198,7 +198,11 @@ export class VotingSystemComponent {
       }
       this.voteService.updateVoteCounts(position.id).subscribe();  // Perform operations on each position's value here
     });
-    this.voteService.submitUserVote(this.userVoteResult).subscribe();
+    this.voteService.submitUserVote(this.userVoteResult).subscribe(_ => {
+      this.voteService.getUsersWhoVoted().subscribe((value) => {
+        this.voteService.setUsersWhoVoted(value.votedUserCount);
+      });
+    });
     this.authService.votedUser(this.user).subscribe(_ => {
       this.ngOnInit();
     });
@@ -224,8 +228,6 @@ export class VotingSystemComponent {
           position: key,
           data: value as Candidate // Cast the value to PositionData interface
         }));
-
-        console.log(this.positionsArray[0].data.Fullname);
       });
       return;
     }

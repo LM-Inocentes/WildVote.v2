@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/compat/database';
+import firebase from 'firebase/compat/app';
 import { Candidate } from '../shared/models/Candidate';
 import { Observable, catchError, forkJoin, from, map, mergeMap, of, switchMap, tap, throwError, toArray} from 'rxjs';
-import firebase from 'firebase/compat/app';
 import { HttpClient } from '@angular/common/http';
 import { GET_ELECTION_STATUS_URL, GET_USER_VOTE_RESULT_URL, SET_ELECTION_URL, USER_COUNT_URL, USER_COUNT_VOTED_URL, USER_VOTE_RESULT_URL } from '../shared/apiURLs/URLs';
 import { ToastrService } from 'ngx-toastr';
@@ -89,11 +89,11 @@ export class VoteService {
   }
 
   listenUsersCount(): Observable<any> {
-    return this.db.list<any>('users/all').valueChanges();
+    return this.db.object<number>(`users/all`).valueChanges();
   }
 
   listenUsersWhoVotedCount(): Observable<any> {
-    return this.db.list<any>('users/voted').valueChanges();
+    return this.db.object<number>(`users/voted/`).valueChanges();
   }
 
 

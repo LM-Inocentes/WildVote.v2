@@ -118,6 +118,7 @@ export class ManageCandidateComponent implements OnInit, OnDestroy{
     this.voteService.setElectionStatus(false).subscribe();
     this.authService.resetUsersVotes().subscribe();
     this.authService.resetUsersVotesResults().subscribe();
+    this.voteService.setUsersWhoVoted(0);
     this.voteService.deleteAllCandidates(this.candidates).subscribe(_ => {
       this.toastr.info('Election Ended');
       this.ngOnInit();

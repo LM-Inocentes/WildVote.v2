@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, combineLatest, map } from 'rxjs';
 import { VoteService } from 'src/app/services/vote.service';
 import { Election } from 'src/app/shared/models/Election';
+
 
 interface IUser {
   name: string;
@@ -30,11 +31,10 @@ export class DashboardComponent implements OnInit {
     userCount: 0,
     votedUserCount : 0
   }
-  getRtUsersCount$!: Observable<any>;
-  getusersCount$!: Observable<any>;
+
   listenusersCount$!: Observable<any>;
-  getusersWhoVotedCount$!: Observable<any>;
   listenusersWhoVotedCount$!: Observable<any>
+  getusersWhoVotedCountPercentage$!: Observable<number>;
   highestVoteCounts$!: Observable<any[]>;
   getAllCandidates$!: Observable<any[]>;
   getAllPresidentCandidates$!: Observable<any[]>;
@@ -43,6 +43,7 @@ export class DashboardComponent implements OnInit {
   getAllTreasurerCandidates$!: Observable<any[]>;
   getAllAuditorCandidates$!: Observable<any[]>;
   getAllCpeRepresentativeCandidates$!: Observable<any[]>;
+  usersVotedPercentage$!: Observable<string>;
   positions: string[] = [
     'PRESIDENT',
     'VICE-PRESIDENT',
@@ -56,24 +57,27 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.voteService.getUsersCount().subscribe((userCount) => {
-      this.usersCount = userCount;
-      this.getusersCount$ = this.voteService.setUsersCount(this.usersCount.userCount);
-    });
-    this.voteService.getUsersWhoVoted().subscribe((userCount) => {
-      this.usersCount = userCount;
-      this.getusersWhoVotedCount$ = this.voteService.setUsersWhoVoted(this.usersCount.votedUserCount);
-    });
+    // this.voteService.getUsersCount().subscribe((userCount) => {
+    //   this.usersCount = userCount;
+    //   this.getusersCount$ = this.voteService.setUsersCount(this.usersCount.userCount);
+    // });
+    // this.voteService.getUsersWhoVoted().subscribe((userCount) => {
+    //   this.usersCount = userCount;
+    //   this.getusersWhoVotedCount$ = this.voteService.setUsersWhoVoted(this.usersCount.votedUserCount);
+    // });
 
     this.listenusersCount$ = this.voteService.listenUsersCount();
     this.listenusersWhoVotedCount$ = this.voteService.listenUsersWhoVotedCount();
+    
     this.listenusersCount$.subscribe();
     this.listenusersWhoVotedCount$.subscribe();
+
+    this.getusersWhoVotedCountPercentage$ = this.calculatePercentage(this.listenusersWhoVotedCount$, this.listenusersCount$);
     
     this.voteService.getElectionStatus().subscribe((STATUS) => {
       this.status = STATUS;
     });
-    this.getRtUsersCount$;
+
     this.highestVoteCounts$ = this.voteService.getHighestVoteCounts();
     this.getAllCandidates$ = this.voteService.getAllCandidates();
     this.getAllPresidentCandidates$ = this.voteService.getAllPresidentCandidates();
@@ -92,11 +96,22 @@ export class DashboardComponent implements OnInit {
     this.getAllTreasurerCandidates$.subscribe();
     this.getAllAuditorCandidates$.subscribe();
     this.getAllCpeRepresentativeCandidates$.subscribe();
+
   }
 
-
-
-
-
+  calculatePercentage(
+    source1$: Observable<number>,
+    source2$: Observable<number>
+  ): Observable<number> {
+    return combineLatest([source1$, source2$]).pipe(
+      map(([source1Data, source2Data]) => {
+        if (source2Data === 0) {
+          return 0; // Handle division by zero scenario
+        } else {
+          return (source1Data / source2Data) * 100;
+        }
+      })
+    );
+  }
 
 }

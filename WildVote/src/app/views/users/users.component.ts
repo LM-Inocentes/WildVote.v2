@@ -3,6 +3,7 @@ import { User } from '../../shared/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { VoteService } from 'src/app/services/vote.service';
 
 
 @Component({
@@ -14,7 +15,7 @@ export class UsersComponent {
   public liveDemoVisible = false;
   public users!: User[];
 
-  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute) { }
+  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute, private voteService: VoteService) { }
 
   ngOnInit(): void {
     let UsersObservable: Observable<User[]>;
@@ -36,8 +37,12 @@ export class UsersComponent {
 
   deleteUser(id:string){
     this.authService.deleteUserByID(id).subscribe(_ => {
+      this.voteService.getUsersCount().subscribe((userCount) => {
+        this.voteService.setUsersCount(userCount.userCount);
+      });
       this.ngOnInit();
     });
+    
   }
 
   demoteUser(user: User){

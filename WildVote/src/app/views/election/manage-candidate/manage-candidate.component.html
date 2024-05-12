@@ -68,9 +68,9 @@
 <div class="d-grid gap-1 col-3 mx-auto p-3" *ngIf="(isElectionStart?.isElectionStart && isElectionStart !== undefined)">
   <button cButton color="danger" (click)="endElection()" variant="outline">End Election</button>
 </div>
-
+<!-- 
 <div *ngIf="(highestVoteCounts$ | async) as highestVoteCounts">
-  <!-- Check if highestVoteCounts is truthy before displaying the heading -->
+ 
   <ng-container *ngIf="highestVoteCounts.length > 0">
     <h2>Highest Vote Counts for Each Position</h2>
     <ul>
@@ -90,7 +90,7 @@
       </li>
     </ul>
   </ng-container>
-</div>
+</div> -->
 
 <figure class="text-center">
   <blockquote class="blockquote">

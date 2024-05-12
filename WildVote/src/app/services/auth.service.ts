@@ -5,6 +5,8 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../shared/models/User';
 import { ADMIN_USER_URL, DELETE_USER_BY_ID, EDIT_USER_BY_ID_URL, GET_USERS_URL, GET_USER_BY_ID_URL, ISNOTADMIN_USER_URL, LOGIN_URL, REGISTER_URL, RESET_VOTED_USER_URL, SEARCH_USER_BY_ID_URL, USER_VOTE_RESET_RESULT_URL, VOTED_USER_URL } from '../shared/apiURLs/URLs';
+import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/compat/database';
+import firebase from 'firebase/compat/app';
 
 const USER_KEY = 'User';
 
@@ -15,7 +17,7 @@ export class AuthService {
   private userSubject = new BehaviorSubject<User>(this.getUserFromLocalStorage());
   public userObservable: Observable<User>;
 
-  constructor( private http:HttpClient, private toastrService: ToastrService, private router: Router) { 
+  constructor( private http:HttpClient, private toastrService: ToastrService, private router: Router, private db: AngularFireDatabase) { 
     this.userObservable = this.userSubject.asObservable();
   }
 

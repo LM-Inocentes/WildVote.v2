@@ -12,6 +12,7 @@
           </c-card>
         </c-col>
       </c-row> -->
+    
   
       <div *ngIf="(status?.isElectionStart) === false" class="text-center"> 
         <blockquote class="blockquote">
@@ -25,23 +26,23 @@
     <c-row class="text-center" [md]="3" [xs]="1">
       <c-col class="mb-sm-2 mb-0">
         <div class="text-medium-emphasis">Users</div>
-        <strong>1025 Users</strong>
+        <strong>{{listenusersCount$ | async}} Users</strong>
         <c-progress class="mt-2" thin>
-          <c-progress-bar color="success" value="40"></c-progress-bar>
+          <c-progress-bar color="success" value="100"></c-progress-bar>
         </c-progress>
       </c-col>
       <c-col class="mb-sm-2 mb-0">
         <div class="text-medium-emphasis">Votes</div>
-        <strong>900 Votes</strong>
+        <strong>{{listenusersWhoVotedCount$ | async}} Votes  ({{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}} %)</strong>
         <c-progress class="mt-2" thin>
-          <c-progress-bar color="info" value="20"></c-progress-bar>
+          <c-progress-bar color="info" value="{{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}}"></c-progress-bar>
         </c-progress>
       </c-col>
       <c-col class="mb-sm-2 mb-0">
         <div class="text-medium-emphasis">Not Yet Voted</div>
-        <strong>125 Users</strong>
+        <strong>{{(listenusersCount$ | async) - (listenusersWhoVotedCount$ | async)}} Users  ({{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}} %)  </strong>
         <c-progress class="mt-2" thin>
-          <c-progress-bar color="warning" value="60"></c-progress-bar>
+          <c-progress-bar color="warning" value="{{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}}"></c-progress-bar>
         </c-progress>
       </c-col>
      
@@ -58,7 +59,7 @@
       </ul>
     </ng-container>
   </div> -->
-  
+<div *ngIf="listenusersWhoVotedCount$ | async as userCount; else nullTemplate" >
 <c-row>
   <c-col xs>
     <c-card class="mb-4">
@@ -69,24 +70,25 @@
             <c-row>
               <c-col sm="12">
                 <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
-                  <div class="fs-5 fw-semibold">President</div>
+                  <div class="fs-5 fw-semibold">President </div>
                 </div>
               </c-col>
             </c-row>
 
             <hr class="mt-0" />
-
+           
             <div class="progress-group mb-4" *ngFor="let presidentCandidate of getAllPresidentCandidates$ | async">
               <div class="progress-group-prepend">
                 <span class="text-medium-emphasis small">{{presidentCandidate.Fullname}}</span>
               </div>
               <div class="progress-group-bars">
-                <strong>{{presidentCandidate.Votes}} Votes ({{ ((presidentCandidate.Votes/usersCount.userCount)*100).toFixed(2) }})% </strong>
+                <strong>{{presidentCandidate.Votes}} Votes ({{ ((presidentCandidate.Votes/(userCount))*100).toFixed(2) }})% </strong>
                 <c-progress>
-                  <c-progress-bar color="{{presidentCandidate.color}}" [value]="(presidentCandidate.Votes / usersCount.userCount) * 100">  </c-progress-bar>
+                  <c-progress-bar color="{{presidentCandidate.color}}" [value]="(presidentCandidate.Votes / (userCount)) * 100">  </c-progress-bar>
                 </c-progress>
               </div>
             </div>
+        
             <!-- <div class="legend text-center" ngPreserveWhitespaces>
               <small>
                 <sup>
@@ -123,9 +125,9 @@
                 <span class="text-medium-emphasis small">{{vpresidentCandidate.Fullname}}</span>
               </div>
               <div class="progress-group-bars">
-                <strong>{{vpresidentCandidate.Votes}} Votes ({{ ((vpresidentCandidate.Votes/usersCount.userCount)*100).toFixed(2) }})% </strong>
+                <strong>{{vpresidentCandidate.Votes}} Votes ({{ ((vpresidentCandidate.Votes/userCount)*100).toFixed(2) }})% </strong>
                 <c-progress>
-                  <c-progress-bar color="{{vpresidentCandidate.color}}" [value]="(vpresidentCandidate.Votes / usersCount.userCount) * 100">  </c-progress-bar>
+                  <c-progress-bar color="{{vpresidentCandidate.color}}" [value]="(vpresidentCandidate.Votes / userCount) * 100">  </c-progress-bar>
                 </c-progress>
               </div>
             </div>
@@ -148,9 +150,9 @@
                 <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
               </div>
               <div class="progress-group-bars">
-                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/usersCount.userCount)*100).toFixed(2) }})% </strong>
+                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }})% </strong>
                 <c-progress>
-                  <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / usersCount.userCount) * 100">  </c-progress-bar>
+                  <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
                 </c-progress>
               </div>
             </div>
@@ -172,9 +174,9 @@
                 <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
               </div>
               <div class="progress-group-bars">
-                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/usersCount.userCount)*100).toFixed(2) }})% </strong>
+                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }})% </strong>
                 <c-progress>
-                  <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / usersCount.userCount) * 100">  </c-progress-bar>
+                  <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
                 </c-progress>
               </div>
             </div>
@@ -197,9 +199,9 @@
                 <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
               </div>
               <div class="progress-group-bars">
-                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/usersCount.userCount)*100).toFixed(2) }})% </strong>
+                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }})% </strong>
                 <c-progress>
-                  <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / usersCount.userCount) * 100">  </c-progress-bar>
+                  <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
                 </c-progress>
               </div>
             </div>
@@ -222,9 +224,9 @@
                 <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
               </div>
               <div class="progress-group-bars">
-                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/usersCount.userCount)*100).toFixed(2) }})% </strong>
+                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }})% </strong>
                 <c-progress>
-                  <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / usersCount.userCount) * 100">  </c-progress-bar>
+                  <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
                 </c-progress>
               </div>
             </div>
@@ -236,7 +238,13 @@
   </c-col>
 </c-row>
 </div>
+</div>
 
+<ng-template #nullTemplate>
+  <!-- Content to render while userCount is loading (else block) -->
+  <p>No Votes Yet...</p>
+  <!-- You can add loading indicators or messages here -->
+</ng-template>
 <!-- 
 <app-widgets-brand [withCharts]="true"></app-widgets-brand>
 
