@@ -53,18 +53,6 @@ export class AuthService {
     return this.db.object<any>(`Auth/MessagePrompt`).valueChanges();
   }
 
-  MessagePromptStatic(): Observable<string> {
-    // Retrieve the AngularFireObject for the MessagePrompt
-
-    // Use snapshotChanges() to fetch the current value once
-    return from(this.db.object(`Auth/MessagePrompt`).snapshotChanges()).pipe(
-      map(snapshot => {
-        // Extract the current value from the snapshot
-        const value = snapshot.payload.val();
-        return value;
-      })
-    );
-  }
 
   setDefaultPrompt(cmd: string): Observable<void> {
     return from(this.db.object(`Auth/MessagePrompt`).set(cmd));
