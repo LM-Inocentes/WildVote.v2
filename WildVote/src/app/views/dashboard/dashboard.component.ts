@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
     userCount: 0,
     votedUserCount : 0
   }
+  
 
   listenusersCount$!: Observable<any>;
   listenusersWhoVotedCount$!: Observable<any>
@@ -65,6 +66,13 @@ export class DashboardComponent implements OnInit {
     //   this.usersCount = userCount;
     //   this.getusersWhoVotedCount$ = this.voteService.setUsersWhoVoted(this.usersCount.votedUserCount);
     // });
+
+    if (!localStorage.getItem('foo')) { 
+      localStorage.setItem('foo', 'no reload') 
+      location.reload() 
+    } else {
+      localStorage.removeItem('foo') 
+    }
 
     this.listenusersCount$ = this.voteService.listenUsersCount();
     this.listenusersWhoVotedCount$ = this.voteService.listenUsersWhoVotedCount();
