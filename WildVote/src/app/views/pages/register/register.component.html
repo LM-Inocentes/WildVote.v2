@@ -1,0 +1,97 @@
+<div class="bg-dark min-vh-100 d-flex flex-row align-items-center">
+    <c-container>
+      <c-row class="justify-content-center">
+        <c-col lg="8" md="9" xl="6">
+          <c-card class="mx-4">
+            <c-card-body class="p-4">
+              <form cForm [formGroup]="registerForm" (ngSubmit)="createAccount()">
+                <h1>Register</h1>
+                <p class="text-medium-emphasis">Create a New Account</p>
+                <!-- ID Number and Fullname on the same line -->
+                <c-row class="mb-3">
+                  <c-col sm="6">
+                    <c-input-group>
+                      <span cInputGroupText>
+                        <svg cIcon name="cilAddressBook"></svg>
+                      </span>
+                      <input formControlName="id" cFormControl placeholder="ID Number" />
+                    </c-input-group>
+                  </c-col>
+                  <c-col sm="6">
+                    <c-input-group>
+                      <span cInputGroupText>
+                        <svg cIcon name="cilUser"></svg>
+                      </span>
+                      <input formControlName="fullname" cFormControl placeholder="Fullname" />
+                    </c-input-group>
+                  </c-col>
+                </c-row>
+                <c-row class="mb-3">
+                  <c-col sm="6">
+                    <c-input-group>
+                      <span cInputGroupText>
+                        <svg cIcon name="cilInstitution"></svg>
+                      </span>
+                      <select formControlName="department" cFormControl>
+                        <option value="" disabled selected>Department</option>
+                        <!-- Add additional options as needed -->
+                        <option>ARCH</option>
+                        <option>CHE</option>
+                        <option>CE</option>
+                        <option>CPE</option>
+                        <option>EE</option>
+                        <option>ECE</option>
+                        <option>IE</option>
+                        <option>ME</option>
+                        <option>EM</option>
+                        <option>CS</option>
+                        <option>IT</option>
+                        <option>CNAHS</option>
+                        <option>CMBA</option>
+                        <option>CASE</option>
+                        <option>CCJ</option>
+                        <!-- ... -->
+                      </select>
+                    </c-input-group>
+                  </c-col>
+                  <c-col sm="6">
+                    <c-input-group>
+                      <span cInputGroupText>
+                        <svg cIcon name="cilListNumbered"></svg>
+                      </span>
+                      <select formControlName="year" cFormControl>
+                        <option value="" disabled selected>Year</option>
+                        <!-- Add additional options as needed -->
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <!-- ... -->
+                      </select>
+                    </c-input-group>
+                  </c-col>
+                </c-row>
+                <c-input-group class="mb-3">
+                  <span cInputGroupText>
+                    <svg cIcon name="cilLockLocked"></svg>
+                  </span>
+                  <input formControlName="password" cFormControl placeholder="Password" type="password" />
+                </c-input-group>
+                <c-input-group class="mb-3">
+                    <span cInputGroupText>
+                      <svg cIcon name="cilLockLocked"></svg>
+                    </span>
+                    <input formControlName="confirmpassword" cFormControl placeholder="Confirm Password" type="password" />
+                  </c-input-group>
+                <div class="d-grid">
+                  <button type="submit" cButton color="success" >Create Account</button>
+                </div>
+              </form>
+            </c-card-body>
+          </c-card>
+        </c-col>
+      </c-row>
+    </c-container>
+  </div>
+  

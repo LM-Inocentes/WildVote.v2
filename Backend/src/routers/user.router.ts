@@ -106,6 +106,17 @@ router.get('/user-count/voted', asyncHandler(async (req, res) => {
   }
 }));
 
+router.get('/user-count/fingerprint/registered', asyncHandler(async (req, res) => {
+  try {
+    const FingerprintRegisteredUserCount = await UserModel.countDocuments({ FingerprintRegistered: true });
+    res.status(200).json({ FingerprintRegisteredUserCount });
+  } catch (error) {
+    console.error('Error fetching voted user count:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}));
+
+
 router.get("/get/:id", asyncHandler(
   async (req, res) =>{
       const user = await UserModel.findOne({id: req.params.id});
@@ -215,9 +226,9 @@ router.delete("/delete/:id", asyncHandler(
   }
 ))
 
-router.post("/register", upload.single('image'), asyncHandler(
+router.post("/register", asyncHandler(
   async (req, res) => {
-    const { id, Fullname, Department, Year, password} = req.body;
+    const { id, Fullname, Department, Year, password, FingerprintRegistered} = req.body;
     const user = await UserModel.findOne({ id });
     if (user) {
       res.status(400)
@@ -233,6 +244,9 @@ router.post("/register", upload.single('image'), asyncHandler(
       Year,
       password,
       Voted: false,
+      FingerprintIndex: 0,
+      FingerprintAuth: false,
+      FingerprintRegistered,
     }
     const dbUser = await UserModel.create(newUser);
     res.send(dbUser);

@@ -10,6 +10,7 @@ export const VOTED_USER_URL = BASE_URL + '/api/users/edit/voted';
 export const USER_VOTE_RESULT_URL = BASE_URL + '/api/users/vote';
 export const USER_COUNT_URL = BASE_URL + '/api/users/user-count';
 export const USER_COUNT_VOTED_URL = BASE_URL + '/api/users/user-count/voted';
+export const USER_FINGERPRINT_REGISTERED_COUNT_URL = BASE_URL + '/api/users/user-count/fingerprint/registered';
 export const GET_USER_VOTE_RESULT_URL = BASE_URL + '/api/users/vote/';
 export const USER_VOTE_RESET_RESULT_URL = BASE_URL + '/api/users/vote/reset';
 export const RESET_VOTED_USER_URL = BASE_URL + '/api/users/reset/voted';

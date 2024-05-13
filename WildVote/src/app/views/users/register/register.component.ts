@@ -32,8 +32,8 @@ export class RegisterComponent implements OnInit{
   })
 
   MessagePrompt$!: Observable<any>;
-  toggle: boolean = true;
-  Prmpt: string = '';
+  MessagePrompt2$!: Observable<any>;
+
   isFingerprintSaved: boolean = false;
 
   constructor(private toastr: ToastrService, private authService: AuthService, private voteService: VoteService) { 
@@ -41,45 +41,39 @@ export class RegisterComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.authService.setDefaultPrompt("Press Captures Fingerprint");
     this.MessagePrompt$ = this.authService.MessagePrompt();
-    this.MessagePrompt$.subscribe((value) => {
-      if (value === "Fingerprint Saved") {
-        console.log(value)
-        this.isFingerprintSaved = true;
-      }else{
-        this.isFingerprintSaved = false;
-      }
-    });
-  }
-
-  setdefault(){
-    this.authService.setDefaultPrompt("Press Capture Fingerprint");
-    this.toggle = !this.toggle;
+    this.MessagePrompt$.subscribe();
   }
 
   enrollFingerprint(){
-    this.toggle = false;
+
     this.authService.cmdFingerprint("register");
   }
 
   addUser() {
+
+    this.MessagePrompt2$ = this.authService.MessagePrompt();
+    this.MessagePrompt2$.subscribe((value) => {
+      if(value !== "Fingerprint Saved"){
+        this.toastr.error('Fingerprint not Saved. Please Try Again', 'Invalid Fingerprint');
+        return
+      }
+    });
+
     if (this.registerForm.invalid && this.isFingerprintSaved) {
       this.toastr.error('Please check your form fields.', 'Invalid Input');
       return;
     }
-
+    
     const user:User = {
       id: this.registerForm.value.id!,
-      Fullname: this.registerForm.value.fullname!,
-      Department: this.registerForm.value.department!,
-      Year: this.registerForm.value.year!,
-      password: this.registerForm.value.password!,
+      FingerprintRegistered: true,
+      FingerprintIndex: 2
     }
 
     this.authService.register(user).subscribe(_ => {
-      this.voteService.getUsersCount().subscribe((userCount) => {
-        this.voteService.setUsersCount(userCount.userCount);
-      });
+     
     });
   }
 

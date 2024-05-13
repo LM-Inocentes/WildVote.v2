@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, from, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../shared/models/User';
-import { ADMIN_USER_URL, DELETE_USER_BY_ID, EDIT_USER_BY_ID_URL, GET_USERS_URL, GET_USER_BY_ID_URL, ISNOTADMIN_USER_URL, LOGIN_URL, REGISTER_URL, RESET_VOTED_USER_URL, SEARCH_USER_BY_ID_URL, USER_VOTE_RESET_RESULT_URL, VOTED_USER_URL } from '../shared/apiURLs/URLs';
+import { ADMIN_USER_URL, DELETE_USER_BY_ID, EDIT_USER_BY_ID_URL, GET_USERS_URL, GET_USER_BY_ID_URL, ISNOTADMIN_USER_URL, LOGIN_URL, REGISTER_URL, RESET_VOTED_USER_URL, SEARCH_USER_BY_ID_URL, USER_FINGERPRINT_REGISTERED_COUNT_URL, USER_VOTE_RESET_RESULT_URL, VOTED_USER_URL } from '../shared/apiURLs/URLs';
 import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/compat/database';
 import firebase from 'firebase/compat/app';
 
@@ -50,16 +50,15 @@ export class AuthService {
   }
 
   MessagePrompt(): Observable<any> {
-    return this.db.object<any>(`Auth/MessagePrompt`).valueChanges();
+    return this.db.object<any>(`Kiosk1/MessagePrompt`).valueChanges();
   }
 
-
   setDefaultPrompt(cmd: string): Observable<void> {
-    return from(this.db.object(`Auth/MessagePrompt`).set(cmd));
+    return from(this.db.object(`Kiosk1/`).update({"MessagePrompt": cmd}));
   }
 
   cmdFingerprint(cmd: string): Observable<void> {
-    return from(this.db.object(`Auth/Status`).set(cmd));
+    return from(this.db.object(`Kiosk1/Status`).set(cmd));
   }
 
   register( user:User ): Observable<User>{
@@ -80,6 +79,10 @@ export class AuthService {
   
   getUsers(): Observable<User[]>{
     return this.http.get<User[]>(GET_USERS_URL);
+  }
+
+  getRegisteredFingerprintUsersCount(): Observable<any>{
+    return this.http.get<any>( USER_FINGERPRINT_REGISTERED_COUNT_URL );
   }
 
   searchUsersByID(searchTerm: string) {

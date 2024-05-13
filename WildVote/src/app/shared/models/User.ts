@@ -8,4 +8,7 @@ export class User{
     password?: string;
     Voted?: boolean;          
     token?: string;
+    FingerprintIndex?: number;
+    FingerprintAuth? : boolean;
+    FingerprintRegistered? : boolean;
 }

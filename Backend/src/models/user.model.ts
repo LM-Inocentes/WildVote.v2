@@ -8,6 +8,9 @@ export interface IUser{
     Year: string;
     password: string;
     Voted: boolean; 
+    FingerprintIndex: number;
+    FingerprintAuth: boolean;
+    FingerprintRegistered: boolean;
    // ReferenceFingerPrint: string;  
 }
 
@@ -20,6 +23,9 @@ export const UserSchema = new Schema<IUser>(
         Year: { type: String, required:true },
         password: { type: String, required:true },
         Voted: { type: Boolean, required:true },
+        FingerprintIndex: { type: Number, required:true },
+        FingerprintAuth: { type: Boolean, required:true },
+        FingerprintRegistered: { type: Boolean, required:true },
     },{
         toJSON:{
             virtuals:true
