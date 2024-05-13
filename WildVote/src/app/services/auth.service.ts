@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, from, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../shared/models/User';
 import { ADMIN_USER_URL, DELETE_USER_BY_ID, EDIT_USER_BY_ID_URL, GET_USERS_URL, GET_USER_BY_ID_URL, ISNOTADMIN_USER_URL, LOGIN_URL, REGISTER_URL, RESET_VOTED_USER_URL, SEARCH_USER_BY_ID_URL, USER_VOTE_RESET_RESULT_URL, VOTED_USER_URL } from '../shared/apiURLs/URLs';
@@ -47,6 +47,31 @@ export class AuthService {
 
       })
     );
+  }
+
+  MessagePrompt(): Observable<any> {
+    return this.db.object<any>(`Auth/MessagePrompt`).valueChanges();
+  }
+
+  MessagePromptStatic(): Observable<string> {
+    // Retrieve the AngularFireObject for the MessagePrompt
+
+    // Use snapshotChanges() to fetch the current value once
+    return from(this.db.object(`Auth/MessagePrompt`).snapshotChanges()).pipe(
+      map(snapshot => {
+        // Extract the current value from the snapshot
+        const value = snapshot.payload.val();
+        return value;
+      })
+    );
+  }
+
+  setDefaultPrompt(cmd: string): Observable<void> {
+    return from(this.db.object(`Auth/MessagePrompt`).set(cmd));
+  }
+
+  cmdFingerprint(cmd: string): Observable<void> {
+    return from(this.db.object(`Auth/Status`).set(cmd));
   }
 
   register( user:User ): Observable<User>{

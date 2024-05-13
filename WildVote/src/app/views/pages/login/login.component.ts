@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  togglebutton: boolean = true;
 
   loginForm = new FormGroup({
     id: new FormControl("", [
@@ -23,6 +24,20 @@ export class LoginComponent {
   })
 
   constructor(private toastr: ToastrService, private authService: AuthService, private router: Router,) { 
+    this.authService.userObservable.subscribe((currentUser) => {
+      if(currentUser.id){
+        this.router.navigate(['dashboard']);
+        return;
+      }
+    });
+  }
+
+  startLogin(){
+    this.togglebutton =  !this.togglebutton;
+  }
+
+  scanFingerprint(){
+    this.togglebutton =  !this.togglebutton;
   }
 
   login() {
@@ -39,4 +54,5 @@ export class LoginComponent {
       this.router.navigateByUrl('/');
     });
   }
+
 }
