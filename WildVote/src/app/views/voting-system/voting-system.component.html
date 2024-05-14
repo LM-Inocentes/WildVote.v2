@@ -14,6 +14,14 @@
   </blockquote>
 </div>
 
+<div *ngIf="!user.FingerprintAuth" class="text-center"> 
+  <blockquote class="blockquote">
+    <strong>
+      <p style="font-size: 24px; color: rgb(162, 37, 9)" class="p-310">Login With Fingerprint to Vote</p>
+    </strong>
+  </blockquote>
+</div>
+
 <div *ngIf="user?.Voted" class="text-center"> 
   <blockquote class="blockquote">
     <strong>
@@ -53,7 +61,7 @@
 </div>
 
 
-<div *ngIf="((status?.isElectionStart)  === true) && !user?.Voted">
+<div *ngIf="((status?.isElectionStart)  === true) && !user?.Voted && user.FingerprintAuth">
 <c-row>
   <c-col xs>
     <c-card class="mb-4">

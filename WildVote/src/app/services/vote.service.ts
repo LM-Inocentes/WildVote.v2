@@ -80,6 +80,10 @@ export class VoteService {
     return from(this.db.object(`users/all`).set(cmd));
   }
 
+  setUsersFingerprintedCount(cmd: number): Observable<void> {
+    return from(this.db.object(`users/fingerprinted`).set(cmd));
+  }
+
   getUsersWhoVoted(): Observable<any>{
     return this.http.get<any>(USER_COUNT_VOTED_URL);
   }

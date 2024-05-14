@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
     //   this.usersCount = userCount;
     //   this.getusersWhoVotedCount$ = this.voteService.setUsersWhoVoted(this.usersCount.votedUserCount);
     // });
-
+    
     if (!localStorage.getItem('foo')) { 
       localStorage.setItem('foo', 'no reload') 
       location.reload() 

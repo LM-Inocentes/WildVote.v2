@@ -20,16 +20,15 @@ const routes: Routes = [
         }
       },
       {
-        path: 'edit/:userID',
+        path: ':userID',
         component: EditComponent,
-        data: { title: 'Users'}
+        data: { title: 'Edit User'}
       },
       {
-        path: 'register',
-        pathMatch: 'full',
+        path: ':userID/fingerprint',
         component: RegisterComponent,
         data: {
-          title: 'Register'
+          title: 'Register Fingerprint'
         }
       },
     ]

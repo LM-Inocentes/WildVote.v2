@@ -87,7 +87,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./views/pages/pages.module').then((m) => m.PagesModule)
       },
-
+      {
+        path: 'scan',
+        loadChildren: () =>
+          import('./views/scan/scan.module').then((m) => m.ScanModule)
+      },
       {
         path: 'election',
         loadChildren: () =>

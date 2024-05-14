@@ -41,6 +41,6 @@ import { EditComponent } from './edit/edit.component'
     TableModule,
     ModalModule,
   ],
-  declarations: [UsersComponent, RegisterComponent, EditComponent]
+  declarations: [UsersComponent, RegisterComponent, EditComponent],
 })
 export class UsersModule { }

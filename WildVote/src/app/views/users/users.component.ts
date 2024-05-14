@@ -36,6 +36,9 @@ export class UsersComponent {
   }
 
   deleteUser(id:string){
+    this.authService.getRegisteredFingerprintUsersCount().subscribe((value) => {
+      this.voteService.setUsersFingerprintedCount(value.FingerprintRegisteredUserCount);
+    });
     this.authService.deleteUserByID(id).subscribe(_ => {
       this.voteService.getUsersCount().subscribe((userCount) => {
         this.voteService.setUsersCount(userCount.userCount);

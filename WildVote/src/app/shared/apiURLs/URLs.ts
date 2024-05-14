@@ -2,6 +2,8 @@ const BASE_URL = 'http://localhost:5000';
 
 
 export const LOGIN_URL = BASE_URL + '/api/users/login';
+export const FINGERPRINT_LOGIN_URL = BASE_URL + '/api/users/login/fingerprint';
+export const LOGOUT_URL = BASE_URL + '/api/users/logout';
 export const REGISTER_URL = BASE_URL + '/api/users/register';
 export const GET_USERS_URL = BASE_URL + '/api/users/get';
 export const GET_USER_BY_ID_URL = BASE_URL + '/api/users/get/';
@@ -11,6 +13,7 @@ export const USER_VOTE_RESULT_URL = BASE_URL + '/api/users/vote';
 export const USER_COUNT_URL = BASE_URL + '/api/users/user-count';
 export const USER_COUNT_VOTED_URL = BASE_URL + '/api/users/user-count/voted';
 export const USER_FINGERPRINT_REGISTERED_COUNT_URL = BASE_URL + '/api/users/user-count/fingerprint/registered';
+export const USER_FINGERPRINT_REGISTERED_URL = BASE_URL + '/api/users/fingerprint';
 export const GET_USER_VOTE_RESULT_URL = BASE_URL + '/api/users/vote/';
 export const USER_VOTE_RESET_RESULT_URL = BASE_URL + '/api/users/vote/reset';
 export const RESET_VOTED_USER_URL = BASE_URL + '/api/users/reset/voted';

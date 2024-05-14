@@ -20,11 +20,6 @@
     <c-col xs>
       <c-card class="mb-4">
         <c-card-header class="bg-dark text-white">Users</c-card-header>
-        <c-card-header class="bg-dark text-white">
-          <button cButton color="light" routerLink="/users/register">
-            <svg cIcon name="cilUserPlus"></svg>
-          </button>
-        </c-card-header>
         <c-card-body>
           <table
             [hover]="true"
@@ -39,9 +34,8 @@
                 <th class="text-center">
                   ID
                 </th>
-                <th>Name</th>
-                <th class="text-center">Department</th>
-                <th>Year</th>
+                <th class="text-center">Name</th>
+                <th class="text-center">Fingerprint</th>
                 <th>Voted</th>
                 <th>Admin</th>
                 <th>Manage</th>
@@ -59,19 +53,19 @@
                   {{ user.id }}
                 </td>
                 <td>
-                  <div>{{ user.Fullname }}</div>
-                  <div class="small text-medium-emphasis text-nowrap">
+                  <div class="text-center">{{ user.Fullname }}</div>
+                  <div class="small text-medium-emphasis text-nowrap text-center">
                     <span>
-                      {{ user.Department }} | {{ user.Year }} 
+                      {{ user.Department }} - {{ user.Year }} 
                     </span>
                   </div>
                 </td>
-                <td class="text-center">
-                    {{ user.Department }} 
+                <td class="text-center" *ngIf="!user.FingerprintRegistered">
+                  <button style="margin-right: 5px;" cButton color="info" routerLink="{{user.id}}/fingerprint">Upload</button>
                 </td>
-                <td>
-                    {{ user.Year }} 
-                </td>
+                <td class="text-center text-success" *ngIf="user.FingerprintRegistered">
+                  Saved
+              </td>
                 <td>
                   {{ user.Voted }}
                 </td>
@@ -79,12 +73,11 @@
                   {{ user.isAdmin }}
                 </td>
                 <td>
-                  <button  style="margin-right: 5px;" cButton color="info" routerLink="/users/edit/{{user.id}}">Edit</button> 
                   <button cButton color="danger" (click)="deleteUser(user.id)">Delete</button>
                 </td>
                 <td>
                   <button *ngIf="!user.isAdmin"  style="margin-right: 5px;" cButton color="info" (click)="setUserAdmin(user)">Set Admin</button> 
-                  <button *ngIf="user.isAdmin"  cButton color="danger" (click)="demoteUser(user)">Demote User</button>
+                  <button *ngIf="user.isAdmin"  cButton color="danger" (click)="demoteUser(user)">Demote to User</button>
                 </td>
               </tr>
             </tbody>

@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service'
 import { User } from 'src/app/shared/models/User';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  togglebutton: boolean = true;
+  togglebutton: boolean = false;
+  LoginIndex$!: Observable<any>;
+  LMessagePrompt$!: Observable<any>;
 
   loginForm = new FormGroup({
     id: new FormControl("", [
@@ -24,20 +27,28 @@ export class LoginComponent {
   })
 
   constructor(private toastr: ToastrService, private authService: AuthService, private router: Router,) { 
+  }
+
+  ngOnInit(): void {
+    this.authService.cmdFingerprint("default");
     this.authService.userObservable.subscribe((currentUser) => {
       if(currentUser.id){
         this.router.navigate(['dashboard']);
-        return;
+      }
+    });
+    this.authService.setDefaultLPrompt("Press Scan to Get Started");
+    this.LMessagePrompt$ = this.authService.LMessagePrompt();
+    this.LMessagePrompt$.subscribe(value => {
+      if(value == "Match Found"){
+        this.toastr.success('Fingerprint Match Found', 'Success');
+        return
       }
     });
   }
 
-  startLogin(){
-    this.togglebutton =  !this.togglebutton;
-  }
-
-  scanFingerprint(){
-    this.togglebutton =  !this.togglebutton;
+  startScan(){
+    this.authService.cmdFingerprint("login");
+    this.togglebutton = !this.togglebutton;
   }
 
   login() {
@@ -53,6 +64,21 @@ export class LoginComponent {
     this.authService.login(user).subscribe(() => {
       this.router.navigateByUrl('/');
     });
+  }
+
+  FingerprintLogin() {
+    this.togglebutton = !this.togglebutton;
+    this.LoginIndex$ = this.authService.ListenFingerPrintLogin();
+    this.LoginIndex$.subscribe(value => {
+      if(value != 0){
+        this.authService.FingerPrintLogin({FingerprintIndex: value, id: ''}).subscribe(() => {
+          this.router.navigateByUrl('/');
+        });
+        return
+      }
+      this.toastr.error('No Fingerprint Match Found', 'Error');
+    });
+    this.authService.cmdFingerprint("default");
   }
 
 }

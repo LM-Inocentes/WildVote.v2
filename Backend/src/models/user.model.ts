@@ -11,7 +11,6 @@ export interface IUser{
     FingerprintIndex: number;
     FingerprintAuth: boolean;
     FingerprintRegistered: boolean;
-   // ReferenceFingerPrint: string;  
 }
 
 export const UserSchema = new Schema<IUser>(

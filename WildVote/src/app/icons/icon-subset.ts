@@ -1,4 +1,5 @@
 import {
+  cilFingerprint,
   cilAddressBook,
   cilInstitution,
   cibCcAmex,
@@ -100,6 +101,7 @@ import {
 } from '@coreui/icons';
 
 export const iconSubset = {
+  cilFingerprint,
   cilInstitution,
   cilAddressBook,
   cilInput,
@@ -201,6 +203,7 @@ export const iconSubset = {
 };
 
 export enum IconSubset {
+  cilFingerprint = 'cilFingerprint',
   cilInstitution = 'cilInstitution',
   cilAddressBook = 'cilAddressBook',
   cilUserPlus = 'cilUserPlus',

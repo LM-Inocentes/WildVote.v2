@@ -16,6 +16,11 @@ export const navItemsGeneral: INavData[] = [
     title: true,
   },
   {
+    name: 'Scan',
+    url: '/scan',
+    iconComponent: { name: 'cilFingerprint' },
+  },
+  {
     name: 'Login',
     url: '/login',
     iconComponent: { name: 'cil-input' },

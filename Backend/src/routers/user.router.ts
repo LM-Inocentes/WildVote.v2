@@ -25,14 +25,25 @@ const generateTokenResponse = (user: any) => {
     token: token,
     Voted: user.Voted,
     Department: user.Department,
-    Year: user.Year
+    Year: user.Year,
+    FingerprintIndex: user.FingerprintIndex,
+    FingerprintAuth: user.FingerprintAuth,
+    FingerprintRegistered: user.FingerprintRegistered
   };
 }
 
 router.post("/login", asyncHandler(
   async (req, res) => {
     const { id, password } = req.body;
-    var user = await UserModel.findOne({ id });
+    var user = await UserModel.findOneAndUpdate(
+      { id: id }, // Find user by id
+      {
+        $set: {
+          "FingerprintAuth": false,
+        }
+      },
+      { new: true } // Return the updated document
+    );
     if (!user) {
       res.status(400).send("User does not exist");
       return;
@@ -42,6 +53,38 @@ router.post("/login", asyncHandler(
       return;
     }
     res.status(400).send("Incorrect Password");
+  }
+))
+
+router.patch("/logout", asyncHandler(
+  async (req, res) => {
+    const { id } = req.body;
+    var user = await UserModel.findOneAndUpdate(
+      { id: id }, // Find user by id
+      {
+        $set: {
+          "FingerprintAuth": false,
+        }
+      },
+      { new: true } // Return the updated document
+    );
+    res.send(user);
+  }
+))
+
+router.post("/login/fingerprint", asyncHandler(
+  async (req, res) => {
+    const { FingerprintIndex } = req.body;
+    var user = await UserModel.findOneAndUpdate(
+      { FingerprintIndex: FingerprintIndex }, // Find user by id
+      {
+        $set: {
+          "FingerprintAuth": true,
+        }
+      },
+      { new: true } // Return the updated document
+    );
+    res.send(generateTokenResponse(user));
   }
 ))
 
@@ -139,6 +182,26 @@ router.patch("/edit", asyncHandler(
           "Department": Department,
           "Year": Year,
           "password": password
+        }
+      },
+      { new: true } // Return the updated document
+    );
+    res.send(updatedUser);
+  }
+))
+router.patch("/fingerprint", asyncHandler(
+  async (req, res) => {
+    const { id, FingerprintIndex } = req.body;
+    const user = await UserModel.findOne({ id: id });
+    if (user!.FingerprintRegistered) {
+      res.status(400).send("User has already registered their fingerprint");
+    }
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { id: id }, // Find user by id
+      {
+        $set: {
+          "FingerprintRegistered": true,
+          "FingerprintIndex": FingerprintIndex,
         }
       },
       { new: true } // Return the updated document

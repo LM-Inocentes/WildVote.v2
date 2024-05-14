@@ -65,7 +65,9 @@ export class RegisterComponent {
       FingerprintRegistered: false
     }
 
-    this.authService.register(user).subscribe();
+    this.authService.register(user).subscribe(_ => {
+      this.router.navigate(['/login']);
+    });
 
     this.voteService.getUsersCount().subscribe((userCount) => {
       this.voteService.setUsersCount(userCount.userCount);

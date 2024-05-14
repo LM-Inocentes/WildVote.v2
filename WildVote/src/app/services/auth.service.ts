@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, from, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../shared/models/User';
-import { ADMIN_USER_URL, DELETE_USER_BY_ID, EDIT_USER_BY_ID_URL, GET_USERS_URL, GET_USER_BY_ID_URL, ISNOTADMIN_USER_URL, LOGIN_URL, REGISTER_URL, RESET_VOTED_USER_URL, SEARCH_USER_BY_ID_URL, USER_FINGERPRINT_REGISTERED_COUNT_URL, USER_VOTE_RESET_RESULT_URL, VOTED_USER_URL } from '../shared/apiURLs/URLs';
+import { ADMIN_USER_URL, DELETE_USER_BY_ID, EDIT_USER_BY_ID_URL, FINGERPRINT_LOGIN_URL, GET_USERS_URL, GET_USER_BY_ID_URL, ISNOTADMIN_USER_URL, LOGIN_URL, LOGOUT_URL, REGISTER_URL, RESET_VOTED_USER_URL, SEARCH_USER_BY_ID_URL, USER_FINGERPRINT_REGISTERED_COUNT_URL, USER_FINGERPRINT_REGISTERED_URL, USER_VOTE_RESET_RESULT_URL, VOTED_USER_URL } from '../shared/apiURLs/URLs';
 import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/compat/database';
 import firebase from 'firebase/compat/app';
 
@@ -49,12 +49,47 @@ export class AuthService {
     );
   }
 
+  FingerPrintLogin(user: User): Observable<User> {
+    return this.http.post<User>(FINGERPRINT_LOGIN_URL, user).pipe(
+      tap({
+        next: (user) => {
+          this.setUserToLocalStorage(user);
+          this.userSubject.next(user);
+          this.toastrService.success(
+            `Welcome ${user.Fullname}!`,
+            'Login Successfully'
+          )
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Login Failed');
+        }
+
+      })
+    );
+  }
+
+  LMessagePrompt(): Observable<any> {
+    return this.db.object<any>(`Kiosk1/LMessagePrompt`).valueChanges();
+  }
+
   MessagePrompt(): Observable<any> {
     return this.db.object<any>(`Kiosk1/MessagePrompt`).valueChanges();
   }
 
+  ListenFingerPrintLogin(): Observable<any> {
+    return this.db.object<any>(`Kiosk1/LoggedIndex`).valueChanges();
+  }
+
+  resetFingerPrintLogin(): Observable<void> {
+    return from(this.db.object(`Kiosk1/`).update({"LoggedIndex": 0}));
+  }
+
   setDefaultPrompt(cmd: string): Observable<void> {
     return from(this.db.object(`Kiosk1/`).update({"MessagePrompt": cmd}));
+  }
+
+  setDefaultLPrompt(cmd: string): Observable<void> {
+    return from(this.db.object(`Kiosk1/`).update({"LMessagePrompt": cmd}));
   }
 
   cmdFingerprint(cmd: string): Observable<void> {
@@ -83,6 +118,22 @@ export class AuthService {
 
   getRegisteredFingerprintUsersCount(): Observable<any>{
     return this.http.get<any>( USER_FINGERPRINT_REGISTERED_COUNT_URL );
+  }
+
+  submitRegisteredFingerprintToUser(user: User): Observable<User>{
+    return this.http.patch<User>(USER_FINGERPRINT_REGISTERED_URL, user).pipe(
+      tap({
+        next: (user) => {
+          this.toastrService.success(
+            `User ${user.id} Fingerprint Saved`,
+            'Success'
+          )
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Error');
+        }
+      })
+    );
   }
 
   searchUsersByID(searchTerm: string) {
@@ -201,6 +252,9 @@ export class AuthService {
     return this.http.get<User>(GET_USER_BY_ID_URL+id);
   }
 
+  resetLogout(user: User): Observable<User>{
+    return this.http.patch<User>(LOGOUT_URL, user);
+  }
 
   Logout(){
     this.userSubject.next(new User());

@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service'
 import { ActivatedRoute } from '@angular/router';
+import { VoteService } from 'src/app/services/vote.service';
 
 @Component({
   selector: 'app-edit',
@@ -28,9 +29,12 @@ export class EditComponent {
     password: new FormControl('', [
       Validators.required,
     ]),
+    confirmpassword: new FormControl("", [
+      Validators.required,
+    ]),
   });
 
-  constructor(private toastr: ToastrService, private authService: AuthService, private activatedRoute: ActivatedRoute) {   
+  constructor(private toastr: ToastrService, private authService: AuthService, private activatedRoute: ActivatedRoute, private voteService: VoteService) {   
   }
 
   ngOnInit(): void {
@@ -43,14 +47,30 @@ export class EditComponent {
           department: this.user.Department,
           year: this.user.Year,
           password: this.user.password,
+          confirmpassword: this.user.password
         });
       });
     });
   }
 
+  deleteUser(id:string){
+    this.authService.deleteUserByID(id).subscribe(_ => {
+      this.voteService.getUsersCount().subscribe((userCount) => {
+        this.voteService.setUsersCount(userCount.userCount);
+      });
+      this.authService.Logout();
+    });
+    
+  }
+
+
   editUser() {
     if (this.registerForm.invalid) {
       this.toastr.error('Please check your form fields.', 'Invalid Input');
+      return;
+    }
+    if (this.registerForm.value.password !== this.registerForm.value.confirmpassword) {
+      this.toastr.error('Please input matching password', 'Password do not Match');
       return;
     }
     
