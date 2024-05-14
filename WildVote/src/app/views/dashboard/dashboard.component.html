@@ -258,20 +258,19 @@
                   <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
                 </c-progress>
               </div>
-              <div class="legend text-center" ngPreserveWhitespaces>
-                <small>
-                  <span>
-                    <strong>Total Votes: {{totalAuditorVotes}}</strong>
-                  </span>
-                  &nbsp;&nbsp;
-                  <span>
-                    <strong>Abstained Votes: {{userCount - totalAuditorVotes}}</strong>
-                  </span>
-                  &nbsp;&nbsp;
-                </small>
-              </div>
             </div>
-
+            <div class="legend text-center" ngPreserveWhitespaces>
+              <small>
+                <span>
+                  <strong>Total Votes: {{totalAuditorVotes}}</strong>
+                </span>
+                &nbsp;&nbsp;
+                <span>
+                  <strong>Abstained Votes: {{userCount - totalAuditorVotes}}</strong>
+                </span>
+                &nbsp;&nbsp;
+              </small>
+            </div>
           </c-col>
 
           <c-col md="6" xl="6" xs="12">
