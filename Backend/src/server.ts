@@ -17,11 +17,11 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
+    origin: "https://wildvote.netlify.app",
     credentials: true,
-    origin:["https://wildvote.netlify.app/"],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
 app.use("/api/users/", userRouter);
 app.use("/api/candidates/", candidateRouter);
 app.use("/api/misc/", miscRouter);
