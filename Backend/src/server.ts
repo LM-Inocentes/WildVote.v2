@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     credentials: true,
-    origin:["https://wildvote.netlify.app/", "http://localhost:4200"],
+    origin:["https://wildvote.netlify.app/"],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 }));
 
