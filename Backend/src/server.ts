@@ -19,6 +19,7 @@ app.use(express.json());
 app.use(cors({
     credentials: true,
     origin:["https://wildvote.netlify.app/", "http://localhost:4200"],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 }));
 
 app.use("/api/users/", userRouter);
