@@ -1,18 +1,54 @@
 
-
-      <!-- <c-row class="justify-content-center">
-        <c-col xs="12" lg="6">
-          <c-card class="mb-4">
-            <c-card-header>
-              Vote Turn-Outs
-            </c-card-header>
-            <c-card-body >
-              <c-chart type="pie" [data]="chartPieData"></c-chart>
-            </c-card-body>
-          </c-card>
+      <c-row>
+        <c-col xl="4" md="4" sm="12">
+          <c-widget-stat-b
+            #widgetStatB1inv="cWidgetStatB"
+            [title]="'Total Number of Voters'"
+            class="mb-4"
+            color="primary"
+            inverse
+            text=""
+            value="{{listenusersCount$ | async}}"
+          >
+            <c-progress [white]="widgetStatB1inv.inverse" class="my-2" thin>
+              <c-progress-bar [value]="100"></c-progress-bar>
+            </c-progress>
+          </c-widget-stat-b>
         </c-col>
-      </c-row> -->
-    
+        <c-col xl="4" md="4" sm="12">
+          <c-widget-stat-b
+            #widgetStatB3inv="cWidgetStatB"
+            [title]="'Total Voters Who Voted'"
+            class="mb-4"
+            color="success"
+            inverse
+            text=""
+            value="{{listenusersWhoVotedCount$ | async}}  ({{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}} %)"
+          >
+            <c-progress [white]="widgetStatB3inv.inverse" class="my-2" thin>
+              <c-progress-bar value="{{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}}"></c-progress-bar>
+            </c-progress>
+          </c-widget-stat-b>
+        </c-col>
+        <c-col xl="4" md="4" sm="12">
+          <c-widget-stat-b
+            #widgetStatB4inv="cWidgetStatB"
+            [title]="'Total Voters Not Yet Voted'"
+            class="mb-4"
+            color="danger"
+            inverse
+            text=""
+            value="{{(listenusersCount$ | async) - (listenusersWhoVotedCount$ | async)}}  ({{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}} %)"
+          >
+            <c-progress [white]="widgetStatB4inv.inverse" class="my-2" thin>
+              <c-progress-bar value="{{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}}"></c-progress-bar>
+            </c-progress>
+          </c-widget-stat-b>
+        </c-col>
+      </c-row>
+      <c-card class="mb-4 bg-dark">
+        
+      </c-card>
   
       <div *ngIf="(status?.isElectionStart) === false" class="text-center"> 
         <blockquote class="blockquote">
@@ -21,45 +57,35 @@
           </strong>
         </blockquote>
       </div>
-<div *ngIf="(status?.isElectionStart) === true">
-  <c-card-footer>
-    <c-row class="text-center" [md]="3" [xs]="1">
-      <c-col class="mb-sm-2 mb-0">
-        <div class="text-medium-emphasis">Total Voters</div>
-        <strong>{{listenusersCount$ | async}} </strong>
-        <c-progress class="mt-2" thin>
-          <c-progress-bar color="success" value="100"></c-progress-bar>
-        </c-progress>
-      </c-col>
-      <c-col class="mb-sm-2 mb-0">
-        <div class="text-medium-emphasis">Total Voted Voters</div>
-        <strong>{{listenusersWhoVotedCount$ | async}}  ({{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}} %)</strong>
-        <c-progress class="mt-2" thin>
-          <c-progress-bar color="info" value="{{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}}"></c-progress-bar>
-        </c-progress>
-      </c-col>
-      <c-col class="mb-sm-2 mb-0">
-        <div class="text-medium-emphasis">Total Not Yet Voted Voters</div>
-        <strong>{{(listenusersCount$ | async) - (listenusersWhoVotedCount$ | async)}}  ({{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}} %)  </strong>
-        <c-progress class="mt-2" thin>
-          <c-progress-bar color="warning" value="{{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}}"></c-progress-bar>
-        </c-progress>
-      </c-col>
-     
-    </c-row>
-  </c-card-footer>
 
-  <!-- <div *ngIf="(highestVoteCounts$ | async) as highestVoteCounts">
-    <ng-container *ngIf="highestVoteCounts.length > 0">
-      <h2>Highest Vote Counts for Each Position</h2>
-      <ul>
-        <li *ngFor="let item of highestVoteCounts">
-          Position: {{ item.Position }} - Highest Vote Count: {{ item.Votes }} (Candidate: {{ item.Fullname }}) (id: {{ item.id }})
-        </li>
-      </ul>
-    </ng-container>
-  </div> -->
+<div *ngIf="(status?.isElectionStart) === true">
 <div *ngIf="listenusersWhoVotedCount$ | async as userCount; else nullTemplate" >
+  <div class="text-center">
+    <blockquote class="blockquote">
+      <strong>
+        <p style="font-size: 24px; color: rgb(0, 0, 0)" class="p-310">Leading Candidates</p>
+      </strong>
+    </blockquote>
+  </div>
+    <c-row>
+
+      <c-col xl="4" lg="4" sm="6" *ngFor="let leadingCandidate of highestVoteCounts$ | async">
+        <c-widget-stat-b
+          #widgetStatB4inv="cWidgetStatB"
+          [title]="leadingCandidate.Fullname"
+          class="mb-4"
+          color="{{leadingCandidate.color}}"
+          inverse
+          text="{{leadingCandidate.Votes}} Votes ({{ ((leadingCandidate.Votes/(userCount))*100).toFixed(2) }}%)"
+          value="{{leadingCandidate.Position}}"
+        >
+          <c-progress [white]="widgetStatB4inv.inverse" class="my-2" thin>
+            <c-progress-bar [value]="((leadingCandidate.Votes / (userCount)) * 100).toFixed(2)"></c-progress-bar>
+          </c-progress>
+        </c-widget-stat-b>
+      </c-col>
+    </c-row>
+
 <c-row>
   <c-col xs>
     <c-card class="mb-4">
@@ -82,31 +108,24 @@
                 <span class="text-medium-emphasis small">{{presidentCandidate.Fullname}}</span>
               </div>
               <div class="progress-group-bars">
-                <strong>{{presidentCandidate.Votes}} Votes ({{ ((presidentCandidate.Votes/(userCount))*100).toFixed(2) }})% </strong>
+                <strong>{{presidentCandidate.Votes}} Votes ({{ ((presidentCandidate.Votes/(userCount))*100).toFixed(2) }}%) </strong>
                 <c-progress>
                   <c-progress-bar color="{{presidentCandidate.color}}" [value]="(presidentCandidate.Votes / (userCount)) * 100">  </c-progress-bar>
                 </c-progress>
               </div>
             </div>
-        
-            <!-- <div class="legend text-center" ngPreserveWhitespaces>
+            <div class="legend text-center" ngPreserveWhitespaces>
               <small>
-                <sup>
-                  <span class="badge badge-pill badge-sm bg-success">&nbsp;</span>
-                </sup>
-                <span>PartyList 1</span>
+                <span>
+                  <strong>Total Votes: {{totalPresidentVotes}}</strong>
+                </span>
                 &nbsp;&nbsp;
-                <sup>
-                  <span class="badge badge-pill badge-sm bg-danger">&nbsp;</span>
-                </sup>
-                <span>PartyList 2</span>
+                <span>
+                  <strong>Abstained Votes: {{userCount - totalPresidentVotes}}</strong>
+                </span>
                 &nbsp;&nbsp;
-                <sup>
-                  <span class="badge badge-pill badge-sm bg-info">&nbsp;</span>
-                </sup>
-                <span>PartyList 3</span>
               </small>
-            </div> -->
+            </div>
           </c-col>
 
           <c-col md="6" xl="6" xs="12">
@@ -125,11 +144,23 @@
                 <span class="text-medium-emphasis small">{{vpresidentCandidate.Fullname}}</span>
               </div>
               <div class="progress-group-bars">
-                <strong>{{vpresidentCandidate.Votes}} Votes ({{ ((vpresidentCandidate.Votes/userCount)*100).toFixed(2) }})% </strong>
+                <strong>{{vpresidentCandidate.Votes}} Votes ({{ ((vpresidentCandidate.Votes/userCount)*100).toFixed(2) }}% )</strong>
                 <c-progress>
                   <c-progress-bar color="{{vpresidentCandidate.color}}" [value]="(vpresidentCandidate.Votes / userCount) * 100">  </c-progress-bar>
                 </c-progress>
               </div>
+            </div>
+            <div class="legend text-center" ngPreserveWhitespaces>
+              <small>
+                <span>
+                  <strong>Total Votes: {{totalVicePresidentVotes}}</strong>
+                </span>
+                &nbsp;&nbsp;
+                <span>
+                  <strong>Abstained Votes: {{userCount - totalVicePresidentVotes}}</strong>
+                </span>
+                &nbsp;&nbsp;
+              </small>
             </div>
           </c-col>
         </c-row>
@@ -150,11 +181,23 @@
                 <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
               </div>
               <div class="progress-group-bars">
-                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }})% </strong>
+                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }}% )</strong>
                 <c-progress>
                   <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
                 </c-progress>
               </div>
+            </div>
+            <div class="legend text-center" ngPreserveWhitespaces>
+              <small>
+                <span>
+                  <strong>Total Votes: {{totalSecretaryVotes}}</strong>
+                </span>
+                &nbsp;&nbsp;
+                <span>
+                  <strong>Abstained Votes: {{userCount - totalSecretaryVotes}}</strong>
+                </span>
+                &nbsp;&nbsp;
+              </small>
             </div>
           </c-col>
 
@@ -174,13 +217,24 @@
                 <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
               </div>
               <div class="progress-group-bars">
-                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }})% </strong>
+                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }}% )</strong>
                 <c-progress>
                   <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
                 </c-progress>
               </div>
             </div>
-
+            <div class="legend text-center" ngPreserveWhitespaces>
+              <small>
+                <span>
+                  <strong>Total Votes: {{totalTreasurerVotes}}</strong>
+                </span>
+                &nbsp;&nbsp;
+                <span>
+                  <strong>Abstained Votes: {{userCount - totalTreasurerVotes}}</strong>
+                </span>
+                &nbsp;&nbsp;
+              </small>
+            </div>
           </c-col>
 
           <c-col md="6" xl="6" xs="12">
@@ -199,10 +253,22 @@
                 <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
               </div>
               <div class="progress-group-bars">
-                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }})% </strong>
+                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }}% )</strong>
                 <c-progress>
                   <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
                 </c-progress>
+              </div>
+              <div class="legend text-center" ngPreserveWhitespaces>
+                <small>
+                  <span>
+                    <strong>Total Votes: {{totalAuditorVotes}}</strong>
+                  </span>
+                  &nbsp;&nbsp;
+                  <span>
+                    <strong>Abstained Votes: {{userCount - totalAuditorVotes}}</strong>
+                  </span>
+                  &nbsp;&nbsp;
+                </small>
               </div>
             </div>
 
@@ -224,13 +290,24 @@
                 <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
               </div>
               <div class="progress-group-bars">
-                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }})% </strong>
+                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }}% )</strong>
                 <c-progress>
                   <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
                 </c-progress>
               </div>
             </div>
-
+            <div class="legend text-center" ngPreserveWhitespaces>
+              <small>
+                <span>
+                  <strong>Total Votes: {{totalCpeRepresentativeVotes}}</strong>
+                </span>
+                &nbsp;&nbsp;
+                <span>
+                  <strong>Abstained Votes: {{userCount - totalCpeRepresentativeVotes}}</strong>
+                </span>
+                &nbsp;&nbsp;
+              </small>
+            </div>
           </c-col>
         </c-row>
       </c-card-body>
@@ -241,264 +318,9 @@
 </div>
 
 <ng-template #nullTemplate>
-  <!-- Content to render while userCount is loading (else block) -->
-  <p>No Votes Yet...</p>
-  <!-- You can add loading indicators or messages here -->
+  <blockquote class="blockquote">
+    <strong>
+      <p style="font-size: 24px; color: rgb(162, 37, 9)" class="p-310">No Votes Yet...</p>
+    </strong>
+  </blockquote>
 </ng-template>
-<!-- 
-<app-widgets-brand [withCharts]="true"></app-widgets-brand>
-
-<c-row>
-  <c-col xs>
-    <c-card class="mb-4">
-      <c-card-header>Traffic {{ "&" }} Sales</c-card-header>
-      <c-card-body>
-        <c-row>
-          <c-col md="6" xl="6" xs="12">
-            <c-row>
-              <c-col sm="6">
-                <div
-                  class="border-start border-start-4 border-start-info py-1 px-3 mb-3"
-                >
-                  <div class="text-medium-emphasis small">New Clients</div>
-                  <div class="fs-5 fw-semibold">9,123</div>
-                </div>
-              </c-col>
-              <c-col sm="6">
-                <div
-                  class="border-start border-start-4 border-start-danger py-1 px-3 mb-3"
-                >
-                  <div class="text-medium-emphasis small">
-                    Recurring Clients
-                  </div>
-                  <div class="fs-5 fw-semibold">22,643</div>
-                </div>
-              </c-col>
-            </c-row>
-
-            <hr class="mt-0" />
-
-            <div class="progress-group mb-4">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">Monday</span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="info" value="34"></c-progress-bar>
-                </c-progress>
-                <c-progress thin>
-                  <c-progress-bar color="danger" value="78"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="progress-group mb-4">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">Tuesday</span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="info" value="56"></c-progress-bar>
-                </c-progress>
-                <c-progress thin>
-                  <c-progress-bar color="danger" value="94"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="progress-group mb-4">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">Wednesday</span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="info" value="12"></c-progress-bar>
-                </c-progress>
-                <c-progress thin>
-                  <c-progress-bar color="danger" value="67"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="progress-group mb-4">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">Thursday</span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="info" value="43"></c-progress-bar>
-                </c-progress>
-                <c-progress thin>
-                  <c-progress-bar color="danger" value="91"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="progress-group mb-4">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">Friday</span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="info" value="22"></c-progress-bar>
-                </c-progress>
-                <c-progress thin>
-                  <c-progress-bar color="danger" value="73"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="progress-group mb-4">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">Saturday</span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="info" value="53"></c-progress-bar>
-                </c-progress>
-                <c-progress thin>
-                  <c-progress-bar color="danger" value="82"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="progress-group mb-4">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">Sunday</span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="info" value="9"></c-progress-bar>
-                </c-progress>
-                <c-progress thin>
-                  <c-progress-bar color="danger" value="69"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="legend text-center" ngPreserveWhitespaces>
-              <small>
-                <sup>
-                  <span class="badge badge-pill badge-sm bg-info">&nbsp;</span>
-                </sup>
-                <span>New clients</span>
-                &nbsp;&nbsp;
-                <sup>
-                  <span class="badge badge-pill badge-sm bg-danger">&nbsp;</span>
-                </sup>
-                <span>Recurring clients</span>
-              </small>
-            </div>
-          </c-col>
-
-          <c-col md="6" xl="6" xs="12">
-            <c-row>
-              <c-col sm="6">
-                <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
-                  <div class="text-medium-emphasis small">Page views</div>
-                  <div class="fs-5 fw-semibold">78,623</div>
-                </div>
-              </c-col>
-              <c-col sm="6">
-                <div class="border-start border-start-4 border-start-success py-1 px-3 mb-3">
-                  <div class="text-medium-emphasis small">Organic</div>
-                  <div class="fs-5 fw-semibold">49,123</div>
-                </div>
-              </c-col>
-            </c-row>
-
-            <hr class="mt-0" />
-
-            <div class="progress-group mb-4">
-              <div class="progress-group-header">
-                <svg cIcon class="icon icon-lg me-2" name="cilUser"></svg>
-                <span>Male</span>
-                <span class="ms-auto font-semibold">43%</span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="warning" value="43"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="progress-group mb-5">
-              <div class="progress-group-header">
-                <svg cIcon class="icon icon-lg me-2" name="cilUserFemale"></svg>
-                <span>Female</span>
-                <span class="ms-auto font-semibold">37%</span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="warning" value="37"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-
-            <div class="progress-group">
-              <div class="progress-group-header">
-                <svg cIcon class="icon icon-lg me-2" name="cibGoogle"></svg>
-                <span>Organic Search</span>
-                <span class="ms-auto font-semibold">
-                  191,235 <span class="text-medium-emphasis small">(56%)</span>
-                </span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="success" value="56"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="progress-group">
-              <div class="progress-group-header">
-                <svg cIcon class="icon icon-lg me-2" name="cibFacebook"></svg>
-                <span>Facebook</span>
-                <span class="ms-auto font-semibold">
-                  51,223 <span class="text-medium-emphasis small">(15%)</span>
-                </span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="success" value="15"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="progress-group">
-              <div class="progress-group-header">
-                <svg cIcon class="icon icon-lg me-2" name="cibTwitter"></svg>
-                <span>Twitter</span>
-                <span class="ms-auto font-semibold">
-                  37,564 <span class="text-medium-emphasis small">(11%)</span>
-                </span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="success" value="11"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="progress-group">
-              <div class="progress-group-header">
-                <svg cIcon class="icon icon-lg me-2" name="cibLinkedin"></svg>
-                <span>LinkedIn</span>
-                <span class="ms-auto font-semibold">
-                  27,319 <span class="text-medium-emphasis small">(8%)</span>
-                </span>
-              </div>
-              <div class="progress-group-bars">
-                <c-progress thin>
-                  <c-progress-bar color="success" value="8"></c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="divider d-flex justify-content-center">
-              <button
-                cButton
-                class="text-muted btn-link"
-                color="transparent"
-                size="sm"
-                type="button"
-              >
-                <svg cIcon name="cil-options"></svg>
-              </button>
-            </div>
-          </c-col>
-        </c-row>
-      </c-card-body>
-    </c-card>
-  </c-col>
-</c-row>
-
- -->

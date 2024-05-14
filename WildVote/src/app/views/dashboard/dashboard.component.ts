@@ -27,11 +27,6 @@ interface IUser {
 })
 export class DashboardComponent implements OnInit {
   status!: Election
-  usersCount = {
-    userCount: 0,
-    votedUserCount : 0
-  }
-  
 
   listenusersCount$!: Observable<any>;
   listenusersWhoVotedCount$!: Observable<any>
@@ -54,6 +49,13 @@ export class DashboardComponent implements OnInit {
     'CPE REPRESENTATIVE'
   ];
 
+  totalPresidentVotes!: number;
+  totalVicePresidentVotes!: number;
+  totalSecretaryVotes!: number;
+  totalTreasurerVotes!: number;
+  totalAuditorVotes!: number;
+  totalCpeRepresentativeVotes!: number;
+
   constructor(private voteService: VoteService) {
   }
 
@@ -66,7 +68,6 @@ export class DashboardComponent implements OnInit {
     //   this.usersCount = userCount;
     //   this.getusersWhoVotedCount$ = this.voteService.setUsersWhoVoted(this.usersCount.votedUserCount);
     // });
-    
     if (!localStorage.getItem('foo')) { 
       localStorage.setItem('foo', 'no reload') 
       location.reload() 
@@ -98,14 +99,51 @@ export class DashboardComponent implements OnInit {
     // Subscribe to observables and handle data
     this.highestVoteCounts$.subscribe();
     this.getAllCandidates$.subscribe();
-    this.getAllPresidentCandidates$.subscribe();
-    this.getAllVicePresidentCandidates$.subscribe();
-    this.getAllSecretaryCandidates$.subscribe();
-    this.getAllTreasurerCandidates$.subscribe();
-    this.getAllAuditorCandidates$.subscribe();
-    this.getAllCpeRepresentativeCandidates$.subscribe();
+    this.getAllPresidentCandidates$.pipe(
+        map(candidates => candidates.map(candidate => candidate.Votes)),
+        map(votes => votes.reduce((acc, vote) => acc + vote, 0))
+      )
+      .subscribe(totalVotes => {
+        this.totalPresidentVotes = totalVotes;
+      });
+    this.getAllVicePresidentCandidates$.pipe(
+        map(candidates => candidates.map(candidate => candidate.Votes)),
+        map(votes => votes.reduce((acc, vote) => acc + vote, 0))
+      )
+      .subscribe(totalVotes => {
+        this.totalVicePresidentVotes = totalVotes;
+      });
+    this.getAllSecretaryCandidates$.pipe(
+        map(candidates => candidates.map(candidate => candidate.Votes)),
+        map(votes => votes.reduce((acc, vote) => acc + vote, 0))
+      )
+      .subscribe(totalVotes => {
+        this.totalSecretaryVotes = totalVotes;
+      }); 
+    this.getAllTreasurerCandidates$.pipe(
+        map(candidates => candidates.map(candidate => candidate.Votes)),
+        map(votes => votes.reduce((acc, vote) => acc + vote, 0))
+      )
+      .subscribe(totalVotes => {
+        this.totalTreasurerVotes = totalVotes;
+      });
+    this.getAllAuditorCandidates$.pipe(
+        map(candidates => candidates.map(candidate => candidate.Votes)),
+        map(votes => votes.reduce((acc, vote) => acc + vote, 0))
+      )
+      .subscribe(totalVotes => {
+        this.totalAuditorVotes = totalVotes;
+      });
+    this.getAllCpeRepresentativeCandidates$.pipe(
+        map(candidates => candidates.map(candidate => candidate.Votes)),
+        map(votes => votes.reduce((acc, vote) => acc + vote, 0))
+      )
+      .subscribe(totalVotes => {
+        this.totalCpeRepresentativeVotes = totalVotes;
+      });
 
   }
+
 
   calculatePercentage(
     source1$: Observable<number>,
