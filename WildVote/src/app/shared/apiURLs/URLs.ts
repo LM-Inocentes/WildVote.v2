@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://wildvote.onrender.com';
 
 
 export const LOGIN_URL = BASE_URL + '/api/users/login';
