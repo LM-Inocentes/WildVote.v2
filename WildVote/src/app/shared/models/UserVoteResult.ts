@@ -8,11 +8,11 @@ class Candidate {
   
   // Define the UserVoteResult class
   export class UserVoteResult {
-    President!: Candidate; 
-    VicePresident!: Candidate;
-    Secretary!: Candidate;
-    Treasurer!: Candidate;
-    Auditor!: Candidate;
-    CPERepresentative!: Candidate;   
+    President?: Candidate; 
+    VicePresident?: Candidate;
+    Secretary?: Candidate;
+    Treasurer?: Candidate;
+    Auditor?: Candidate;
+    CPERepresentative?: Candidate;   
     id!: string;
   }

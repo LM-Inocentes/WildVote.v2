@@ -23,13 +23,13 @@ export interface IUserVote {
 // Define Mongoose schema for `IUserVote`
 const UserVoteSchema = new Schema<IUserVote>(
   {
-    id: { type: String, required: true },
-    President: { type: Object, required: true },
-    VicePresident: { type: Object, required: true },
-    Secretary: { type: Object, required: true },
-    Treasurer: { type: Object, required: true },
-    Auditor: { type: Object, required: true },
-    CPERepresentative: { type: Object, required: true },
+    id: { type: String, required: false },
+    President: { type: Object, required: false },
+    VicePresident: { type: Object, required: false },
+    Secretary: { type: Object, required: false },
+    Treasurer: { type: Object, required: false },
+    Auditor: { type: Object, required: false },
+    CPERepresentative: { type: Object, required: false },
   },
   {
     toJSON: {

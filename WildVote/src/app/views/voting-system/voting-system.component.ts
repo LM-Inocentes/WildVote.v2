@@ -190,13 +190,23 @@ export class VotingSystemComponent {
     };
   }
 
+  cleanupUserVoteResult(): void {
+    const positions = ['President', 'VicePresident', 'Secretary', 'Treasurer', 'Auditor', 'CPERepresentative'] as const;
+    for (const position of positions) {
+      if (this.userVoteResult[position] && this.userVoteResult[position]!.id =='') {
+        delete this.userVoteResult[position];
+      }
+    }
+  }
+
   submitVoteResult(): void{
     this.userVoteResult.id = this.user.id;
+    this.cleanupUserVoteResult();
     Object.values(this.userVoteResult).forEach(position => {
-      if(position===''||position.id===undefined){
-        return;
+      if(position === ''||position.id === undefined ||position.id ===''){
+        return
       }
-      this.voteService.updateVoteCounts(position.id).subscribe();  // Perform operations on each position's value here
+      this.voteService.updateVoteCounts(position.id).subscribe(); 
     });
     this.voteService.submitUserVote(this.userVoteResult).subscribe(_ => {
       this.voteService.getUsersWhoVoted().subscribe((value) => {

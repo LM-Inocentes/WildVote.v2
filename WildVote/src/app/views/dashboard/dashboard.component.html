@@ -25,22 +25,22 @@
   <c-card-footer>
     <c-row class="text-center" [md]="3" [xs]="1">
       <c-col class="mb-sm-2 mb-0">
-        <div class="text-medium-emphasis">Users</div>
-        <strong>{{listenusersCount$ | async}} Users</strong>
+        <div class="text-medium-emphasis">Total Voters</div>
+        <strong>{{listenusersCount$ | async}} </strong>
         <c-progress class="mt-2" thin>
           <c-progress-bar color="success" value="100"></c-progress-bar>
         </c-progress>
       </c-col>
       <c-col class="mb-sm-2 mb-0">
-        <div class="text-medium-emphasis">Votes</div>
-        <strong>{{listenusersWhoVotedCount$ | async}} Votes  ({{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}} %)</strong>
+        <div class="text-medium-emphasis">Total Voted Voters</div>
+        <strong>{{listenusersWhoVotedCount$ | async}}  ({{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}} %)</strong>
         <c-progress class="mt-2" thin>
           <c-progress-bar color="info" value="{{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}}"></c-progress-bar>
         </c-progress>
       </c-col>
       <c-col class="mb-sm-2 mb-0">
-        <div class="text-medium-emphasis">Not Yet Voted</div>
-        <strong>{{(listenusersCount$ | async) - (listenusersWhoVotedCount$ | async)}} Users  ({{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}} %)  </strong>
+        <div class="text-medium-emphasis">Total Not Yet Voted Voters</div>
+        <strong>{{(listenusersCount$ | async) - (listenusersWhoVotedCount$ | async)}}  ({{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}} %)  </strong>
         <c-progress class="mt-2" thin>
           <c-progress-bar color="warning" value="{{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}}"></c-progress-bar>
         </c-progress>
