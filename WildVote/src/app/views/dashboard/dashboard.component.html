@@ -60,16 +60,15 @@
 
 <div *ngIf="(status?.isElectionStart) === true">
 <div *ngIf="listenusersWhoVotedCount$ | async as userCount; else nullTemplate" >
-  <div class="text-center">
+  <div class="text-center"  *ngIf="highestVoteCounts$ | async as LeadingCandidate">
     <blockquote class="blockquote">
       <strong>
         <p style="font-size: 24px; color: rgb(0, 0, 0)" class="p-310">Leading Candidates</p>
       </strong>
     </blockquote>
   </div>
-    <c-row>
-
-      <c-col xl="4" lg="4" sm="6" *ngFor="let leadingCandidate of highestVoteCounts$ | async">
+    <c-row  *ngIf="highestVoteCounts$ | async as LeadingCandidate">
+      <c-col xl="4" lg="4" sm="6" *ngFor="let leadingCandidate of LeadingCandidate">
         <c-widget-stat-b
           #widgetStatB4inv="cWidgetStatB"
           [title]="leadingCandidate.Fullname"
