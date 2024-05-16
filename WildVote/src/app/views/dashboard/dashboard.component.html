@@ -1,79 +1,76 @@
+<c-row>
+  <c-col xl="4" md="4" sm="12">
+    <c-widget-stat-b
+      #widgetStatB1inv="cWidgetStatB"
+      [title]="'Total Number of Voters'"
+      class="mb-4"
+      color="primary"
+      inverse
+      text=""
+      value="{{listenusersCount$ | async}}"
+    >
+      <c-progress [white]="widgetStatB1inv.inverse" class="my-2" thin>
+        <c-progress-bar [value]="100"></c-progress-bar>
+      </c-progress>
+    </c-widget-stat-b>
+  </c-col>
+  <c-col xl="4" md="4" sm="12">
+    <c-widget-stat-b
+      #widgetStatB3inv="cWidgetStatB"
+      [title]="'Total Voters Who Voted'"
+      class="mb-4"
+      color="success"
+      inverse
+      text=""
+      value="{{listenusersWhoVotedCount$ | async}}  ({{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}} %)"
+    >
+      <c-progress [white]="widgetStatB3inv.inverse" class="my-2" thin>
+        <c-progress-bar value="{{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}}"></c-progress-bar>
+      </c-progress>
+    </c-widget-stat-b>
+  </c-col>
+  <c-col xl="4" md="4" sm="12">
+    <c-widget-stat-b
+      #widgetStatB4inv="cWidgetStatB"
+      [title]="'Total Voters Not Yet Voted'"
+      class="mb-4"
+      color="danger"
+      inverse
+      text=""
+      value="{{(listenusersCount$ | async) - (listenusersWhoVotedCount$ | async)}}  ({{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}} %)"
+    >
+      <c-progress [white]="widgetStatB4inv.inverse" class="my-2" thin>
+        <c-progress-bar value="{{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}}"></c-progress-bar>
+      </c-progress>
+    </c-widget-stat-b>
+  </c-col>
+</c-row>
+<c-card class="mb-4 bg-dark"></c-card>
 
-      <c-row>
-        <c-col xl="4" md="4" sm="12">
-          <c-widget-stat-b
-            #widgetStatB1inv="cWidgetStatB"
-            [title]="'Total Number of Voters'"
-            class="mb-4"
-            color="primary"
-            inverse
-            text=""
-            value="{{listenusersCount$ | async}}"
-          >
-            <c-progress [white]="widgetStatB1inv.inverse" class="my-2" thin>
-              <c-progress-bar [value]="100"></c-progress-bar>
-            </c-progress>
-          </c-widget-stat-b>
-        </c-col>
-        <c-col xl="4" md="4" sm="12">
-          <c-widget-stat-b
-            #widgetStatB3inv="cWidgetStatB"
-            [title]="'Total Voters Who Voted'"
-            class="mb-4"
-            color="success"
-            inverse
-            text=""
-            value="{{listenusersWhoVotedCount$ | async}}  ({{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}} %)"
-          >
-            <c-progress [white]="widgetStatB3inv.inverse" class="my-2" thin>
-              <c-progress-bar value="{{(getusersWhoVotedCountPercentage$| async)?.toFixed(2)}}"></c-progress-bar>
-            </c-progress>
-          </c-widget-stat-b>
-        </c-col>
-        <c-col xl="4" md="4" sm="12">
-          <c-widget-stat-b
-            #widgetStatB4inv="cWidgetStatB"
-            [title]="'Total Voters Not Yet Voted'"
-            class="mb-4"
-            color="danger"
-            inverse
-            text=""
-            value="{{(listenusersCount$ | async) - (listenusersWhoVotedCount$ | async)}}  ({{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}} %)"
-          >
-            <c-progress [white]="widgetStatB4inv.inverse" class="my-2" thin>
-              <c-progress-bar value="{{ (100 - (getusersWhoVotedCountPercentage$| async)!).toFixed(2)}}"></c-progress-bar>
-            </c-progress>
-          </c-widget-stat-b>
-        </c-col>
-      </c-row>
-      <c-card class="mb-4 bg-dark">
-        
-      </c-card>
-  
-      <div *ngIf="(status?.isElectionStart) === false" class="text-center"> 
-        <blockquote class="blockquote">
-          <strong>
-            <p style="font-size: 24px; color: rgb(162, 37, 9)" class="p-310">No Ongoing Election</p>
-          </strong>
-        </blockquote>
-      </div>
+<div *ngIf="(status?.isElectionStart) === false" class="text-center"> 
+  <blockquote class="blockquote">
+    <strong>
+      <p style="font-size: 24px; color: rgb(162, 37, 9)" class="p-310">No Ongoing Election</p>
+    </strong>
+  </blockquote>
+</div>
 
 <div *ngIf="(status?.isElectionStart) === true">
-<div *ngIf="listenusersWhoVotedCount$ | async as userCount; else nullTemplate" >
-  <div class="text-center"  *ngIf="highestVoteCounts$ | async as LeadingCandidate">
-    <blockquote class="blockquote">
-      <strong>
-        <p style="font-size: 24px; color: rgb(0, 0, 0)" class="p-310">Leading Candidates</p>
-      </strong>
-    </blockquote>
-  </div>
-    <c-row  *ngIf="highestVoteCounts$ | async as LeadingCandidate">
+  <div *ngIf="listenusersWhoVotedCount$ | async as userCount; else nullTemplate">
+    <div class="text-center"  *ngIf="highestVoteCounts$ | async as LeadingCandidate">
+      <blockquote class="blockquote">
+        <strong>
+          <p style="font-size: 24px; color: rgb(0, 0, 0)" class="p-310">Leading Candidates</p>
+        </strong>
+      </blockquote>
+    </div>
+    <c-row *ngIf="highestVoteCounts$ | async as LeadingCandidate">
       <c-col xl="4" lg="4" sm="6" *ngFor="let leadingCandidate of LeadingCandidate">
         <c-widget-stat-b
           #widgetStatB4inv="cWidgetStatB"
           [title]="leadingCandidate.Fullname"
           class="mb-4"
-          color="{{leadingCandidate.color}}"
+          [color]="leadingCandidate.color"
           inverse
           text="{{leadingCandidate.Votes}} Votes ({{ ((leadingCandidate.Votes/(userCount))*100).toFixed(2) }}%)"
           value="{{leadingCandidate.Position}}"
@@ -85,234 +82,222 @@
       </c-col>
     </c-row>
 
-<c-row>
-  <c-col xs>
-    <c-card class="mb-4">
-      <c-card-header>Votes Results</c-card-header>
-      <c-card-body>
-        <c-row>
-          <c-col md="6" xl="6" xs="12">
+    <c-row>
+      <c-col xs>
+        <c-card class="mb-4">
+          <c-card-header>Votes Results</c-card-header>
+          <c-card-body>
             <c-row>
-              <c-col sm="12">
-                <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
-                  <div class="fs-5 fw-semibold">President </div>
+              <c-col md="6" xl="6" xs="12">
+                <c-row>
+                  <c-col sm="12">
+                    <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
+                      <div class="fs-5 fw-semibold">President</div>
+                    </div>
+                  </c-col>
+                </c-row>
+                <hr class="mt-0" />
+                <div class="progress-group mb-4" *ngFor="let presidentCandidate of getAllPresidentCandidates$ | async">
+                  <div class="progress-group-prepend">
+                    <span class="text-medium-emphasis small">{{presidentCandidate.Fullname}}</span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <strong>{{presidentCandidate.Votes}} Votes ({{ ((presidentCandidate.Votes/(userCount))*100).toFixed(2) }}%) </strong>
+                    <c-progress>
+                      <c-progress-bar [color]="presidentCandidate.color" [value]="(presidentCandidate.Votes / (userCount)) * 100">  </c-progress-bar>
+                    </c-progress>
+                  </div>
+                </div>
+                <div class="legend text-center" ngPreserveWhitespaces>
+                  <small>
+                    <span>
+                      <strong>Total Votes: {{totalPresidentVotes}}</strong>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span>
+                      <strong>Abstained Votes: {{userCount - totalPresidentVotes}}</strong>
+                    </span>
+                    &nbsp;&nbsp;
+                  </small>
+                </div>
+              </c-col>
+
+              <c-col md="6" xl="6" xs="12">
+                <c-row>
+                  <c-col sm="12">
+                    <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
+                      <div class="fs-5 fw-semibold">Vice-President</div>
+                    </div>
+                  </c-col>
+                </c-row>
+                <hr class="mt-0" />
+                <div class="progress-group mb-4" *ngFor="let vpresidentCandidate of getAllVicePresidentCandidates$ | async">
+                  <div class="progress-group-prepend">
+                    <span class="text-medium-emphasis small">{{vpresidentCandidate.Fullname}}</span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <strong>{{vpresidentCandidate.Votes}} Votes ({{ ((vpresidentCandidate.Votes/(userCount))*100).toFixed(2) }}%)</strong>
+                    <c-progress>
+                      <c-progress-bar [color]="vpresidentCandidate.color" [value]="(vpresidentCandidate.Votes / (userCount)) * 100">  </c-progress-bar>
+                    </c-progress>
+                  </div>
+                </div>
+                <div class="legend text-center" ngPreserveWhitespaces>
+                  <small>
+                    <span>
+                      <strong>Total Votes: {{totalVicePresidentVotes}}</strong>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span>
+                      <strong>Abstained Votes: {{userCount - totalVicePresidentVotes}}</strong>
+                    </span>
+                    &nbsp;&nbsp;
+                  </small>
                 </div>
               </c-col>
             </c-row>
-
-            <hr class="mt-0" />
-           
-            <div class="progress-group mb-4" *ngFor="let presidentCandidate of getAllPresidentCandidates$ | async">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">{{presidentCandidate.Fullname}}</span>
-              </div>
-              <div class="progress-group-bars">
-                <strong>{{presidentCandidate.Votes}} Votes ({{ ((presidentCandidate.Votes/(userCount))*100).toFixed(2) }}%) </strong>
-                <c-progress>
-                  <c-progress-bar color="{{presidentCandidate.color}}" [value]="(presidentCandidate.Votes / (userCount)) * 100">  </c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="legend text-center" ngPreserveWhitespaces>
-              <small>
-                <span>
-                  <strong>Total Votes: {{totalPresidentVotes}}</strong>
-                </span>
-                &nbsp;&nbsp;
-                <span>
-                  <strong>Abstained Votes: {{userCount - totalPresidentVotes}}</strong>
-                </span>
-                &nbsp;&nbsp;
-              </small>
-            </div>
-          </c-col>
-
-          <c-col md="6" xl="6" xs="12">
             <c-row>
-              <c-col sm="12">
-                <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
-                  <div class="fs-5 fw-semibold">Vice-President</div>
+              <c-col md="6" xl="6" xs="12">
+                <c-row>
+                  <c-col sm="12">
+                    <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
+                      <div class="fs-5 fw-semibold">Secretary</div>
+                    </div>
+                  </c-col>
+                </c-row>
+                <hr class="mt-0" />
+                <div class="progress-group mb-4" *ngFor="let Candidate of getAllSecretaryCandidates$ | async">
+                  <div class="progress-group-prepend">
+                    <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/(userCount))*100).toFixed(2) }}%)</strong>
+                    <c-progress>
+                      <c-progress-bar [color]="Candidate.color" [value]="(Candidate.Votes / (userCount)) * 100">  </c-progress-bar>
+                    </c-progress>
+                  </div>
+                </div>
+                <div class="legend text-center" ngPreserveWhitespaces>
+                  <small>
+                    <span>
+                      <strong>Total Votes: {{totalSecretaryVotes}}</strong>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span>
+                      <strong>Abstained Votes: {{userCount - totalSecretaryVotes}}</strong>
+                    </span>
+                    &nbsp;&nbsp;
+                  </small>
+                </div>
+              </c-col>
+
+              <c-col md="6" xl="6" xs="12">
+                <c-row>
+                  <c-col sm="12">
+                    <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
+                      <div class="fs-5 fw-semibold">Treasurer</div>
+                    </div>
+                  </c-col>
+                </c-row>
+                <hr class="mt-0" />
+                <div class="progress-group mb-4" *ngFor="let Candidate of getAllTreasurerCandidates$ | async">
+                  <div class="progress-group-prepend">
+                    <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/(userCount))*100).toFixed(2) }}%)</strong>
+                    <c-progress>
+                      <c-progress-bar [color]="Candidate.color" [value]="(Candidate.Votes / (userCount)) * 100">  </c-progress-bar>
+                    </c-progress>
+                  </div>
+                </div>
+                <div class="legend text-center" ngPreserveWhitespaces>
+                  <small>
+                    <span>
+                      <strong>Total Votes: {{totalTreasurerVotes}}</strong>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span>
+                      <strong>Abstained Votes: {{userCount - totalTreasurerVotes}}</strong>
+                    </span>
+                    &nbsp;&nbsp;
+                  </small>
+                </div>
+              </c-col>
+
+              <c-col md="6" xl="6" xs="12">
+                <c-row>
+                  <c-col sm="12">
+                    <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
+                      <div class="fs-5 fw-semibold">Auditor</div>
+                    </div>
+                  </c-col>
+                </c-row>
+                <hr class="mt-0" />
+                <div class="progress-group mb-4" *ngFor="let Candidate of getAllAuditorCandidates$ | async">
+                  <div class="progress-group-prepend">
+                    <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/(userCount))*100).toFixed(2) }}%)</strong>
+                    <c-progress>
+                      <c-progress-bar [color]="Candidate.color" [value]="(Candidate.Votes / (userCount)) * 100">  </c-progress-bar>
+                    </c-progress>
+                  </div>
+                </div>
+                <div class="legend text-center" ngPreserveWhitespaces>
+                  <small>
+                    <span>
+                      <strong>Total Votes: {{totalAuditorVotes}}</strong>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span>
+                      <strong>Abstained Votes: {{userCount - totalAuditorVotes}}</strong>
+                    </span>
+                    &nbsp;&nbsp;
+                  </small>
+                </div>
+              </c-col>
+
+              <c-col md="6" xl="6" xs="12">
+                <c-row>
+                  <c-col sm="12">
+                    <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
+                      <div class="fs-5 fw-semibold">CpE Representative</div>
+                    </div>
+                  </c-col>
+                </c-row>
+                <hr class="mt-0" />
+                <div class="progress-group mb-4" *ngFor="let Candidate of getAllCpeRepresentativeCandidates$ | async">
+                  <div class="progress-group-prepend">
+                    <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/(userCount))*100).toFixed(2) }}%)</strong>
+                    <c-progress>
+                      <c-progress-bar [color]="Candidate.color" [value]="(Candidate.Votes / (userCount)) * 100">  </c-progress-bar>
+                    </c-progress>
+                  </div>
+                </div>
+                <div class="legend text-center" ngPreserveWhitespaces>
+                  <small>
+                    <span>
+                      <strong>Total Votes: {{totalCpeRepresentativeVotes}}</strong>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span>
+                      <strong>Abstained Votes: {{userCount - totalCpeRepresentativeVotes}}</strong>
+                    </span>
+                    &nbsp;&nbsp;
+                  </small>
                 </div>
               </c-col>
             </c-row>
-
-            <hr class="mt-0" />
-
-            <div class="progress-group mb-4" *ngFor="let vpresidentCandidate of getAllVicePresidentCandidates$ | async">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">{{vpresidentCandidate.Fullname}}</span>
-              </div>
-              <div class="progress-group-bars">
-                <strong>{{vpresidentCandidate.Votes}} Votes ({{ ((vpresidentCandidate.Votes/userCount)*100).toFixed(2) }}% )</strong>
-                <c-progress>
-                  <c-progress-bar color="{{vpresidentCandidate.color}}" [value]="(vpresidentCandidate.Votes / userCount) * 100">  </c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="legend text-center" ngPreserveWhitespaces>
-              <small>
-                <span>
-                  <strong>Total Votes: {{totalVicePresidentVotes}}</strong>
-                </span>
-                &nbsp;&nbsp;
-                <span>
-                  <strong>Abstained Votes: {{userCount - totalVicePresidentVotes}}</strong>
-                </span>
-                &nbsp;&nbsp;
-              </small>
-            </div>
-          </c-col>
-        </c-row>
-        <c-row>
-          <c-col md="6" xl="6" xs="12">
-            <c-row>
-              <c-col sm="12">
-                <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
-                  <div class="fs-5 fw-semibold">Secretary</div>
-                </div>
-              </c-col>
-            </c-row>
-
-            <hr class="mt-0" />
-
-            <div class="progress-group mb-4" *ngFor="let Candidate of getAllSecretaryCandidates$ | async">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
-              </div>
-              <div class="progress-group-bars">
-                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }}% )</strong>
-                <c-progress>
-                  <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="legend text-center" ngPreserveWhitespaces>
-              <small>
-                <span>
-                  <strong>Total Votes: {{totalSecretaryVotes}}</strong>
-                </span>
-                &nbsp;&nbsp;
-                <span>
-                  <strong>Abstained Votes: {{userCount - totalSecretaryVotes}}</strong>
-                </span>
-                &nbsp;&nbsp;
-              </small>
-            </div>
-          </c-col>
-
-          <c-col md="6" xl="6" xs="12">
-            <c-row>
-              <c-col sm="12">
-                <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
-                  <div class="fs-5 fw-semibold">Treasurer</div>
-                </div>
-              </c-col>
-            </c-row>
-
-            <hr class="mt-0" />
-
-            <div class="progress-group mb-4" *ngFor="let Candidate of getAllTreasurerCandidates$ | async">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
-              </div>
-              <div class="progress-group-bars">
-                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }}% )</strong>
-                <c-progress>
-                  <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="legend text-center" ngPreserveWhitespaces>
-              <small>
-                <span>
-                  <strong>Total Votes: {{totalTreasurerVotes}}</strong>
-                </span>
-                &nbsp;&nbsp;
-                <span>
-                  <strong>Abstained Votes: {{userCount - totalTreasurerVotes}}</strong>
-                </span>
-                &nbsp;&nbsp;
-              </small>
-            </div>
-          </c-col>
-
-          <c-col md="6" xl="6" xs="12">
-            <c-row>
-              <c-col sm="12">
-                <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
-                  <div class="fs-5 fw-semibold">Auditor</div>
-                </div>
-              </c-col>
-            </c-row>
-
-            <hr class="mt-0" />
-
-            <div class="progress-group mb-4" *ngFor="let Candidate of getAllAuditorCandidates$ | async">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
-              </div>
-              <div class="progress-group-bars">
-                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }}% )</strong>
-                <c-progress>
-                  <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="legend text-center" ngPreserveWhitespaces>
-              <small>
-                <span>
-                  <strong>Total Votes: {{totalAuditorVotes}}</strong>
-                </span>
-                &nbsp;&nbsp;
-                <span>
-                  <strong>Abstained Votes: {{userCount - totalAuditorVotes}}</strong>
-                </span>
-                &nbsp;&nbsp;
-              </small>
-            </div>
-          </c-col>
-
-          <c-col md="6" xl="6" xs="12">
-            <c-row>
-              <c-col sm="12">
-                <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
-                  <div class="fs-5 fw-semibold">CpE Representative</div>
-                </div>
-              </c-col>
-            </c-row>
-
-            <hr class="mt-0" />
-
-            <div class="progress-group mb-4" *ngFor="let Candidate of getAllCpeRepresentativeCandidates$ | async">
-              <div class="progress-group-prepend">
-                <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
-              </div>
-              <div class="progress-group-bars">
-                <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/userCount)*100).toFixed(2) }}% )</strong>
-                <c-progress>
-                  <c-progress-bar color="{{Candidate.color}}" [value]="(Candidate.Votes / userCount) * 100">  </c-progress-bar>
-                </c-progress>
-              </div>
-            </div>
-            <div class="legend text-center" ngPreserveWhitespaces>
-              <small>
-                <span>
-                  <strong>Total Votes: {{totalCpeRepresentativeVotes}}</strong>
-                </span>
-                &nbsp;&nbsp;
-                <span>
-                  <strong>Abstained Votes: {{userCount - totalCpeRepresentativeVotes}}</strong>
-                </span>
-                &nbsp;&nbsp;
-              </small>
-            </div>
-          </c-col>
-        </c-row>
-      </c-card-body>
-    </c-card>
-  </c-col>
-</c-row>
-</div>
+          </c-card-body>
+        </c-card>
+      </c-col>
+    </c-row>
+  </div>
 </div>
 
 <ng-template #nullTemplate>
