@@ -151,14 +151,23 @@ router.get('/user-count/voted', asyncHandler(async (req, res) => {
 
 router.get('/user-count/fingerprint/registered', asyncHandler(async (req, res) => {
   try {
-    const FingerprintRegisteredUserCount = await UserModel.countDocuments({ FingerprintRegistered: true });
-    res.status(200).json({ FingerprintRegisteredUserCount });
+    let fingerprintIndex = 1; // Starting index
+    let userExists:any = true;
+
+    // Loop to find the next available fingerprint index
+    while (userExists) {
+      userExists = await UserModel.exists({ FingerprintIndex: fingerprintIndex });
+      if (userExists) {
+        fingerprintIndex++;
+      }
+    }
+
+    res.status(200).json({ FingerprintIndex: fingerprintIndex });
   } catch (error) {
-    console.error('Error fetching voted user count:', error);
+    console.error('Error fetching fingerprint index:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }));
-
 
 router.get("/get/:id", asyncHandler(
   async (req, res) =>{

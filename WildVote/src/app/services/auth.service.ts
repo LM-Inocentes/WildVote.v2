@@ -116,7 +116,7 @@ export class AuthService {
     return this.http.get<User[]>(GET_USERS_URL);
   }
 
-  getRegisteredFingerprintUsersCount(): Observable<any>{
+  getunRegisteredFingerprintIndex(): Observable<any>{
     return this.http.get<any>( USER_FINGERPRINT_REGISTERED_COUNT_URL );
   }
 

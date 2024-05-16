@@ -231,7 +231,6 @@ export class VotingSystemComponent {
       if(this.user.Voted){
       this.voteService.getUserVote(this.user.id).subscribe((uservote) => {
         this.getUserVoteResult = uservote;
-
         this.positionsArray = Object.entries(this.getUserVoteResult)
         .filter(([key, value]) => typeof value === 'object' && value !== null && !Array.isArray(value))
         .map(([key, value]) => ({
@@ -246,7 +245,6 @@ export class VotingSystemComponent {
       this.status = STATUS;
     });
 
-    
 
     this.candidateService.getCandidates().subscribe((candidates) => {
       this.candidates = candidates;

@@ -27,8 +27,9 @@ export class RegisterComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.authService.getRegisteredFingerprintUsersCount().subscribe((value) => {
-      this.voteService.setUsersFingerprintedCount(value.FingerprintRegisteredUserCount);
+    this.authService.getunRegisteredFingerprintIndex().subscribe((value) => {
+      console.log(value)
+      this.voteService.setUsersFingerprintedIndex(value.FingerprintRegisteredUserCount);
     });
     this.authService.cmdFingerprint("default");
     this.authService.setDefaultPrompt("Press Captures Fingerprint");
@@ -68,18 +69,17 @@ export class RegisterComponent implements OnInit, OnDestroy{
         this.toastr.error('Fingerprint not Saved. Please Try Again', 'Invalid Fingerprint');
         return
       }
-        this.authService.getRegisteredFingerprintUsersCount().subscribe((value) => {
+        this.authService.getunRegisteredFingerprintIndex().subscribe((value) => {
           this.authService.submitRegisteredFingerprintToUser({
             id: this.user.id,
             FingerprintRegistered: true,
-            FingerprintIndex: value.FingerprintRegisteredUserCount+1
+            FingerprintIndex: value.FingerprintRegisteredUserCount
           }).subscribe(_ =>{
               if (this.messagePromptSubscription) {
                 this.messagePromptSubscription.unsubscribe();
               }
               this.ngOnInit();
           });
-          this.voteService.setUsersFingerprintedCount(value.FingerprintRegisteredUserCount);
         });
     });
     this.authService.cmdFingerprint("default");

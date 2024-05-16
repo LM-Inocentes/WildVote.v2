@@ -80,7 +80,7 @@ export class VoteService {
     return from(this.db.object(`users/all`).set(cmd));
   }
 
-  setUsersFingerprintedCount(cmd: number): Observable<void> {
+  setUsersFingerprintedIndex(cmd: number): Observable<void> {
     return from(this.db.object(`users/fingerprinted`).set(cmd));
   }
 
@@ -99,7 +99,6 @@ export class VoteService {
   listenUsersWhoVotedCount(): Observable<any> {
     return this.db.object<number>(`users/voted/`).valueChanges();
   }
-
 
   getUserVote(id: string): Observable<UserVoteResult>{
     return this.http.get<UserVoteResult>(GET_USER_VOTE_RESULT_URL+id);
