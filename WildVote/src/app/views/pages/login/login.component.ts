@@ -5,6 +5,7 @@ import { AuthService } from '../../../services/auth.service'
 import { User } from 'src/app/shared/models/User';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ export class LoginComponent {
   togglebutton: boolean = false;
   LoginIndex$!: Observable<any>;
   LMessagePrompt$!: Observable<any>;
+  isAllowedDevice: boolean = false;
 
   loginForm = new FormGroup({
     id: new FormControl("", [
@@ -26,10 +28,15 @@ export class LoginComponent {
     ]),
   })
 
-  constructor(private toastr: ToastrService, private authService: AuthService, private router: Router,) { 
+  constructor(private toastr: ToastrService, private authService: AuthService, private router: Router, private deviceService: DeviceDetectorService) { 
   }
 
   ngOnInit(): void {
+    const deviceInfo = this.deviceService.getDeviceInfo();
+    console.log(deviceInfo);
+    if (deviceInfo.os === 'Linux') {
+      this.isAllowedDevice = true;
+    }
     this.authService.cmdFingerprint("default");
     this.authService.userObservable.subscribe((currentUser) => {
       if(currentUser.id){
