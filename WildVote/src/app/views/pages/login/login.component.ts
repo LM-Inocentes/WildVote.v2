@@ -34,7 +34,7 @@ export class LoginComponent {
   ngOnInit(): void {
     const deviceInfo = this.deviceService.getDeviceInfo();
     console.log(deviceInfo);
-    if (deviceInfo.os === 'Linux') {
+    if (deviceInfo.os === 'Chrome-OS') {
       this.isAllowedDevice = true;
     }
     this.authService.cmdFingerprint("default");
