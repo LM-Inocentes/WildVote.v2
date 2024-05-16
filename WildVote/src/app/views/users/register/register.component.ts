@@ -5,7 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service'
 import { VoteService } from 'src/app/services/vote.service';
 import { Observable, Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { cilAddressBook, cilUser, cilLockLocked, cilInstitution, cilListNumbered} from '@coreui/icons';
 
 @Component({
@@ -22,11 +22,26 @@ export class RegisterComponent implements OnInit, OnDestroy{
   user = {} as User;
   scanClicked: boolean = false;
 
-  constructor(private toastr: ToastrService, private authService: AuthService, private voteService: VoteService,  private activatedRoute: ActivatedRoute) { 
+  constructor(private toastr: ToastrService, private authService: AuthService, private voteService: VoteService,  private activatedRoute: ActivatedRoute,  private router: Router) { 
     
   }
 
   ngOnInit(): void {
+    this.authService.userObservable.subscribe((loggedinUser) => {
+      if(!loggedinUser.isAdmin){
+        this.router.navigate(['dashboard']);
+        return;
+      }
+    });
+    this.activatedRoute.params.subscribe((params) => {
+      this.authService.editUserById(params['userID']).subscribe(User => {
+        this.user = User;
+        if(User.FingerprintRegistered){
+          this.router.navigate(['dashboard']);
+          return;
+        }
+      });
+    });
     this.authService.getunRegisteredFingerprintIndex().subscribe((value) => {
       this.voteService.setUsersFingerprintedIndex(value.FingerprintIndex);
     });
@@ -34,11 +49,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
     this.authService.setDefaultPrompt("Press Captures Fingerprint");
     this.MessagePrompt$ = this.authService.MessagePrompt();
     this.MessagePrompt$.subscribe();
-    this.activatedRoute.params.subscribe((params) => {
-      this.authService.editUserById(params['userID']).subscribe(User => {
-        this.user = User;
-      });
-    });
     if (this.messagePromptSubscription) {
       this.messagePromptSubscription.unsubscribe();
     }
