@@ -55,7 +55,8 @@
       cDropdownToggle
       class="py-0"
     >
-    <c-avatar color="warning" status="success">{{user.Fullname?.charAt(0)}}</c-avatar>
+    {{user.Fullname}}
+    <c-avatar color="warning" >{{user.Fullname?.charAt(0)}}</c-avatar>
     </button>
 
     <ng-template #loggedin>
@@ -66,7 +67,7 @@
       cDropdownToggle
       class="py-0"
     >
-    <c-avatar color="secondary" status="danger">
+    <c-avatar color="secondary" >
       <svg cIcon name="cilUserX"></svg>
     </c-avatar>
     </button>
