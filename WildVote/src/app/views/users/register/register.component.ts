@@ -28,8 +28,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.authService.getunRegisteredFingerprintIndex().subscribe((value) => {
-      console.log(value)
-      this.voteService.setUsersFingerprintedIndex(value.FingerprintRegisteredUserCount);
+      this.voteService.setUsersFingerprintedIndex(value.FingerprintIndex);
     });
     this.authService.cmdFingerprint("default");
     this.authService.setDefaultPrompt("Press Captures Fingerprint");

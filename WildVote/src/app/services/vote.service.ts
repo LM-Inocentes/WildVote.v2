@@ -81,7 +81,7 @@ export class VoteService {
   }
 
   setUsersFingerprintedIndex(cmd: number): Observable<void> {
-    return from(this.db.object(`users/fingerprinted`).set(cmd));
+    return from(this.db.object(`users/FingerprintIndex`).set(cmd));
   }
 
   getUsersWhoVoted(): Observable<any>{

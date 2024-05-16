@@ -1,0 +1,23 @@
+.container{
+    position: fixed;
+    width: 200%;
+    height: 100%;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+  }
+  
+  .details{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 120%;
+  }
+  
+  img{
+    width: 200px;
+    height: 200px;
+  }
+  

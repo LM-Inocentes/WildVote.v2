@@ -4,8 +4,10 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { LoadingComponent } from './views/loading/loading.component'
+import { LoadingInterceptor } from './shared/interceptors/loading.interceptor.ts.interceptor'
 
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
@@ -54,7 +56,7 @@ const APP_CONTAINERS = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, ...APP_CONTAINERS],
+  declarations: [AppComponent, ...APP_CONTAINERS, LoadingComponent,],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -96,6 +98,11 @@ const APP_CONTAINERS = [
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor, 
+      multi : true
     },
     IconSetService,
     Title
