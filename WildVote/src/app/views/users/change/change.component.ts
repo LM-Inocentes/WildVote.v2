@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/shared/models/User';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service'
@@ -7,12 +7,11 @@ import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  selector: 'app-change',
+  templateUrl: './change.component.html',
+  styleUrl: './change.component.scss'
 })
-export class RegisterComponent implements OnInit, OnDestroy{
-
+export class ChangeComponent implements OnInit {
   MessagePrompt$!: Observable<any>;
   MessagePrompt2$!: Observable<any>;
   messagePromptSubscription!: Subscription;
@@ -34,14 +33,12 @@ export class RegisterComponent implements OnInit, OnDestroy{
     this.activatedRoute.params.subscribe((params) => {
       this.authService.editUserById(params['userID']).subscribe(User => {
         this.user = User;
-        if(User.FingerprintRegistered){
+        if(!User.FingerprintRegistered){
           this.router.navigate(['dashboard']);
           return;
         }
+        this.voteService.setUsersFingerprintedIndex(this.user.FingerprintIndex!);
       });
-    });
-    this.authService.getunRegisteredFingerprintIndex().subscribe((value) => {
-      this.voteService.setUsersFingerprintedIndex(value.FingerprintIndex);
     });
     this.authService.cmdFingerprint("default");
     this.authService.setDefaultPrompt("Press Captures Fingerprint");
@@ -60,8 +57,8 @@ export class RegisterComponent implements OnInit, OnDestroy{
   }
 
   enrollFingerprint(){
-    if(this.user.FingerprintRegistered){
-      this.toastr.error('User has already registered their fingerprint', 'Unable to Scan');
+    if(!this.user.FingerprintRegistered){
+      this.toastr.error('User hhave not yet registered fingerprint', 'Unable to Scan');
       return;
     }
     this.authService.cmdFingerprint("register");

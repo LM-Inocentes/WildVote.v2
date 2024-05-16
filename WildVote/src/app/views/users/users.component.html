@@ -61,11 +61,11 @@
                   </div>
                 </td>
                 <td class="text-center" *ngIf="!user.FingerprintRegistered">
-                  <button style="margin-right: 5px;" cButton color="info" routerLink="{{user.id}}/fingerprint">Upload</button>
+                  <button style="margin-right: 5px;" cButton color="success" routerLink="{{user.id}}/fingerprint">Upload</button>
                 </td>
                 <td class="text-center text-success" *ngIf="user.FingerprintRegistered">
-                  Saved
-              </td>
+                  <button cButton color="info" routerLink="{{user.id}}/fingerprint/change">Change</button>
+                </td>
                 <td>
                   {{ user.Voted }}
                 </td>

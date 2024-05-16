@@ -22,6 +22,7 @@ import { UsersRoutingModule } from './users-routing.module';
 import { UsersComponent } from './users.component';
 import { RegisterComponent } from './register/register.component';
 import { EditComponent } from './edit/edit.component'
+import { ChangeComponent } from './change/change.component';
 
 @NgModule({
   imports: [
@@ -42,6 +43,6 @@ import { EditComponent } from './edit/edit.component'
     TableModule,
     ModalModule,
   ],
-  declarations: [UsersComponent, RegisterComponent, EditComponent],
+  declarations: [UsersComponent, RegisterComponent, EditComponent, ChangeComponent],
 })
 export class UsersModule { }

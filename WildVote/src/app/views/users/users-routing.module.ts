@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { UsersComponent } from './users.component';
 import { RegisterComponent } from './register/register.component';
 import { EditComponent } from './edit/edit.component';
-
+import { ChangeComponent } from './change/change.component';
 const routes: Routes = [
   {
     path: '',
@@ -27,6 +27,13 @@ const routes: Routes = [
       {
         path: ':userID/fingerprint',
         component: RegisterComponent,
+        data: {
+          title: 'Register Fingerprint'
+        }
+      },
+      {
+        path: ':userID/fingerprint/change',
+        component: ChangeComponent,
         data: {
           title: 'Register Fingerprint'
         }
