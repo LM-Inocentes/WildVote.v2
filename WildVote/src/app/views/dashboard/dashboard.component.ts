@@ -1,11 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-
-import { DashboardChartsData, IChartProps } from './dashboard-charts-data';
-import { Observable, combineLatest, map } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, combineLatest, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { VoteService } from 'src/app/services/vote.service';
 import { Election } from 'src/app/shared/models/Election';
-
 
 interface IUser {
   name: string;
@@ -25,11 +22,11 @@ interface IUser {
   templateUrl: 'dashboard.component.html',
   styleUrls: ['dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
-  status!: Election
+export class DashboardComponent implements OnInit, OnDestroy {
+  status!: Election;
 
   listenusersCount$!: Observable<any>;
-  listenusersWhoVotedCount$!: Observable<any>
+  listenusersWhoVotedCount$!: Observable<any>;
   getusersWhoVotedCountPercentage$!: Observable<number>;
   highestVoteCounts$!: Observable<any[]>;
   getAllCandidates$!: Observable<any[]>;
@@ -56,18 +53,11 @@ export class DashboardComponent implements OnInit {
   totalAuditorVotes!: number;
   totalCpeRepresentativeVotes!: number;
 
-  constructor(private voteService: VoteService) {
-  }
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(private voteService: VoteService) { }
 
   ngOnInit(): void {
-    // this.voteService.getUsersCount().subscribe((userCount) => {
-    //   this.usersCount = userCount;
-    //   this.getusersCount$ = this.voteService.setUsersCount(this.usersCount.userCount);
-    // });
-    // this.voteService.getUsersWhoVoted().subscribe((userCount) => {
-    //   this.usersCount = userCount;
-    //   this.getusersWhoVotedCount$ = this.voteService.setUsersWhoVoted(this.usersCount.votedUserCount);
-    // });
     if (!localStorage.getItem('foo')) { 
       localStorage.setItem('foo', 'no reload') 
       location.reload() 
@@ -78,14 +68,13 @@ export class DashboardComponent implements OnInit {
     this.listenusersCount$ = this.voteService.listenUsersCount();
     this.listenusersWhoVotedCount$ = this.voteService.listenUsersWhoVotedCount();
     
-    this.listenusersCount$.subscribe();
-    this.listenusersWhoVotedCount$.subscribe();
-
     this.getusersWhoVotedCountPercentage$ = this.calculatePercentage(this.listenusersWhoVotedCount$, this.listenusersCount$);
-    
-    this.voteService.getElectionStatus().subscribe((STATUS) => {
-      this.status = STATUS;
-    });
+
+    this.subscriptions.add(
+      this.voteService.getElectionStatus().subscribe((STATUS) => {
+        this.status = STATUS;
+      })
+    );
 
     this.highestVoteCounts$ = this.voteService.getHighestVoteCounts();
     this.getAllCandidates$ = this.voteService.getAllCandidates();
@@ -96,54 +85,59 @@ export class DashboardComponent implements OnInit {
     this.getAllAuditorCandidates$ = this.voteService.getAllAuditorCandidates();
     this.getAllCpeRepresentativeCandidates$ = this.voteService.getAllCpeRepresentativeCandidates();
 
-    // Subscribe to observables and handle data
-    this.highestVoteCounts$.subscribe();
-    this.getAllCandidates$.subscribe();
-    this.getAllPresidentCandidates$.pipe(
+    this.subscriptions.add(
+      this.getAllPresidentCandidates$.pipe(
         map(candidates => candidates.map(candidate => candidate.Votes)),
         map(votes => votes.reduce((acc, vote) => acc + vote, 0))
-      )
-      .subscribe(totalVotes => {
+      ).subscribe(totalVotes => {
         this.totalPresidentVotes = totalVotes;
-      });
-    this.getAllVicePresidentCandidates$.pipe(
+      })
+    );
+    this.subscriptions.add(
+      this.getAllVicePresidentCandidates$.pipe(
         map(candidates => candidates.map(candidate => candidate.Votes)),
         map(votes => votes.reduce((acc, vote) => acc + vote, 0))
-      )
-      .subscribe(totalVotes => {
+      ).subscribe(totalVotes => {
         this.totalVicePresidentVotes = totalVotes;
-      });
-    this.getAllSecretaryCandidates$.pipe(
+      })
+    );
+    this.subscriptions.add(
+      this.getAllSecretaryCandidates$.pipe(
         map(candidates => candidates.map(candidate => candidate.Votes)),
         map(votes => votes.reduce((acc, vote) => acc + vote, 0))
-      )
-      .subscribe(totalVotes => {
+      ).subscribe(totalVotes => {
         this.totalSecretaryVotes = totalVotes;
-      }); 
-    this.getAllTreasurerCandidates$.pipe(
+      })
+    );
+    this.subscriptions.add(
+      this.getAllTreasurerCandidates$.pipe(
         map(candidates => candidates.map(candidate => candidate.Votes)),
         map(votes => votes.reduce((acc, vote) => acc + vote, 0))
-      )
-      .subscribe(totalVotes => {
+      ).subscribe(totalVotes => {
         this.totalTreasurerVotes = totalVotes;
-      });
-    this.getAllAuditorCandidates$.pipe(
+      })
+    );
+    this.subscriptions.add(
+      this.getAllAuditorCandidates$.pipe(
         map(candidates => candidates.map(candidate => candidate.Votes)),
         map(votes => votes.reduce((acc, vote) => acc + vote, 0))
-      )
-      .subscribe(totalVotes => {
+      ).subscribe(totalVotes => {
         this.totalAuditorVotes = totalVotes;
-      });
-    this.getAllCpeRepresentativeCandidates$.pipe(
+      })
+    );
+    this.subscriptions.add(
+      this.getAllCpeRepresentativeCandidates$.pipe(
         map(candidates => candidates.map(candidate => candidate.Votes)),
         map(votes => votes.reduce((acc, vote) => acc + vote, 0))
-      )
-      .subscribe(totalVotes => {
+      ).subscribe(totalVotes => {
         this.totalCpeRepresentativeVotes = totalVotes;
-      });
-
+      })
+    );
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
 
   calculatePercentage(
     source1$: Observable<number>,
@@ -159,5 +153,4 @@ export class DashboardComponent implements OnInit {
       })
     );
   }
-
 }
