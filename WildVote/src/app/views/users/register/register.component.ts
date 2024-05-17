@@ -62,6 +62,10 @@ export class RegisterComponent implements OnInit, OnDestroy{
       return;
     }
     this.authService.cmdFingerprint("register");
+    this.authService.getunRegisteredFingerprintIndex().subscribe((value) => { 
+      this.voteService.setUsersFingerprintedIndex(value.FingerprintIndex); 
+      this.user.FingerprintIndex = value.FingerprintIndex
+    });
     this.scanClicked = !this.scanClicked;
   }
 
@@ -73,18 +77,15 @@ export class RegisterComponent implements OnInit, OnDestroy{
         this.toastr.error('Fingerprint not Saved. Please Try Again', 'Invalid Fingerprint');
         return
       }
-        this.authService.getunRegisteredFingerprintIndex().subscribe((value) => {
-          this.voteService.setUsersFingerprintedIndex(value.FingerprintIndex);
-          this.authService.submitRegisteredFingerprintToUser({
-            id: this.user.id,
-            FingerprintRegistered: true,
-            FingerprintIndex: value.FingerprintIndex
-          }).subscribe(_ =>{
-              if (this.messagePromptSubscription) {
-                this.messagePromptSubscription.unsubscribe();
-              }
-          });
-        });
+      this.authService.submitRegisteredFingerprintToUser({
+        id: this.user.id,
+        FingerprintRegistered: true,
+        FingerprintIndex: this.user.FingerprintIndex
+      }).subscribe(_ =>{
+          if (this.messagePromptSubscription) {
+            this.messagePromptSubscription.unsubscribe();
+          }
+      });       
     });
     this.authService.cmdFingerprint("default");
   }
