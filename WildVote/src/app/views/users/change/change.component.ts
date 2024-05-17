@@ -73,18 +73,16 @@ export class ChangeComponent implements OnInit {
         this.toastr.error('Fingerprint not Saved. Please Try Again', 'Invalid Fingerprint');
         return
       }
-        this.authService.getunRegisteredFingerprintIndex().subscribe((value) => {
-          this.authService.submitRegisteredFingerprintToUser({
-            id: this.user.id,
-            FingerprintRegistered: true,
-            FingerprintIndex: value.FingerprintRegisteredUserCount
-          }).subscribe(_ =>{
-              if (this.messagePromptSubscription) {
-                this.messagePromptSubscription.unsubscribe();
-              }
-              this.ngOnInit();
-          });
-        });
+      this.authService.submitRegisteredFingerprintToUser({
+        id: this.user.id,
+        FingerprintRegistered: true,
+        FingerprintIndex: this.user.FingerprintIndex
+      }).subscribe(_ =>{
+          if (this.messagePromptSubscription) {
+            this.messagePromptSubscription.unsubscribe();
+          }
+          this.ngOnInit();
+      });
     });
     this.authService.cmdFingerprint("default");
   }

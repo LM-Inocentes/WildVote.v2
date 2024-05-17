@@ -164,7 +164,6 @@ router.get('/user-count/fingerprint/registered', asyncHandler(async (req, res) =
 
     res.status(200).json({ FingerprintIndex: fingerprintIndex });
   } catch (error) {
-    console.error('Error fetching fingerprint index:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }));
@@ -201,10 +200,6 @@ router.patch("/edit", asyncHandler(
 router.patch("/fingerprint", asyncHandler(
   async (req, res) => {
     const { id, FingerprintIndex } = req.body;
-    const user = await UserModel.findOne({ id: id });
-    if (user!.FingerprintRegistered) {
-      res.status(400).send("User has already registered their fingerprint");
-    }
     const updatedUser = await UserModel.findOneAndUpdate(
       { id: id }, // Find user by id
       {

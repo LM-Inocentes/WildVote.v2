@@ -80,7 +80,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
           this.authService.submitRegisteredFingerprintToUser({
             id: this.user.id,
             FingerprintRegistered: true,
-            FingerprintIndex: value.FingerprintRegisteredUserCount
+            FingerprintIndex: value.FingerprintIndex
           }).subscribe(_ =>{
               if (this.messagePromptSubscription) {
                 this.messagePromptSubscription.unsubscribe();
