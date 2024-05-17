@@ -61,7 +61,6 @@ export class ChangeComponent implements OnInit {
       this.toastr.error('User have not yet registered fingerprint', 'Unable to Scan');
       return;
     }
-    this.voteService.setUsersFingerprintedIndex(this.user.FingerprintIndex!); 
     this.authService.cmdFingerprint("register");
     this.scanClicked = !this.scanClicked;
   }
