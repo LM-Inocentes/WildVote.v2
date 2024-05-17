@@ -61,11 +61,11 @@ export class RegisterComponent implements OnInit, OnDestroy{
       this.toastr.error('User has already registered their fingerprint', 'Unable to Scan');
       return;
     }
-    this.authService.cmdFingerprint("register");
     this.authService.getunRegisteredFingerprintIndex().subscribe((value) => { 
       this.voteService.setUsersFingerprintedIndex(value.FingerprintIndex); 
       this.user.FingerprintIndex = value.FingerprintIndex
     });
+    this.authService.cmdFingerprint("register");
     this.scanClicked = !this.scanClicked;
   }
 
