@@ -74,7 +74,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
         return
       }
         this.authService.getunRegisteredFingerprintIndex().subscribe((value) => {
-          console.log(value)
           this.voteService.setUsersFingerprintedIndex(value.FingerprintIndex);
           this.authService.submitRegisteredFingerprintToUser({
             id: this.user.id,
