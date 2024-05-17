@@ -35,7 +35,7 @@ export class LoginComponent {
     const deviceInfo = this.deviceService.getDeviceInfo();
     console.log(deviceInfo);
     if (deviceInfo.os === 'Chrome-OS') {
-      this.isAllowedDevice = true;
+      this.isAllowedDevice = false;
     }
     this.authService.cmdFingerprint("default");
     this.authService.userObservable.subscribe((currentUser) => {
