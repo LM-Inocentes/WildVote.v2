@@ -40,9 +40,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
         }
       });
     });
-    this.authService.getunRegisteredFingerprintIndex().subscribe((value) => {
-      this.voteService.setUsersFingerprintedIndex(value.FingerprintIndex);
-    });
     this.authService.cmdFingerprint("default");
     this.authService.setDefaultPrompt("Press Captures Fingerprint");
     this.MessagePrompt$ = this.authService.MessagePrompt();
