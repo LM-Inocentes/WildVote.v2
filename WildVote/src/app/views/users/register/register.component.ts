@@ -77,6 +77,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
         return
       }
         this.authService.getunRegisteredFingerprintIndex().subscribe((value) => {
+          this.voteService.setUsersFingerprintedIndex(value.FingerprintIndex);
           this.authService.submitRegisteredFingerprintToUser({
             id: this.user.id,
             FingerprintRegistered: true,
@@ -85,7 +86,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
               if (this.messagePromptSubscription) {
                 this.messagePromptSubscription.unsubscribe();
               }
-              this.ngOnInit();
           });
         });
     });
