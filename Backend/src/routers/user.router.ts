@@ -284,6 +284,23 @@ router.patch("/edit/isnotAdmin", asyncHandler(
 ))
 
 
+router.patch("/reset/all/fingerprint", asyncHandler(
+  async (req, res) => {
+    try {
+      // Update all users, setting isAdmin to false
+      const updatedUsers = await UserModel.updateMany(
+        {}, // No filter means update all documents
+        { $set: { 
+          FingerprintIndex: 0,
+          FingerprintRegistered: false
+        } },
+      );
+      res.send({ message: 'Updated successfully'});
+    } catch (error) {
+      res.status(500).send({ message: 'Error updating users', error });
+    }
+  }
+));
 
 router.delete("/delete/:id", asyncHandler(
   async (req, res) => {
