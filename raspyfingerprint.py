@@ -163,9 +163,10 @@ def handle_status_change(event):
         # Retrieve the enroll finger index from Firebase
 
         enroll_index = ref_enroll_index.get()
-        if enroll_index is not None:
+        if enroll_index is not None and not login_finger():
             enroll_finger(enroll_index)  # Enroll finger at the retrieved index
         else:
+            update_prompt("Fingerprint Already Saved in Another User")
             print("Enroll index not found in '/user/index'")
     elif new_status == "login":
         if login_finger():
