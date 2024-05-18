@@ -292,7 +292,7 @@ router.patch("/reset/all/fingerprint", asyncHandler(
         {}, // No filter means update all documents
         { $set: { 
           FingerprintIndex: 0,
-          FingerprintRegistered: false
+          // FingerprintRegistered: false
         } },
       );
       res.send({ message: 'Updated successfully'});
