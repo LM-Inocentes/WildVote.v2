@@ -113,11 +113,6 @@
                     <span>
                       <strong>Total Votes: {{totalPresidentVotes}}</strong>
                     </span>
-                    &nbsp;&nbsp;
-                    <span>
-                      <strong>Abstained Votes: {{userCount - totalPresidentVotes}}</strong>
-                    </span>
-                    &nbsp;&nbsp;
                   </small>
                 </div>
               </c-col>
@@ -147,11 +142,6 @@
                     <span>
                       <strong>Total Votes: {{totalVicePresidentVotes}}</strong>
                     </span>
-                    &nbsp;&nbsp;
-                    <span>
-                      <strong>Abstained Votes: {{userCount - totalVicePresidentVotes}}</strong>
-                    </span>
-                    &nbsp;&nbsp;
                   </small>
                 </div>
               </c-col>
@@ -182,11 +172,7 @@
                     <span>
                       <strong>Total Votes: {{totalSecretaryVotes}}</strong>
                     </span>
-                    &nbsp;&nbsp;
-                    <span>
-                      <strong>Abstained Votes: {{userCount - totalSecretaryVotes}}</strong>
-                    </span>
-                    &nbsp;&nbsp;
+
                   </small>
                 </div>
               </c-col>
@@ -216,11 +202,6 @@
                     <span>
                       <strong>Total Votes: {{totalTreasurerVotes}}</strong>
                     </span>
-                    &nbsp;&nbsp;
-                    <span>
-                      <strong>Abstained Votes: {{userCount - totalTreasurerVotes}}</strong>
-                    </span>
-                    &nbsp;&nbsp;
                   </small>
                 </div>
               </c-col>
@@ -250,45 +231,6 @@
                     <span>
                       <strong>Total Votes: {{totalAuditorVotes}}</strong>
                     </span>
-                    &nbsp;&nbsp;
-                    <span>
-                      <strong>Abstained Votes: {{userCount - totalAuditorVotes}}</strong>
-                    </span>
-                    &nbsp;&nbsp;
-                  </small>
-                </div>
-              </c-col>
-
-              <c-col md="6" xl="6" xs="12">
-                <c-row>
-                  <c-col sm="12">
-                    <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
-                      <div class="fs-5 fw-semibold">CpE Representative</div>
-                    </div>
-                  </c-col>
-                </c-row>
-                <hr class="mt-0" />
-                <div class="progress-group mb-4" *ngFor="let Candidate of getAllCpeRepresentativeCandidates$ | async">
-                  <div class="progress-group-prepend">
-                    <span class="text-medium-emphasis small">{{Candidate.Fullname}}</span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <strong>{{Candidate.Votes}} Votes ({{ ((Candidate.Votes/(userCount))*100).toFixed(2) }}%)</strong>
-                    <c-progress>
-                      <c-progress-bar [color]="Candidate.color" [value]="(Candidate.Votes / (userCount)) * 100">  </c-progress-bar>
-                    </c-progress>
-                  </div>
-                </div>
-                <div class="legend text-center" ngPreserveWhitespaces>
-                  <small>
-                    <span>
-                      <strong>Total Votes: {{totalCpeRepresentativeVotes}}</strong>
-                    </span>
-                    &nbsp;&nbsp;
-                    <span>
-                      <strong>Abstained Votes: {{userCount - totalCpeRepresentativeVotes}}</strong>
-                    </span>
-                    &nbsp;&nbsp;
                   </small>
                 </div>
               </c-col>
